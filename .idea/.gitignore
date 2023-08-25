@@ -1,0 +1,5 @@
+# 디폴트 무시된 파일
+/shelf/
+/workspace.xml
+# CodeStream ignored files
+/../../seb45_main_030\.idea/codestream.xml
