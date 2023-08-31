@@ -1,5 +1,5 @@
 package com.mainproject.grilledshrimp.domain.user.dto;
 
-public class UserPatchDto {
+public class UserNamePatchDto {
     private String username;
 }
