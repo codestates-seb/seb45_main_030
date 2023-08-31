@@ -3,7 +3,7 @@ package com.mainproject.grilledshrimp.domain.post.entity;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
 import com.mainproject.grilledshrimp.domain.postTag.entity.PostTag;
 import com.mainproject.grilledshrimp.domain.recommendPost.entity.RecommendPost;
-import com.mainproject.grilledshrimp.domain.user.entity.User;
+import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +26,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 
     @Column(nullable = false)
     private String post_title;
@@ -39,6 +39,9 @@ public class Post {
 
     @Column(nullable = true)
     private String post_address;
+
+    @Column(nullable = false)
+    private boolean post_comment_permission;
 
     @Column(nullable = false)
     private LocalDateTime created_at = LocalDateTime.now();

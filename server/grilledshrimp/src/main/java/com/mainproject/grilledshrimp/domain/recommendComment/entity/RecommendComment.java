@@ -1,7 +1,7 @@
 package com.mainproject.grilledshrimp.domain.recommendComment.entity;
 
 import com.mainproject.grilledshrimp.domain.comment.entity.Comment;
-import com.mainproject.grilledshrimp.domain.user.entity.User;
+import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,5 +25,5 @@ public class RecommendComment {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 }

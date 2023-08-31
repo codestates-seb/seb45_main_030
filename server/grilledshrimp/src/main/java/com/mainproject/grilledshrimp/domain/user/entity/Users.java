@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class User {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
@@ -28,6 +28,9 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = true)
+    private String introduction;
 
     @Column(nullable = false, updatable = false, unique = true)
     private String email;
@@ -48,12 +51,12 @@ public class User {
     private LocalDateTime modified_at;
 
     // 북마크 일대다 관계
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users")
     private List<Bookmark> bookmarks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users")
     private List<RecommendPost> recommendPostList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users")
     private List<RecommendComment> recommendCommentList = new ArrayList<>();
 }
