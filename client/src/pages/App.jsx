@@ -1,5 +1,11 @@
+import MainPage from "./MainPage";
+
 function App() {
-    return <div>기본 템플릿</div>;
+    return (
+        <>
+            <MainPage></MainPage>
+        </>
+    );
 }
 
 export default App;
