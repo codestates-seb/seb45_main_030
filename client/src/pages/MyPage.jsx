@@ -25,6 +25,28 @@ export default function MyPage() {
 
     // 중간 버튼 컴포넌트
     const Buttons = () => {
+        <div className="button_container">
+        <ul>
+            <li>
+                <a>
+                    <svg></svg>
+                    My Photos
+                </a>
+            </li>
+            <li>
+                <a>
+                    <svg></svg>
+                    Bookmark
+                </a>
+            </li>
+            <li>
+                <a>
+                    <svg></svg>
+                    Comments
+                </a>
+            </li>
+        </ul>
+    </div>
     }
 
     // 하단 이미지 그리드 컴포넌트 (그리드 가져와도 될듯?)
