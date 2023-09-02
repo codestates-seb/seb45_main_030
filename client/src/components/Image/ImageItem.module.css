@@ -1,8 +1,25 @@
 .container {
+    position: relative;
     width: 100%;
     height: fit-content;
 }
 
 .picture_wrap img{
     width: 100%;
+}
+
+.image_hover {
+    visibility: hidden;
+    position: absolute;
+    bottom: 0;
+    background-color: yellow;
+}
+.container:hover .picture_wrap::before{
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: darkgray;
+}
+.container:hover .image_hover{
+    visibility: visible
 }
