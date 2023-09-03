@@ -1,25 +1,30 @@
 .container {
+    
+}
+.figure{
     position: relative;
-    width: 100%;
     height: fit-content;
 }
 
-.picture_wrap img{
+.figure img{
     width: 100%;
 }
 
-.image_hover {
-    visibility: hidden;
+
+.figcaption {
+    width: 100%;
+    /* height: 100%; */
     position: absolute;
     bottom: 0;
-    background-color: yellow;
+    left: 0;
+    opacity: 0;
+    background-color: rgb(0,0,0,0.3);
 }
-.container:hover .picture_wrap::before{
-    content: '';
-    width: 100%;
-    height: 100%;
-    background-color: darkgray;
+
+.figcaption p {
+    color: white;
 }
-.container:hover .image_hover{
-    visibility: visible
+
+.figure:hover .figcaption{
+    opacity: 1;
 }
