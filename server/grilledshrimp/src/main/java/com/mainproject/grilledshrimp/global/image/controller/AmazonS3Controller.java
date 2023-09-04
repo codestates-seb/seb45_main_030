@@ -23,7 +23,7 @@ public class AmazonS3Controller {
 
     /**
      * Amazon S3에 파일 업로드
-     * @return 성공 시 200 Success와 함께 업로드 된 파일의 파일명 리스트 반환
+     * @return 성공 시 201 CREATED 와 함께 업로드 된 파일의 파일명 리스트 반환
      */
     @PostMapping("/file")
     public ResponseEntity<List<String>> uploadFile(@RequestPart List<MultipartFile> multipartFile) {
@@ -32,7 +32,7 @@ public class AmazonS3Controller {
 
     /**
      * Amazon S3에 업로드 된 파일을 삭제
-     * @return 성공 시 200 Success
+     * @return 성공 시 204 NO_CONTENT 반환
      */
     @DeleteMapping("/file")
     public ResponseEntity<Void> deleteFile(@RequestParam String fileName) {
