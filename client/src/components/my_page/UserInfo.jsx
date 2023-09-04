@@ -4,7 +4,7 @@ export default function UserInfo() {
     return (
         <div className="userinfo_container">
         <div className="img_conatainer">
-            <img alt="유저 이미지" src="client/public/user-icon-96.png"/>
+            <img src="client/public/images/user-icon-96.png" alt="유저이미지"/>
         </div>
         <div className="info_container">
             <div className="name_container">

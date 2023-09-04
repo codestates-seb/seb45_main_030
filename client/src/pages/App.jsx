@@ -1,5 +1,9 @@
+import MyPage from "./MyPage";
+
 function App() {
-    return <div>기본 템플릿</div>;
+    return (
+    <MyPage/>
+    );
 }
 
 export default App;
