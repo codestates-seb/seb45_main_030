@@ -1,28 +1,22 @@
 
 // 중간 버튼 컴포넌트
+import React from "react";
+import { Link } from "react-router-dom";
+
 export default function MyPageBtn() {
-    return (
+  return (
     <div className="button_container">
-    <ul>
+      <ul>
         <li>
-            <a>
-                <svg></svg>
-                My Photos
-            </a>
+          <Link to="/mypage/my-photos">My Photos</Link>
         </li>
         <li>
-            <a>
-                <svg></svg>
-                Bookmark
-            </a>
+          <Link to="/mypage/bookmark">Bookmark</Link>
         </li>
         <li>
-            <a>
-                <svg></svg>
-                Comments
-            </a>
+          <Link to="/mypage/comments">Comments</Link>
         </li>
-    </ul>
+      </ul>
     </div>
-)
+  );
 }
