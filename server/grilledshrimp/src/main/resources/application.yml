@@ -20,10 +20,7 @@ spring:
     security:
       oauth2:
         client:
-            registration:
-              google:
-                client-id: ${GOOGLE_CLIENT_ID}
-                client-secret: ${GOOGLE_CLIENT_SECRET}
+              
 
 logging:
     level:
@@ -36,3 +33,15 @@ jwt:
     key: ${JWT_SECRET_KEY}
     access-token-expiration-minutes: 30
     refresh-token-expiration-minutes: 420
+
+cloud:
+    aws:
+        region:
+            static: ap-northeast-2
+        stack:
+            auto: false
+
+# admin용 계정
+mail:
+    address:
+        admin: admin@gmail.com
