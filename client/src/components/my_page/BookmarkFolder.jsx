@@ -1,21 +1,17 @@
-
-// 하단 폴더 컴포넌트
-// 폴더를 생성하지 않았다면 '북마크' 폴더에 저장.
-// 북마크 생성 버튼과 북마크 이름 입력하는 것도 필요할 듯
-import React, { useState } from "react";
+import React from 'react';
+import { useRecoilState } from 'recoil';
+import { bookmarkFoldersState } from '../../recoil/Global';
 
 export default function BookmarkFolder() {
-  const [folders, setFolders] = useState(["북마크"]); // '북마크'라는 기본 폴더를 포함한 폴더 목록
-  const [newFolderName, setNewFolderName] = useState(""); // 새로운 폴더 이름을 상태로 관리
-  const [isCreatingFolder, setIsCreatingFolder] = useState(false); // 폴더 생성 중 여부를 상태로 관리
+  const [folders, setFolders] = useRecoilState(bookmarkFoldersState);
+  const [newFolderName, setNewFolderName] = React.useState('');
+  const [isCreatingFolder, setIsCreatingFolder] = React.useState(false);
 
-  // 새로운 폴더 생성
   const createFolder = () => {
-    if (newFolderName.trim() !== "") {
-      // 빈 폴더 이름은 허용하지 않음
+    if (newFolderName.trim() !== '') {
       setFolders([...folders, newFolderName]);
-      setNewFolderName(""); // 새로운 폴더 이름 초기화
-      setIsCreatingFolder(false); // 폴더 생성 모드 종료
+      setNewFolderName('');
+      setIsCreatingFolder(false);
     }
   };
 
