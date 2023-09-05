@@ -6,9 +6,11 @@ import com.mainproject.grilledshrimp.domain.user.dto.UserPostDto;
 import com.mainproject.grilledshrimp.domain.user.dto.UserProfileImageDto;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.mapper.UserMapper;
+import com.mainproject.grilledshrimp.domain.user.service.AuthUserDetailsService;
 import com.mainproject.grilledshrimp.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,32 +19,20 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private final AuthUserDetailsService authUserDetailsService;
     private final UserMapper mapper;
 
-    public UserController(UserService userService, UserMapper mapper) {
+    public UserController(UserService userService, AuthUserDetailsService authUserDetailsService, UserMapper mapper) {
         this.userService = userService;
+        this.authUserDetailsService = authUserDetailsService;
         this.mapper = mapper;
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity postUser(@Valid @RequestBody UserPostDto userPostDto) {
         Users users = userService.createUser(mapper.userPostDtoToUser(userPostDto));
         return new ResponseEntity(mapper.userToUserResponseDto(users), HttpStatus.CREATED);
-    }
-
-    // TODO OAuth 2 인증 환경에서는 회원 정보를 별도로 관리하지 않으므로, 회원 정보를 어떻게 로드할 것인가는 추가적인 논의가 필요합니다.
-    @PostMapping("/login")
-    public ResponseEntity loginUser(@Valid @RequestBody UserLoginDto userLoginDto) {
-        Users users = userService.loginUser(userLoginDto.getEmail(), userLoginDto.getPassword());
-        return new ResponseEntity(mapper.userToUserResponseDto(users), HttpStatus.OK);
-    }
-
-
-    // 로그아웃 나중에 수정 필요
-    @PostMapping("/logout")
-    public ResponseEntity logoutUser() {
-
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     // 유저 사진 등록

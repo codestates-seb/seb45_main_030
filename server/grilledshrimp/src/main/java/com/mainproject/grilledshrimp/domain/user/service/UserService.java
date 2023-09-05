@@ -2,7 +2,7 @@ package com.mainproject.grilledshrimp.domain.user.service;
 
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
-import com.mainproject.grilledshrimp.global.auth.utils.UserAuthorityUtils;
+import com.mainproject.grilledshrimp.domain.user.utils.UserAuthorityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,4 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Users loginUser(String email, String password) {
-        return userRepository.findByEmailAndPassword(email, password);
-    }
 }
