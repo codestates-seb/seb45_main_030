@@ -1,5 +1,12 @@
+import React from "react";
+import Modal from "../components/Modal";
+
 function App() {
-    return <div>기본 템플릿</div>;
+    return (
+        <div>
+            <Modal />
+        </div>
+    );
 }
 
 export default App;
