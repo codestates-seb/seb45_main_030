@@ -1,21 +1,31 @@
 import ImageList from "../components/Image/ImageList";
-
+import styles from "./MainPage.module.css";
+import person_ping from "../assets/icon/person_pin_circle.png"
 function MainPage() {
-
     const Banner = () => {
-        return <div>배너</div>;
+        return (
+            <section className={styles.banner}>
+                <div>
+                    <h1>Lorem, ipsum</h1>
+                    <label htmlFor="banner_input">
+                        <p>가까운 멋진 장소를 찾아보세요.</p>
+                    </label>
+                    <input id="banner_input" type="text" />
+                </div>
+            </section>
+        );
     };
     const Welcome = () => {
         // 위치정보가 있으면 인근 뷰포인트
         // 없으면 인기 뷰포인트
-        return <div>인근 뷰포인트</div>;
+        return <div>
+            <img src={person_ping} alt="사람_핑_아이콘" />인근 뷰포인트</div>;
     };
     return (
         <>
             <header>헤더 컴포넌트</header>
-            <Banner></Banner>
-            <Welcome></Welcome>
-            {/* 아래 ImageList의 로딩을 Intersection Observer API를 통해 마지막으로 로딩된 이미지가 보여질때 추가로 API요청을 통해 이미지를 불러옴*/}
+            <Banner />
+            <Welcome />
             <ImageList />
         </>
     );

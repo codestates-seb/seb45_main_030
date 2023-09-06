@@ -26,7 +26,7 @@ function ImageList() {
     ImageDataDistributor();
 
     return (
-        <div className={styles.container}>
+        <section className={styles.container}>
             <div className={styles.top_grid}>
                 <div className={styles.column_grid}>
                     {columns.first.map((el) => {
@@ -45,7 +45,7 @@ function ImageList() {
                 </div>
             </div>
             <div ref={sentinelRef}></div>
-        </div>
+        </section>
     );
 }
 export default ImageList;
