@@ -3,10 +3,12 @@ import axios from "axios";
 
 /**
  * @param {string} url - 쿼리스트링을 제외한 url
- * @returns state {
+ * @returns {object} state {
  *   pageNum:{number},
  *   dataArr:{Array},
  * }
+ * @returns {useRef} sentinelRef  ref{sentinelRef} 속성을 지닌 HTML요소가 화면에 등장하면 다음 사진을 불러옵니다.
+ *
  */
 function useGetImageList(url) {
     const [state, setState] = useState({
