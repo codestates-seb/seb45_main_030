@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { bookmarkFoldersState } from '../../recoil/Global';
 
 export default function BookmarkFolder() {
   const [folders, setFolders] = useRecoilState(bookmarkFoldersState);
-  const [newFolderName, setNewFolderName] = React.useState('');
-  const [isCreatingFolder, setIsCreatingFolder] = React.useState(false);
+  const [newFolderName, setNewFolderName] = useState('');
+  const [isCreatingFolder, setIsCreatingFolder] = useState(false);
 
   const createFolder = () => {
     if (newFolderName.trim() !== '') {
@@ -14,6 +14,12 @@ export default function BookmarkFolder() {
       setIsCreatingFolder(false);
     }
   };
+
+  const deleteFolder = ( folderName ) => {
+    // 전달된 폴더 이름을 사용하여 해당 폴더를 삭제
+    const updatedFolders = folders.filter((folder) => folder !== folderName);
+    setFolders(updatedFolders);
+  }
 
   return (
     <div className="folder">
@@ -34,7 +40,10 @@ export default function BookmarkFolder() {
       </div>
       <ul>
         {folders.map((folder, index) => (
-          <li key={index}>{folder}</li>
+            <>
+                <li key={index}>{folder}</li>
+                <button onClick={() => deleteFolder(folder)}>삭제</button>
+            </>
         ))}
       </ul>
     </div>
