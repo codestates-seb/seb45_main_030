@@ -60,7 +60,6 @@ function ButtonBookmark({ postId, comment }) {
 
     return (
         <button className={styles.button} onClick={handleRecommend}>
-            추천
             <img className={styles.img} src={isBookmarked ? thumb_up_fill : thumb_up_empty} alt="추천_버튼" />
         </button>
     );
