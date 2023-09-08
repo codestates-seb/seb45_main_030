@@ -2,8 +2,11 @@ package com.mainproject.grilledshrimp.domain.user.service;
 
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
-import com.mainproject.grilledshrimp.global.utils.UserAuthorityUtils;
+import com.mainproject.grilledshrimp.global.exception.BusinessLogicException;
+import com.mainproject.grilledshrimp.global.exception.ExceptionCode;
+import com.mainproject.grilledshrimp.domain.user.utils.UserAuthorityUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +21,13 @@ public class UserService {
 
     private final UserAuthorityUtils authorityUtils;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserAuthorityUtils authorityUtils) {
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserAuthorityUtils authorityUtils, RedisTemplate redisTemplate) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
+        this.redisTemplate = redisTemplate;
     }
 
     // 패스워드를 암호화 해서 회원가입을 진행합니다.
@@ -51,4 +57,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public void logoutUser(String email) {
+        if(redisTemplate.opsForValue().get("JWT_TOKEN:" + email) == null) {
+            log.info("이미 로그아웃된 유저");
+            throw new BusinessLogicException(ExceptionCode.USER_LOGOUTED);
+        }
+        redisTemplate.delete("JWT_TOKEN:" + email);
+        log.info("유저 : {} 로그아웃", email);
+    }
 }

@@ -1,4 +1,4 @@
-package com.mainproject.grilledshrimp.global.response;
+package com.mainproject.grilledshrimp.global.exception.response;
 
 import com.mainproject.grilledshrimp.global.exception.ExceptionCode;
 import lombok.Getter;

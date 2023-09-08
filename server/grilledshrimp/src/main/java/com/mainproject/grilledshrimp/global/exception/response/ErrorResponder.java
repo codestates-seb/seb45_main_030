@@ -1,9 +1,12 @@
-package com.mainproject.grilledshrimp.global.utils;
+package com.mainproject.grilledshrimp.global.exception.response;
 
 import com.google.gson.Gson;
-import com.mainproject.grilledshrimp.global.response.ErrorResponse;
+import com.mainproject.grilledshrimp.global.exception.BusinessLogicException;
+import com.mainproject.grilledshrimp.global.exception.ExceptionCode;
+import com.mainproject.grilledshrimp.global.exception.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
