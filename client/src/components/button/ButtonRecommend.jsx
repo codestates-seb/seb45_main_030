@@ -4,7 +4,7 @@ import thumb_up_fill from "../../assets/icon/thumb_up_fill.png";
 import thumb_up_empty from "../../assets/icon/thumb_up_empty.png";
 import styles from "../button/Button.module.css"
 
-function ButtonRecommend({ postId, comment }) {
+function ButtonRecommend({ postId }) {
     // 사용가 요소를 추천했는지 안했는지 서버에 상태 데이터를 요청한다
 
     // 1 추천하지 않은 상태면,
@@ -55,6 +55,7 @@ function ButtonRecommend({ postId, comment }) {
     };
 
     const handleRecommend = () => {
+        console.log("북마크버튼 전달받은 id",postId)
         // patchData()
         setIsRecommended(!isRecommended);
     };
