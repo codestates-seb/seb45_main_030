@@ -65,31 +65,35 @@ export default function UserInfo() {
             <div className="info_container">
                 <div className={styles.name_container}>
                     {isEditingName ? (
-                        <input type="text" value={editedName} onChange={(e) => setEditedName(e.target.value)} />
+                        <>
+                            <input type="text" value={editedName} onChange={(e) => setEditedName(e.target.value)} />
+                            <button onClick={updateUserProfile}>수정 확인</button>
+                            <button onClick={() => setIsEditingName(false)}>수정 취소</button>
+                        </>
                     ) : (
-                        <h1>{userData.name}</h1>
-                    )}
-                    {isEditingName ? (
-                        <button onClick={updateUserProfile}>수정 확인</button>
-                    ) : (
-                        <button onClick={() => setIsEditingName(true)}>수정</button>
+                        <>
+                            <h1>{userData.name}</h1>
+                            <button onClick={() => setIsEditingName(true)}>수정</button>
+                        </>
                     )}
                 </div>
                 <p>{userData.email}</p>
                 <div className="introduce_container">
                     {isEditingIntroduction ? (
-                        <input
-                            type="text"
-                            value={editedIntroduction}
-                            onChange={(e) => setEditedIntroduction(e.target.value)}
-                        />
+                        <>
+                            <input
+                                type="text"
+                                value={editedIntroduction}
+                                onChange={(e) => setEditedIntroduction(e.target.value)}
+                            />
+                            <button onClick={updateUserProfile}>수정 확인</button>
+                            <button onClick={() => setIsEditingIntroduction(false)}>수정 취소</button>
+                        </>
                     ) : (
-                        <p>{userData.introduction}</p>
-                    )}
-                    {isEditingIntroduction ? (
-                        <button onClick={updateUserProfile}>수정 확인</button>
-                    ) : (
-                        <button onClick={() => setIsEditingIntroduction(true)}>수정</button>
+                        <>
+                            <p>{userData.introduction}</p>
+                            <button onClick={() => setIsEditingIntroduction(true)}>수정</button>
+                        </>
                     )}
                 </div>
             </div>
