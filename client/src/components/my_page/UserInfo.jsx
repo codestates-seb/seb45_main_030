@@ -12,7 +12,7 @@ export default function UserInfo() {
     const [userData, setUserData] = useRecoilState(userState);
     const [isEditingName, setIsEditingName] = useState(false);
     const [isEditingIntroduction, setIsEditingIntroduction] = useState(false);
-    const [editedName, setEditedName] = useState(userData.name);
+    const [editedName, setEditedName] = useState(userData.user_name);
     const [editedIntroduction, setEditedIntroduction] = useState(userData.introduction);
 
     // 서버로부터 사용자 정보를 가져오는 함수
@@ -21,7 +21,7 @@ export default function UserInfo() {
             const response = await axios.get("서버 API 엔드포인트");
             const data = response.data;
             setUserData({
-                name: data.name,
+                user_name: data.user_name,
                 email: data.email,
                 introduction: data.introduction,
             });
@@ -40,14 +40,14 @@ export default function UserInfo() {
         try {
             // 변경된 유저 정보를 서버에 보내고 업데이트
             await axios.put("서버 API 엔드포인트", {
-                name: isEditingName ? editedName : userData.name,
+                user_name: isEditingName ? editedName : userData.user_name,
                 email: userData.email,
                 introduction: isEditingIntroduction ? editedIntroduction : userData.introduction,
             });
             alert("유저 정보가 업데이트되었습니다.");
             setUserData({
                 ...userData,
-                name: isEditingName ? editedName : userData.name,
+                user_name: isEditingName ? editedName : userData.user_name,
                 introduction: isEditingIntroduction ? editedIntroduction : userData.introduction,
             });
             setIsEditingName(false);
@@ -72,7 +72,7 @@ export default function UserInfo() {
                         </>
                     ) : (
                         <>
-                            <h1>{userData.name}</h1>
+                            <h1>{userData.user_name}</h1>
                             <button onClick={() => setIsEditingName(true)}>수정</button>
                         </>
                     )}

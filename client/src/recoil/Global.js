@@ -8,7 +8,7 @@ export const bookmarkFoldersState = atom({
 export const userState = atom({
     key: "userState",
     default: {
-        name: "",
+        user_name: "",
         email: "",
         introduction: "",
     },
