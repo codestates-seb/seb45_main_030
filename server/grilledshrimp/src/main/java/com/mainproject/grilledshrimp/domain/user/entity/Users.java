@@ -19,12 +19,14 @@ import java.util.List;
 @Setter
 @Entity
 public class Users {
+    // 스네이크 케이스를 사용하면 jpaRepository에서 findByUsername등을 사용할 수 없다.
+    // 그래서 카멜 케이스를 사용한다.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
+    private Long userId;
 
     @Column(nullable = false, unique = true)
-    private String user_name;
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -35,20 +37,24 @@ public class Users {
     @Column(nullable = false, updatable = false, unique = true)
     private String email;
 
+    // 처음 생성할 땐 활동중 상태로 생성한다.
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
-    private String user_status;
+    private UserStatus userStatus = UserStatus.USER_ACTIVE;
 
-    @Column(nullable = false)
-    private String role;
+    // 처음 생성할 땐 일반 사용자로 생성한다.
+    // 별도의 엔티티를 생성하지 않아도 간단하게 매핑 처리가 됨 (String으로 매핑)
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> role = new ArrayList<>();
 
     @Column(nullable = true)
-    private String profile_image;
+    private String profileImage;
 
     @Column(nullable = false)
-    private LocalDateTime created_at = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(nullable = false)
-    private LocalDateTime modified_at;
+    private LocalDateTime modifiedAt;
 
     // 북마크 일대다 관계
     @OneToMany(mappedBy = "users")
@@ -59,4 +65,29 @@ public class Users {
 
     @OneToMany(mappedBy = "users")
     private List<RecommendComment> recommendCommentList = new ArrayList<>();
+
+    public enum UserStatus {
+        USER_ACTIVE("활동중"),
+        USER_SLEEP("휴면 상태"),
+        USER_QUIT("탈퇴 상태");
+
+        @Getter
+        private String status;
+
+        UserStatus(String status) {
+            this.status = status;
+        }
+    }
+
+    public enum UserRole {
+        ROLE_ADMIN("관리자"),
+        ROLE_USER("일반 사용자");
+
+        @Getter
+        private String role;
+
+        UserRole(String role) {
+            this.role = role;
+        }
+    }
 }
