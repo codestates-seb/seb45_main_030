@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import thumb_up_fill from "../../assets/icon/thumb_up_fill.png";
 import thumb_up_empty from "../../assets/icon/thumb_up_empty.png";
+import styles from "../button/Button.module.css"
 
 function ButtonRecommend({ postId, comment }) {
     // 사용가 요소를 추천했는지 안했는지 서버에 상태 데이터를 요청한다
@@ -59,9 +60,8 @@ function ButtonRecommend({ postId, comment }) {
     };
 
     return (
-        <button onClick={handleRecommend}>
-            추천
-            <img src={isRecommended ? thumb_up_fill : thumb_up_empty} alt="추천_버튼" />
+        <button className={styles.button} onClick={handleRecommend}>
+            <img className={styles.img} src={isRecommended ? thumb_up_fill : thumb_up_empty} alt="추천_버튼" />
         </button>
     );
 }
