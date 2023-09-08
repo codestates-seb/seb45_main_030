@@ -5,7 +5,6 @@ export default function Comments() {
                 <svg></svg>
                 <div className="post"></div>
             </div>
-
         </div>
-    )
+    );
 }

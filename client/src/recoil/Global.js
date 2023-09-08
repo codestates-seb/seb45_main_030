@@ -1,16 +1,15 @@
-import { atom } from 'recoil';
+import { atom } from "recoil";
 
 export const bookmarkFoldersState = atom({
     key: "bookmarkFoldersState",
     default: ["북마크"],
 });
 
-
 export const userState = atom({
-    key: 'userState',
+    key: "userState",
     default: {
-      name: '',
-      email: '',
-      introduction: '',
+        name: "",
+        email: "",
+        introduction: "",
     },
-  });
+});
