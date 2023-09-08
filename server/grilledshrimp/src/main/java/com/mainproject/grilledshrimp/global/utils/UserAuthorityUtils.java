@@ -1,4 +1,4 @@
-package com.mainproject.grilledshrimp.domain.user.utils;
+package com.mainproject.grilledshrimp.global.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;

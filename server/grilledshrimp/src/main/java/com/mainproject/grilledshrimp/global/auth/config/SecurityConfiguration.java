@@ -1,12 +1,20 @@
 package com.mainproject.grilledshrimp.global.auth.config;
 
-import com.mainproject.grilledshrimp.global.auth.filter.JwtAuthenticationFilter;
+import com.mainproject.grilledshrimp.global.auth.jwt.handler.UserAccessDeniedHandler;
+import com.mainproject.grilledshrimp.global.auth.jwt.handler.UserAuthenticationEntryPoint;
+import com.mainproject.grilledshrimp.global.utils.UserAuthorityUtils;
+import com.mainproject.grilledshrimp.global.auth.jwt.filter.JwtAuthenticationFilter;
+import com.mainproject.grilledshrimp.global.auth.jwt.filter.JwtVerificationFilter;
+import com.mainproject.grilledshrimp.global.auth.jwt.handler.UserAuthenticationFailureHandler;
+import com.mainproject.grilledshrimp.global.auth.jwt.handler.UserAuthenticationSuccessHandler;
 import com.mainproject.grilledshrimp.global.auth.jwt.JwtTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,16 +24,23 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
+    private final UserAuthorityUtils authorityUtils;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer) {
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, UserAuthorityUtils authorityUtils, RedisTemplate<String, Object> redisTemplate) {
         this.jwtTokenizer = jwtTokenizer;
+        this.authorityUtils = authorityUtils;
+        this.redisTemplate = redisTemplate;
     }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -34,10 +49,13 @@ public class SecurityConfiguration {
                 .and()
                 .csrf().disable()        // CSRF 공격 방지 비활성화
                 .cors(withDefaults())    // CORS 허용
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 비활성화
+                .and()
                 .formLogin().disable()   // form 기반 로그인 비활성화
                 .httpBasic().disable()   // http 기본 인증 비활성화
-                .logout()               // 로그아웃 설정
-                .logoutUrl("/users/logout")   // 로그아웃 url 설정
+                .exceptionHandling()
+                .authenticationEntryPoint(new UserAuthenticationEntryPoint())   // 인증 실패 시 처리
+                .accessDeniedHandler(new UserAccessDeniedHandler())   // 인가 실패 시 처리
                 .and()
                 .apply(new CustomFilterConfigurer()) // 커스텀 필터 적용
                 .and()
@@ -48,15 +66,18 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-    //
+    // 커스텀 필터 적용
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));    //
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE"));  //
+        CorsConfiguration config = new CorsConfiguration();
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();   //
-        source.registerCorsConfiguration("/**", configuration);      //
+        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 
@@ -66,6 +87,7 @@ public class SecurityConfiguration {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    // 커스텀 필터
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
         @Override
         public void configure(HttpSecurity http) throws Exception {
@@ -73,7 +95,13 @@ public class SecurityConfiguration {
 
             JwtAuthenticationFilter customFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
             customFilter.setFilterProcessesUrl("/users/login");
-            http.addFilterBefore(customFilter, JwtAuthenticationFilter.class);
+            customFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
+            customFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
+
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, redisTemplate);
+            http
+                    .addFilter(customFilter)
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
 }

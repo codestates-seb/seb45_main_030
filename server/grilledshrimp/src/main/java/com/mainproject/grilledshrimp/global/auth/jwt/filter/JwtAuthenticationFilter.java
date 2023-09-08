@@ -1,23 +1,27 @@
-package com.mainproject.grilledshrimp.global.auth.filter;
+package com.mainproject.grilledshrimp.global.auth.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mainproject.grilledshrimp.domain.user.dto.UserLoginDto;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.global.auth.jwt.JwtTokenizer;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 // JWT를 이용한 인증을 위한 필터
+@Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
@@ -33,9 +37,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         ObjectMapper objectMapper = new ObjectMapper();
         UserLoginDto userLoginDto = objectMapper.readValue(request.getInputStream(), UserLoginDto.class);
-
+        
         // 인증을 위한 토큰 생성
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userLoginDto.getEmail(), userLoginDto.getPassword());
+        log.info("인증을 위한 토큰 생성");
         return authenticationManager.authenticate(authenticationToken);
     }
 
@@ -44,7 +49,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) {
+                                            Authentication authResult) throws IOException, ServletException {
         Users users = (Users) authResult.getPrincipal();
 
         String accessToken = delegateAccessToken(users);
@@ -52,6 +57,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.addHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().write("{\"accessToken\": \"" + "Bearer " + accessToken + "\", \"refreshToken\": \"" + refreshToken + "\"}");
+
+        log.info("인증이 성공했을 때 JWT 토큰을 생성해서 응답 헤더에 추가");
+        this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
 
     // access token 생성

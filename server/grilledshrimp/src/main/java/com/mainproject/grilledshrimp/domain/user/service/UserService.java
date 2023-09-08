@@ -2,7 +2,7 @@ package com.mainproject.grilledshrimp.domain.user.service;
 
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
-import com.mainproject.grilledshrimp.domain.user.utils.UserAuthorityUtils;
+import com.mainproject.grilledshrimp.global.utils.UserAuthorityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +26,9 @@ public class UserService {
 
     // 패스워드를 암호화 해서 회원가입을 진행합니다.
     public Users createUser(Users user) {
+        // 이미 있는 유저라면 에러를 발생시킵니다.
+
+
         user.setModifiedAt(LocalDateTime.now()); // 현재 시간으로 수정 시간을 설정합니다.
 
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
