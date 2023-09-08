@@ -45,8 +45,6 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .headers().frameOptions().sameOrigin() // 동일 출처로부터 들어오는 request만 허용
-                .and()
                 .csrf().disable()        // CSRF 공격 방지 비활성화
                 .cors(withDefaults())    // CORS 허용
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 비활성화
