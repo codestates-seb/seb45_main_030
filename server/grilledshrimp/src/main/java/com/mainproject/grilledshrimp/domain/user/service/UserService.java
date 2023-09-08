@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -33,7 +34,7 @@ public class UserService {
     // 패스워드를 암호화 해서 회원가입을 진행합니다.
     public Users createUser(Users user) {
         // 이미 있는 유저라면 에러를 발생시킵니다.
-
+        verifyExistsEmail(user.getEmail());
 
         user.setModifiedAt(LocalDateTime.now()); // 현재 시간으로 수정 시간을 설정합니다.
 
@@ -50,7 +51,7 @@ public class UserService {
     }
 
     public Users findUser(long userId) {
-        return userRepository.findById(userId).orElseThrow();
+        return findVerifiedUser(userId);
     }
 
     public Users updateUser(Users user) {
@@ -64,5 +65,17 @@ public class UserService {
         }
         redisTemplate.delete("JWT_TOKEN:" + email);
         log.info("유저 : {} 로그아웃", email);
+    }
+
+    public Users findVerifiedUser(long userId) {
+        Optional<Users> optionalUser = userRepository.findById(userId);
+        Users findUser = optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        return findUser;
+    }
+
+    public void verifyExistsEmail(String email) {
+        Optional<Users> user = userRepository.findByEmail(email);
+        if (user.isPresent())
+            throw new BusinessLogicException(ExceptionCode.USER_EXIST);
     }
 }

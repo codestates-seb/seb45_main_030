@@ -29,6 +29,7 @@ public enum ExceptionCode {
     USER_NOT_FOUND(404, "해당 유저를 찾을 수 없습니다."),
     USER_LOGIN_FAILED(401, "로그인에 실패했습니다."),
     USER_LOGIN_REQUIRED(401, "로그인이 필요합니다."),
+    USER_EXIST(409, "이미 존재하는 유저입니다."),
 
     USER_LOGOUT_FAILED(401, "로그아웃에 실패했습니다."),
     USER_LOGOUTED(401, "이미 로그아웃된 유저입니다."),

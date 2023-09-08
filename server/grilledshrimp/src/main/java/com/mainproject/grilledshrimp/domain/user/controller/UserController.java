@@ -71,9 +71,9 @@ public class UserController {
 
     // 특정 유저의 정보 가져오기
     @GetMapping("/{user-id}")
-    public ResponseEntity getUserInfo() {
-
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity getUserInfo(@PathVariable("user-id") long userId) {
+        Users findUser = userService.findUser(userId);
+        return new ResponseEntity<>(mapper.userToUserResponseDto(findUser), HttpStatus.OK);
     }
 
     // 모든 유저 정보 가져오기
