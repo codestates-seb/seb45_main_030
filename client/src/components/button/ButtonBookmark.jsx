@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import thumb_up_fill from "../../assets/icon/bookmark_fill.png";
 import thumb_up_empty from "../../assets/icon/bookmark_empty.png";
-
+import styles from "../button/Button.module.css"
 function ButtonBookmark({ postId, comment }) {
     // 사용가 요소를 추천했는지 안했는지 서버에 상태 데이터를 요청한다
 
@@ -59,9 +59,9 @@ function ButtonBookmark({ postId, comment }) {
     };
 
     return (
-        <button onClick={handleRecommend}>
+        <button className={styles.button} onClick={handleRecommend}>
             추천
-            <img src={isBookmarked ? thumb_up_fill : thumb_up_empty} alt="추천_버튼" />
+            <img className={styles.img} src={isBookmarked ? thumb_up_fill : thumb_up_empty} alt="추천_버튼" />
         </button>
     );
 }
