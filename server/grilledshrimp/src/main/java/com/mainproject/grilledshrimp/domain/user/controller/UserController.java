@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -32,8 +33,8 @@ public class UserController {
 
     // 유저 사진 등록
     @PostMapping("/{user-id}/image")
-    public ResponseEntity postUserImage(@Valid @RequestBody UserProfileImageDto userProfileImageDto) {
-
+    public ResponseEntity postUserImage(@PathVariable("user-id") Long userId, @Valid @RequestBody UserProfileImageDto userProfileImageDto) {
+        userService.updateProfileImage(userId, userProfileImageDto.getProfileImage());
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -47,19 +48,20 @@ public class UserController {
 
     // 유저 사진 수정
     @PatchMapping("/{user-id}/image")
-    public ResponseEntity patchUserImage(@Valid @RequestBody UserProfileImageDto userProfileImageDto) {
-
+    public ResponseEntity patchUserImage(@PathVariable("user-id") Long userId, @Valid @RequestBody UserProfileImageDto userProfileImageDto) {
+        userService.updateProfileImage(userId, userProfileImageDto.getProfileImage());
         return new ResponseEntity(HttpStatus.OK);
     }
 
     // 유저 사진 삭제도 있어야 할 듯
 
-    // 유저 이름 수정
+
+    // 유저 정보 수정
     // 유저 정보 수정DTO에 수정할 정보 여러개 넣고 필요한 값만 받아 바꾸면 됨
     @PatchMapping("/{user-id}")
-    public ResponseEntity patchUserName(@Valid @RequestBody UserNamePatchDto userNamePatchDto) {
-
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity patchUser(@Valid @RequestBody UserPatchDto userPatchDto, @PathVariable("user-id") Long userId) {
+        Users updateUser = userService.updateUser(userId, mapper.userPatchDtoToUser(userPatchDto));
+        return new ResponseEntity(mapper.userToUserResponseDto(updateUser), HttpStatus.OK);
     }
 
     // 특정 유저의 전체 게시글 가져오기
@@ -79,14 +81,14 @@ public class UserController {
     // 모든 유저 정보 가져오기
     @GetMapping
     public ResponseEntity getAllUserInfo() {
-
-        return new ResponseEntity(HttpStatus.OK);
+        List<Users> users = userService.findAllUser();
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 
     // 특정 유저 삭제
     @DeleteMapping("/{user-id}")
-    public ResponseEntity deleteUser() {
-
+    public ResponseEntity deleteUser(@PathVariable("user-id") long userId) {
+        userService.deleteUser(userId);
         return new ResponseEntity(HttpStatus.OK);
     }
 }
