@@ -19,42 +19,42 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class Post {
+public class Posts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long post_id;
+    private Long postId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Users users;
+    private Users user;
 
     @Column(nullable = false)
-    private String post_title;
+    private String postTitle;
 
     @Column(nullable = true)
-    private String post_caption;
+    private String postCaption;
 
     @Column(nullable = false)
-    private String post_image;
+    private String postImage;
 
     @Column(nullable = true)
-    private String post_address;
+    private String postAddress;
 
     @Column(nullable = false)
-    private boolean post_comment_permission;
+    private boolean postCommentPermission;
 
     @Column(nullable = false)
-    private LocalDateTime created_at = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(nullable = false)
-    private LocalDateTime modified_at;
+    private LocalDateTime modifiedAt;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "posts", orphanRemoval = true)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "posts", orphanRemoval = true)
     private List<PostTag> postTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "posts", orphanRemoval = true)
     private List<RecommendPost> recommendPostList = new ArrayList<>();
 }
