@@ -17,16 +17,14 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
-    private final AuthUserDetailsService authUserDetailsService;
     private final UserMapper mapper;
 
-    public UserController(UserService userService, AuthUserDetailsService authUserDetailsService, UserMapper mapper) {
+    public UserController(UserService userService, UserMapper mapper) {
         this.userService = userService;
-        this.authUserDetailsService = authUserDetailsService;
         this.mapper = mapper;
     }
 
-
+    // 유저 로그인
     @PostMapping("/signup")
     public ResponseEntity postUser(@Valid @RequestBody UserPostDto userPostDto) {
         Users users = userService.createUser(mapper.userPostDtoToUser(userPostDto));
@@ -44,6 +42,12 @@ public class UserController {
         return new ResponseEntity<>((responseDto),HttpStatus.OK);
     }
 
+    // 유저 로그아웃
+    @PostMapping("/logout")
+    public ResponseEntity logoutUser(@Valid @RequestBody UserLogoutDto userLogoutDto) {
+        userService.logoutUser(userLogoutDto.getEmail());
+        return new ResponseEntity(HttpStatus.OK);
+    }
 //    // 유저 사진 수정
 //    @PatchMapping("/{user-id}/image")
 //    public ResponseEntity patchUserImage(@Valid @RequestBody UserProfileImageDto userProfileImageDto) {
@@ -70,9 +74,9 @@ public class UserController {
 
     // 특정 유저의 정보 가져오기
     @GetMapping("/{user-id}")
-    public ResponseEntity getUserInfo() {
-
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity getUserInfo(@PathVariable("user-id") long userId) {
+        Users findUser = userService.findUser(userId);
+        return new ResponseEntity<>(mapper.userToUserResponseDto(findUser), HttpStatus.OK);
     }
 
     // 모든 유저 정보 가져오기

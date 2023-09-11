@@ -1,12 +1,8 @@
 package com.mainproject.grilledshrimp.global.auth.jwt.handler;
 
-import com.google.gson.Gson;
-
-import com.mainproject.grilledshrimp.global.response.ErrorResponse;
-import com.mainproject.grilledshrimp.global.utils.ErrorResponder;
+import com.mainproject.grilledshrimp.global.exception.response.ErrorResponder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
