@@ -1,6 +1,6 @@
 package com.mainproject.grilledshrimp.domain.postTag.entity;
 
-import com.mainproject.grilledshrimp.domain.post.entity.Post;
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.tag.entity.Tag;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,8 @@ import javax.persistence.*;
 public class PostTag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long post_tag_id;
+    @Column(name = "post_tag_id")
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "tag_id")
@@ -25,5 +26,5 @@ public class PostTag {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Post post;
+    private Posts posts;
 }

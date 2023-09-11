@@ -1,6 +1,6 @@
 package com.mainproject.grilledshrimp.domain.bookmark.entity;
 
-import com.mainproject.grilledshrimp.domain.post.entity.Post;
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,7 +29,7 @@ public class Bookmark {
     // 외래키
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Post post;
+    private Posts posts;
 
     @Column(nullable = false)
     private String bookmark_name;
