@@ -1,0 +1,89 @@
+.box {
+    background-color: white;
+    border: 2px solid #d9d9d9;
+    border-radius: 5px;
+    width: 314px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .emailpart {
+    margin-top: 25px;
+  }
+  
+  .inputprofile {
+    border: 2px solid #d9d9d9;
+    border-radius: 5px;
+    width: 230px;
+    height: 2.5vh;
+  }
+  
+  .guide {
+    display: flex;
+    flex-direction: flex-start;
+  }
+  
+  .text {
+    font: Inter;
+    font-weight: 700;
+    border-radius: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .textgroup {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .findpassword {
+    color: #4bb6e4;
+    font-weight: 600;
+  }
+  
+  .findpassword:hover {
+    cursor: pointer;
+    filter: brightness(1.2);
+  }
+  
+  .loginbutton {
+    border: 2px solid #d9d9d9;
+    border-radius: 5px;
+    width: 238px;
+    height: 4.5vh;
+    color: white;
+    background-color: #0a95ff;
+    font: Inter;
+    text-align: center;
+    line-height: 34px;
+    margin-bottom: 35px;
+  }
+  
+  .loginbutton:hover {
+    cursor: pointer;
+    filter: brightness(0.9);
+  }
+  
+  .invalidwarn {
+    display: flex;
+    flex-direction: flex-start;
+  }
+  
+  .invalidmsg {
+    display: none;
+    color: red;
+    margin-top: 3px;
+    font-size: 13px;
+  }
+  .invalid {
+    border: 2px solid red;
+  }
+  
+  .show {
+    display: block;
+  }

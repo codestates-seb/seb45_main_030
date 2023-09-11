@@ -1,5 +1,24 @@
+import React from "react";
+import './App.css';
+import SignupPage from "./SignupPage";
+import LoginPage from "./LoginPage";
+
 function App() {
-    return <div>기본 템플릿</div>;
+  return (
+    <>
+    {/* <BrowserRouter>
+    <div>    
+       <Routes>
+            <Route path="/LoginPage" element={<LoginPage />} />
+        </Routes>
+    </div>
+
+
+
+    </BrowserRouter> */}
+    <LoginPage />
+    </>
+  );
 }
 
 export default App;
