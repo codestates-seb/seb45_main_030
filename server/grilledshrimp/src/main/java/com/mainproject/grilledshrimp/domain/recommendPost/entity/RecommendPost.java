@@ -1,6 +1,6 @@
 package com.mainproject.grilledshrimp.domain.recommendPost.entity;
 
-import com.mainproject.grilledshrimp.domain.post.entity.Post;
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +21,7 @@ public class RecommendPost {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Post post;
+    private Posts posts;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
