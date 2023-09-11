@@ -10,6 +10,7 @@ function ImageItem({ postData }) {
         //특정 게시글 컴포넌트로 모달 띄움
     };
     console.log(id, src, width, height);
+    const resizedHeight = Math.round(height * (300 / width));
     return (
         <div className={styles.container}>
             <figure className={styles.figure}>
@@ -17,7 +18,7 @@ function ImageItem({ postData }) {
 
                 <img
                     onClick={handleClickThumbnail}
-                    src={`https://picsum.photos/id/${id}/300/${Math.round(height * (300 / width))}`}
+                    src={`https://picsum.photos/id/${id}/300/${resizedHeight}`}
                     alt=""
                 />
                 <figcaption className={styles.figcaption}>
