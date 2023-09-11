@@ -18,11 +18,8 @@ import java.util.List;
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tag_id;
+    private Long id;
 
     @Column(nullable = false)
-    private String tag_name;
-
-    @OneToMany(mappedBy = "tag")
-    private List<PostTag> postTags = new ArrayList<>();
+    private String tagName;
 }
