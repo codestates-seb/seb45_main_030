@@ -54,10 +54,29 @@ public class UserService {
         return findVerifiedUser(userId);
     }
 
-    public Users updateUser(Users user) {
-        return userRepository.save(user);
+    public List<Users> findAllUser() {
+        return userRepository.findAll();
     }
 
+    public void updateProfileImage(long userId, String profileImage) {
+        Users user = findVerifiedUser(userId);
+        user.setProfileImage(profileImage);
+        userRepository.save(user);
+    }
+
+    // 유저 정보 수정
+    public Users updateUser(Long userId, Users user) {
+        user.setUserId(userId);
+        Users findUser = findVerifiedUser(userId);
+        Optional.ofNullable(user.getUsername()).ifPresent(findUser::setUsername);
+        Optional.ofNullable(user.getIntroduction()).ifPresent(findUser::setIntroduction);
+        Optional.ofNullable(user.getProfileImage()).ifPresent(findUser::setProfileImage);
+
+        findUser.setModifiedAt(LocalDateTime.now());
+        return userRepository.save(findUser);
+    }
+
+    // 유저 로그아웃
     public void logoutUser(String email) {
         if(redisTemplate.opsForValue().get("JWT_TOKEN:" + email) == null) {
             log.info("이미 로그아웃된 유저");
@@ -67,12 +86,20 @@ public class UserService {
         log.info("유저 : {} 로그아웃", email);
     }
 
+    // 특정 유저 삭제
+    public void deleteUser(long userId) {
+        Users findUser = findVerifiedUser(userId);
+        userRepository.delete(findUser);
+    }
+
+    // 특정 유저가 존재하는지 확인
     public Users findVerifiedUser(long userId) {
         Optional<Users> optionalUser = userRepository.findById(userId);
         Users findUser = optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         return findUser;
     }
 
+    // 특정 유저가 없는지 확인
     public void verifyExistsEmail(String email) {
         Optional<Users> user = userRepository.findByEmail(email);
         if (user.isPresent())
