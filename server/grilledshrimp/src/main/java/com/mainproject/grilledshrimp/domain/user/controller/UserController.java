@@ -24,7 +24,7 @@ public class UserController {
         this.mapper = mapper;
     }
 
-    // 유저 로그인
+    // 유저 생성
     @PostMapping("/signup")
     public ResponseEntity postUser(@Valid @RequestBody UserPostDto userPostDto) {
         Users users = userService.createUser(mapper.userPostDtoToUser(userPostDto));
@@ -89,6 +89,6 @@ public class UserController {
     @DeleteMapping("/{user-id}")
     public ResponseEntity deleteUser(@PathVariable("user-id") long userId) {
         userService.deleteUser(userId);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

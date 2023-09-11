@@ -1,5 +1,6 @@
 package com.mainproject.grilledshrimp.domain.bookmark.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -7,7 +8,12 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class BookmarkPostDto {
+    @JsonProperty("user_id")
     private Long user_id;
+
+    @JsonProperty("post_id")
     private Long post_id;
-    private String bookmark_name;
+
+    @JsonProperty("bookmark_name")
+    private String bookmarkName;
 }

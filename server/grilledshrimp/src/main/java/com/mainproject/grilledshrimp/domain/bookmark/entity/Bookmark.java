@@ -1,5 +1,6 @@
 package com.mainproject.grilledshrimp.domain.bookmark.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mainproject.grilledshrimp.domain.post.entity.Post;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,8 @@ public class Bookmark {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookmark_id;
+
+    private Long bookmarkId;
     
     // 외래키
     @ManyToOne
@@ -32,5 +34,5 @@ public class Bookmark {
     private Post post;
 
     @Column(nullable = false)
-    private String bookmark_name;
+    private String bookmarkName;
 }
