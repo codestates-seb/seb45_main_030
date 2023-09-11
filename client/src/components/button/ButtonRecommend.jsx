@@ -1,10 +1,28 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import thumb_up_fill from "../../assets/icon/thumb_up_fill.png";
-import thumb_up_empty from "../../assets/icon/thumb_up_empty.png";
-import styles from "../button/Button.module.css"
+// import { ReactComponent as ThumbUP } from "../../assets/icon/thumbup.svg";
+import styles from "../button/Button.module.css";
+
+const RECOMMEND_COLOR = "blue"
 
 function ButtonRecommend({ postId }) {
+    const RecommendIcon = ({ fill }) => {
+        return (
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24"
+                viewBox="0 -960 960 960"
+                width="24"
+                fill={fill}
+                stroke={RECOMMEND_COLOR}
+                strokeWidth="64"
+                strokeLinecap="round"
+            >
+                <path d="M720-120H320v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h218q32 0 56 24t24 56v80q0 7-1.5 15t-4.5 15L794-168q-9 20-30 34t-44 14ZM240-640v520H80v-520h160Z" />
+            </svg>
+        );
+    };
+
     // 사용가 요소를 추천했는지 안했는지 서버에 상태 데이터를 요청한다
 
     // 1 추천하지 않은 상태면,
@@ -55,14 +73,14 @@ function ButtonRecommend({ postId }) {
     };
 
     const handleRecommend = () => {
-        console.log("북마크버튼 전달받은 id",postId)
+        console.log("북마크버튼 전달받은 id", postId);
         // patchData()
         setIsRecommended(!isRecommended);
     };
 
     return (
         <button className={styles.button} onClick={handleRecommend}>
-            <img className={styles.img} src={isRecommended ? thumb_up_fill : thumb_up_empty} alt="추천_버튼" />
+            {isRecommended ? <RecommendIcon fill={RECOMMEND_COLOR} /> : <RecommendIcon fill="none" />}
         </button>
     );
 }

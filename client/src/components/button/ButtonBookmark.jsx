@@ -1,9 +1,29 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import thumb_up_fill from "../../assets/icon/bookmark_fill.png";
-import thumb_up_empty from "../../assets/icon/bookmark_empty.png";
+// import { ReactComponent as BookMarkIcon } from "../../assets/icon/bookmark.svg"
 import styles from "../button/Button.module.css";
+
+const BOOKMARK_COLOR = "red";
+
 function ButtonBookmark({ postId }) {
+    // cra webpack에서 오류가 발생해 svg import가 작동하지 않음
+    const BookmarkIcon = ({ fill }) => {
+        return (
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24"
+                viewBox="0 -960 960 960"
+                width="24"
+                fill={fill}
+                stroke={BOOKMARK_COLOR}
+                strokeWidth="64"
+                strokeLinecap="round"
+            >
+                <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Z" />
+            </svg>
+        );
+    };
+
     // 사용가 요소를 추천했는지 안했는지 서버에 상태 데이터를 요청한다
 
     // 1 추천하지 않은 상태면,
@@ -54,14 +74,14 @@ function ButtonBookmark({ postId }) {
     };
 
     const handleRecommend = () => {
-        console.log("추천버튼 전달받은 id",postId)
+        console.log("추천버튼 전달받은 id", postId);
         // patchData()
         setIsBookmarked(!isBookmarked);
     };
 
     return (
         <button className={styles.button} onClick={handleRecommend}>
-            <img className={styles.img} src={isBookmarked ? thumb_up_fill : thumb_up_empty} alt="추천_버튼" />
+            {isBookmarked ? <BookmarkIcon fill={BOOKMARK_COLOR} /> : <BookmarkIcon fill="none" />}
         </button>
     );
 }
