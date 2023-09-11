@@ -10,7 +10,7 @@ public enum ExceptionCode {
     
     // 댓글
     COMMENT_NOT_FOUND(404, "해당 댓글을 찾을 수 없습니다."),
-    
+    ILLIGAL_IMAGE_TYPE(400, "잘못된 파일 형식입니다."),
     // 유저
     USER_NOT_FOUND(404, "해당 유저를 찾을 수 없습니다."),
     
