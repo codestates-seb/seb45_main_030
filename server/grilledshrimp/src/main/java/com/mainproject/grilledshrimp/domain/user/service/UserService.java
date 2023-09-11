@@ -2,10 +2,12 @@ package com.mainproject.grilledshrimp.domain.user.service;
 
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
+import com.mainproject.grilledshrimp.global.image.AwsS3Service;
 import com.mainproject.grilledshrimp.global.utils.UserAuthorityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,12 +15,14 @@ import java.util.List;
 @Service
 @Slf4j
 public class UserService {
+    private final AwsS3Service awsS3Service;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final UserAuthorityUtils authorityUtils;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserAuthorityUtils authorityUtils) {
+    public UserService(AwsS3Service awsS3Service, UserRepository userRepository, PasswordEncoder passwordEncoder, UserAuthorityUtils authorityUtils) {
+        this.awsS3Service = awsS3Service;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
@@ -41,6 +45,13 @@ public class UserService {
         Users savedUser = userRepository.save(user);
         log.info("유저 생성");
         return savedUser;
+    }
+
+    public Users uploadImage(long userId, MultipartFile file){
+        Users user = userRepository.findById(userId).orElseThrow();
+        String fileName = awsS3Service.uploadImage(file);
+        user.setProfileImage(fileName);
+        return userRepository.save(user);
     }
 
     public Users findUser(long userId) {
