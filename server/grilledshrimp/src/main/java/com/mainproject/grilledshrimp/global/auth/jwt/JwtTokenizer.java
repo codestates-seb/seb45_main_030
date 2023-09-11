@@ -1,5 +1,8 @@
 package com.mainproject.grilledshrimp.global.auth.jwt;
 
+import com.mainproject.grilledshrimp.global.exception.BusinessLogicException;
+import com.mainproject.grilledshrimp.global.exception.ExceptionCode;
+import com.mainproject.grilledshrimp.global.exception.response.ErrorResponder;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -8,6 +11,7 @@ import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +23,7 @@ import java.util.Map;
 
 // 로그인에 성공하면 JWT 토큰을 발급해주는 클래스
 @Component
+@Slf4j
 public class JwtTokenizer {
     // jwt 비밀키
     @Getter
@@ -100,5 +105,33 @@ public class JwtTokenizer {
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return key;
+    }
+
+    // 토큰유효성, 만료일자 확인
+    public boolean validateToken(String token) {
+        try {
+            Jws<Claims> claims = Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
+                    .build()
+                    .parseClaimsJws(token);
+            if(claims.getBody().getExpiration().before(new Date())) {
+                log.info("토큰 만료");
+                throw new BusinessLogicException(ExceptionCode.JWT_TOKEN_EXPIRED);
+            }
+            return true;
+        } catch (Exception e) {
+            log.info("토큰 유효성 검사 실패");
+            throw new BusinessLogicException(ExceptionCode.JWT_TOKEN_INVALID);
+        }
+    }
+
+    // 토큰에서 username을 가져옵니다.
+    public String getUsername(String bearer) {
+        return Jwts.parserBuilder()
+                .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
+                .build()
+                .parseClaimsJws(bearer)
+                .getBody()
+                .getSubject();
     }
 }
