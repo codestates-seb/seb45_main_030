@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import { bookmarkFoldersState } from "../../recoil/Global";
+import addBtn from "../assets/icon/add.svg"
 
 export default function BookmarkFolder() {
     const [folders, setFolders] = useRecoilState(bookmarkFoldersState);
@@ -35,7 +36,7 @@ export default function BookmarkFolder() {
                         <button onClick={createFolder}>생성</button>
                     </>
                 ) : (
-                    <button onClick={() => setIsCreatingFolder(true)}>북마크 폴더 생성</button>
+                    <img src={addBtn} alt="addBtn" onClick={() => setIsCreatingFolder(true)}/>
                 )}
             </div>
             <ul>
