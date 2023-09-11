@@ -1,9 +1,6 @@
 package com.mainproject.grilledshrimp.domain.user.controller;
 
-import com.mainproject.grilledshrimp.domain.user.dto.UserLoginDto;
-import com.mainproject.grilledshrimp.domain.user.dto.UserNamePatchDto;
-import com.mainproject.grilledshrimp.domain.user.dto.UserPostDto;
-import com.mainproject.grilledshrimp.domain.user.dto.UserProfileImageDto;
+import com.mainproject.grilledshrimp.domain.user.dto.*;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.mapper.UserMapper;
 import com.mainproject.grilledshrimp.domain.user.service.AuthUserDetailsService;
@@ -12,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -37,17 +35,21 @@ public class UserController {
 
     // 유저 사진 등록
     @PostMapping("/{user-id}/image")
-    public ResponseEntity postUserImage(@Valid @RequestBody UserProfileImageDto userProfileImageDto) {
+    public ResponseEntity postUserImage(
+            @PathVariable("user-id") long userId,
+            @RequestParam(value = "file")MultipartFile file) {
+        Users user = userService.uploadImage(userId, file);
+        UserResponseDto responseDto = mapper.userToUserResponseDto(user);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>((responseDto),HttpStatus.OK);
     }
 
-    // 유저 사진 수정
-    @PatchMapping("/{user-id}/image")
-    public ResponseEntity patchUserImage(@Valid @RequestBody UserProfileImageDto userProfileImageDto) {
-
-        return new ResponseEntity(HttpStatus.OK);
-    }
+//    // 유저 사진 수정
+//    @PatchMapping("/{user-id}/image")
+//    public ResponseEntity patchUserImage(@Valid @RequestBody UserProfileImageDto userProfileImageDto) {
+//
+//        return new ResponseEntity(HttpStatus.OK);
+//    }
 
     // 유저 사진 삭제도 있어야 할 듯
 
