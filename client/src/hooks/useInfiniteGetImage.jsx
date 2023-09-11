@@ -11,33 +11,30 @@ import axios from "axios";
  *
  */
 function useGetImageList(url) {
+    const sentinelRef = useRef();
     const [state, setState] = useState({
         pageNum: 1,
         dataArr: [],
     });
 
-    const sentinelRef = useRef();
-
     // https://picsum.photos/ 더미 이미지 API
     useEffect(() => {
         const currentRefValue = sentinelRef.current;
 
-        const getApiData = () => {
-            axios
-                .get(`${url}?page=${state.pageNum}`)
-                .then((response) => {
-                    setState((prevState) => {
-                        return {
-                            ...prevState,
-                            pageNum: prevState.pageNum + 1,
-                            dataArr: [...prevState.dataArr, ...response.data],
-                        };
-                    });
-                })
-                .catch((error) => {
-                    console.error("데이터를 불러오는 중 오류 발생:", error);
-                    // 오류 토스트 컴포넌트(?)
+        const getApiData = async () => {
+            try {
+                const response = await axios.get(`${url}?page=${state.pageNum}`);
+                setState((prevState) => {
+                    return {
+                        ...prevState,
+                        pageNum: prevState.pageNum + 1,
+                        dataArr: [...prevState.dataArr, ...response.data],
+                    };
                 });
+            } catch (error) {
+                console.error("데이터를 불러오는 중 오류 발생:", error);
+                // 오류 토스트 컴포넌트를 여기에 추가할 수 있습니다.
+            }
         };
         const io = new IntersectionObserver((entries, observer) => {
             entries.forEach((entry) => {
@@ -55,7 +52,7 @@ function useGetImageList(url) {
                 io.unobserve(currentRefValue);
             }
         };
-    }, [url,state.pageNum]);
+    }, [url, state.pageNum]);
     return { state, sentinelRef };
 }
 export default useGetImageList;

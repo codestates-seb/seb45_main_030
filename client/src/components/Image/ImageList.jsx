@@ -30,17 +30,32 @@ function ImageList() {
             <div className={styles.top_grid}>
                 <div className={styles.column_grid}>
                     {columns.first.map((el) => {
-                        return <ImageItem key={el.id} postData={{"id":el.id,"src":el.download_url}} />;
+                        return (
+                            <ImageItem
+                                key={el.id}
+                                postData={{ id: el.id, src: el.download_url, width: el.width, height: el.height }}
+                            />
+                        );
                     })}
                 </div>
                 <div className={styles.column_grid}>
                     {columns.second.map((el) => {
-                        return <ImageItem key={el.id} postData={{"id":el.id,"src":el.download_url}} />;
+                        return (
+                            <ImageItem
+                                key={el.id}
+                                postData={{ id: el.id, src: el.download_url, width: el.width, height: el.height }}
+                            />
+                        );
                     })}
                 </div>
                 <div className={styles.column_grid}>
                     {columns.third.map((el) => {
-                        return <ImageItem key={el.id} postData={{"id":el.id,"src":el.download_url}} />;
+                        return (
+                            <ImageItem
+                                key={el.id}
+                                postData={{ id: el.id, src: el.download_url, width: el.width, height: el.height }}
+                            />
+                        );
                     })}
                 </div>
             </div>
