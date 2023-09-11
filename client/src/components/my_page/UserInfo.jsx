@@ -3,10 +3,7 @@ import { useRecoilState } from "recoil";
 import axios from "axios";
 import styles from "./UserInfo.module.css";
 import { userState } from "../../recoil/Global";
-
-// 로그인 했을 때 유저 관련 기본 정보를 가져오잖아요? 그걸 전역상태관리로 atom에 저장해두면 좋지 않나 싶습니다.
-// 이유는, 일단 마이페이지에서 유저관련 데이터를 받아와야 하는 부분이 있는데 통신을 또 하는것보다 전역에 저장해둔걸 가져다 쓰는게 좋지않나 싶었습니다.
-// 따라서, 로그인 성공했을 때 다른 컴포넌트에서 사용될 수 있는 유저 관련 정보를 전부 전역상태관리로 관리하는게 어떤가 싶습니다.
+import userIcon from "../assets/icon/user-icon-96.png";
 
 export default function UserInfo() {
     const [userData, setUserData] = useRecoilState(userState);
@@ -60,7 +57,7 @@ export default function UserInfo() {
     return (
         <div className={styles.userinfo_container}>
             <div className="img_conatainer">
-                <img src="client/public/images/user-icon-96.png" alt="유저이미지" />
+                <img src={userIcon} alt="유저이미지" />
             </div>
             <div className="info_container">
                 <div className={styles.name_container}>
