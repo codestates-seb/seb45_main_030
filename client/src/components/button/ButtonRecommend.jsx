@@ -1,28 +1,15 @@
+// import { useRecoilValue } from "recoil";
+// import { loginState } from "../state/LoginState";
 import { useEffect, useState } from "react";
 import axios from "axios";
-// import { ReactComponent as ThumbUP } from "../../assets/icon/thumbup.svg";
 import styles from "../button/Button.module.css";
 
-const RECOMMEND_COLOR = "blue"
+const GET_URL = process.env.REACT_APP_RECOMMEND_GET_API_URL;
+const PATCH_URL = process.env.REACT_APP_RECOMMEND_PATCH_API_URL;
+const RECOMMEND_COLOR = "blue";
 
 function ButtonRecommend({ postId }) {
-    const RecommendIcon = ({ fill }) => {
-        return (
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="24"
-                viewBox="0 -960 960 960"
-                width="24"
-                fill={fill}
-                stroke={RECOMMEND_COLOR}
-                strokeWidth="64"
-                strokeLinecap="round"
-            >
-                <path d="M720-120H320v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h218q32 0 56 24t24 56v80q0 7-1.5 15t-4.5 15L794-168q-9 20-30 34t-44 14ZM240-640v520H80v-520h160Z" />
-            </svg>
-        );
-    };
-
+    // const isLoginNow = useRecoilValue(loginState);
     // 사용가 요소를 추천했는지 안했는지 서버에 상태 데이터를 요청한다
 
     // 1 추천하지 않은 상태면,
@@ -45,14 +32,7 @@ function ButtonRecommend({ postId }) {
 
     // 2.댓글일 경우는 구현 안할 수도 있다고 추측됨
 
-    const GET_URL = `localhost:8080/recommends/posts/${postId}`;
-    const PATCH_URL = `localhost:8080/recommends/posts`;
-
     const [isRecommended, setIsRecommended] = useState(); // 불리언 값
-
-    useEffect(() => {
-        getData();
-    }, []);
 
     const getData = async () => {
         // const response = await axios.get(GET_URL);
@@ -63,12 +43,12 @@ function ButtonRecommend({ postId }) {
 
     const patchData = async () => {
         try {
-            const response = await axios.patch(PATCH_URL, {
-                post_id: 1,
-            });
+            // const response = await axios.patch(PATCH_URL, {
+            //     post_id: 1,
+            // });
             // 서버에서 response가 있다면
             // response를 받고 isRecommend 상태를 서버의 추천여부로 업데이트함
-            setIsRecommended(response);
+            // setIsRecommended(response);
         } catch {}
     };
 
@@ -76,6 +56,23 @@ function ButtonRecommend({ postId }) {
         console.log("북마크버튼 전달받은 id", postId);
         // patchData()
         setIsRecommended(!isRecommended);
+    };
+
+    const RecommendIcon = ({ fill }) => {
+        return (
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24"
+                viewBox="0 -960 960 960"
+                width="24"
+                fill={fill}
+                stroke={RECOMMEND_COLOR}
+                strokeWidth="64"
+                strokeLinecap="round"
+            >
+                <path d="M720-120H320v-520l280-280 50 50q7 7 11.5 19t4.5 23v14l-44 174h218q32 0 56 24t24 56v80q0 7-1.5 15t-4.5 15L794-168q-9 20-30 34t-44 14ZM240-640v520H80v-520h160Z" />
+            </svg>
+        );
     };
 
     return (

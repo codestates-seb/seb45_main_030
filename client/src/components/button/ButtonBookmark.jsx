@@ -1,28 +1,19 @@
+// import { useRecoilValue } from "recoil";
+// import { loginState } from "../state/LoginState";
 import { useEffect, useState } from "react";
 import axios from "axios";
-// import { ReactComponent as BookMarkIcon } from "../../assets/icon/bookmark.svg"
 import styles from "../button/Button.module.css";
 
+const GET_URL = process.env.REACT_APP_BOOKMARK_GET_API_URL;
+const PATCH_URL = process.env.REACT_APP_BOOKMARK_PATCH_API_URL;
 const BOOKMARK_COLOR = "red";
+console.log(GET_URL, PATCH_URL);
 
 function ButtonBookmark({ postId }) {
-    // cra webpack에서 오류가 발생해 svg import가 작동하지 않음
-    const BookmarkIcon = ({ fill }) => {
-        return (
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="24"
-                viewBox="0 -960 960 960"
-                width="24"
-                fill={fill}
-                stroke={BOOKMARK_COLOR}
-                strokeWidth="64"
-                strokeLinecap="round"
-            >
-                <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Z" />
-            </svg>
-        );
-    };
+    const [isBookmarked, setIsBookmarked] = useState(); // 불리언 값
+    // const isLoginNow = useRecoilValue(loginState);
+    // 로그인이 된 상태이면, 서버에 요청해서 해당 게시글의 추천,북마크 여부를 받아온 뒤 버튼의 활성화 여부를 변경함
+    // 로그인 안 된 상태이면, 버튼은 비활성화(빈 아이콘) 상태임. 이때 아이콘을 클릭하면 로그인을 유도한다.
 
     // 사용가 요소를 추천했는지 안했는지 서버에 상태 데이터를 요청한다
 
@@ -46,15 +37,6 @@ function ButtonBookmark({ postId }) {
 
     // 2.댓글일 경우는 구현 안할 수도 있다고 추측됨
 
-    const GET_URL = `localhost:8080/bookmarks?user_id=${postId}`;
-    const PATCH_URL = `localhost:8080/recommends/posts`;
-
-    const [isBookmarked, setIsBookmarked] = useState(); // 불리언 값
-
-    useEffect(() => {
-        getData();
-    }, []);
-
     const getData = async () => {
         // const response = await axios.get(GET_URL);
         // const data = await response.data;
@@ -64,12 +46,12 @@ function ButtonBookmark({ postId }) {
 
     const patchData = async () => {
         try {
-            const response = await axios.patch(PATCH_URL, {
-                post_id: 1,
-            });
+            // const response = await axios.patch(PATCH_URL, {
+            //     post_id: 1,
+            // });
             // 서버에서 response가 있다면
             // response를 받고 isRecommend 상태를 서버의 추천여부로 업데이트함
-            setIsBookmarked(response);
+            // setIsBookmarked(response);
         } catch {}
     };
 
@@ -77,6 +59,24 @@ function ButtonBookmark({ postId }) {
         console.log("추천버튼 전달받은 id", postId);
         // patchData()
         setIsBookmarked(!isBookmarked);
+    };
+
+    // svg를 import할때 오류가 발생해 컴포넌트화 했습니다.
+    const BookmarkIcon = ({ fill }) => {
+        return (
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24"
+                viewBox="0 -960 960 960"
+                width="24"
+                fill={fill}
+                stroke={BOOKMARK_COLOR}
+                strokeWidth="64"
+                strokeLinecap="round"
+            >
+                <path d="M200-120v-640q0-33 23.5-56.5T280-840h400q33 0 56.5 23.5T760-760v640L480-240 200-120Z" />
+            </svg>
+        );
     };
 
     return (
