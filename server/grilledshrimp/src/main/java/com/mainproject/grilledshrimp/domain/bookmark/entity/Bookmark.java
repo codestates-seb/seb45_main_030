@@ -3,10 +3,8 @@ package com.mainproject.grilledshrimp.domain.bookmark.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mainproject.grilledshrimp.domain.post.entity.Post;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 
 import javax.persistence.*;
@@ -16,21 +14,21 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@Builder
 public class Bookmark {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long bookmarkId;
     
     // 외래키
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private Users users;
     
     // 외래키
     @ManyToOne
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
     @Column(nullable = false)

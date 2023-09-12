@@ -5,6 +5,7 @@ import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
 import com.mainproject.grilledshrimp.domain.bookmark.mapper.BookmarkMapper;
 import com.mainproject.grilledshrimp.domain.bookmark.service.BookmarkService;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequestMapping("/bookmarks")
 public class BookmarkController {
     private final BookmarkMapper mapper;
@@ -26,11 +28,11 @@ public class BookmarkController {
     // 북마크 생성
     @PostMapping()
     public ResponseEntity postBookmark(@Valid @RequestBody BookmarkPostDto bookmarkPostDto) {
-        Bookmark bookmark = bookmarkService.createBookmark(mapper.bookmarkPostDtoToBookmark(bookmarkPostDto));
+        Bookmark bookmark = bookmarkService.createBookmark(bookmarkPostDto);
         return new ResponseEntity(mapper.bookmarkToBookmarkResponseDto(bookmark), HttpStatus.CREATED);
     }
 
-    // 북마크 조회
+    // 북마크 전체 조회
     @GetMapping("/{user-id}")
     public ResponseEntity getBookmark(@PathVariable("user-id") Long userId) {
         List<Bookmark> findBookmark = bookmarkService.findBookmark(userId);

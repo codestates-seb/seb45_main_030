@@ -45,6 +45,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .headers().frameOptions().disable() // h2-console 사용을 위한 설정
+                .and()
                 .csrf().disable()        // CSRF 공격 방지 비활성화
                 .cors(withDefaults())    // CORS 허용
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 비활성화
@@ -61,7 +63,8 @@ public class SecurityConfiguration {
                 .and()
 
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/post/**").hasRole("USER")   // /post/** 경로에 대해서는 USER 권한이 있어야 접근 가능
+                        .antMatchers("/h2-console/*").permitAll()
+                        //.antMatchers("/post/**").hasRole("USER")   // /post/** 경로에 대해서는 USER 권한이 있어야 접근 가능
                         .anyRequest().permitAll()    // 그 외 나머지 요청에 대해서는 인증 없이 접근 허용
                 )
         ;
