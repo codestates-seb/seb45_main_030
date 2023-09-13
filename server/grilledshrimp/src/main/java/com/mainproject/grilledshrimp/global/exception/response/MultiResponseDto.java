@@ -1,4 +1,4 @@
-package com.mainproject.grilledshrimp.global.response;
+package com.mainproject.grilledshrimp.global.exception.response;
 
 import lombok.Getter;
 import org.springframework.data.domain.Page;
