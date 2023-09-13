@@ -29,6 +29,7 @@ public class UserController {
     public ResponseEntity postUser(@Valid @RequestBody UserPostDto userPostDto) {
         Users users = userService.createUser(mapper.userPostDtoToUser(userPostDto));
         return new ResponseEntity(mapper.userToUserResponseDto(users), HttpStatus.CREATED);
+        //return new ResponseEntity(mapper.userToUserResponseSimpleDto(users), HttpStatus.CREATED);
     }
 
     // 유저 사진 등록
