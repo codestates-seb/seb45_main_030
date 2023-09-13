@@ -1,5 +1,9 @@
 package com.mainproject.grilledshrimp.domain.bookmark.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
+import com.mainproject.grilledshrimp.domain.post.entity.Post;
+import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -8,6 +12,18 @@ import lombok.Getter;
 @Getter
 public class BookmarkPostDto {
     private Long user_id;
+
     private Long post_id;
-    private String bookmark_name;
+
+    @JsonProperty("bookmark_name")
+    private String bookmarkName;
+
+    public Bookmark dtoToEntity(Users user, Post post) {
+        return Bookmark.builder()
+                .users(user)
+                .post(post)
+                .bookmarkName(bookmarkName)
+                .build();
+    }
+
 }

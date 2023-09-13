@@ -24,11 +24,12 @@ public class UserController {
         this.mapper = mapper;
     }
 
-    // 유저 로그인
+    // 유저 생성
     @PostMapping("/signup")
     public ResponseEntity postUser(@Valid @RequestBody UserPostDto userPostDto) {
         Users users = userService.createUser(mapper.userPostDtoToUser(userPostDto));
         return new ResponseEntity(mapper.userToUserResponseDto(users), HttpStatus.CREATED);
+        //return new ResponseEntity(mapper.userToUserResponseSimpleDto(users), HttpStatus.CREATED);
     }
 
     // 유저 사진 등록
@@ -89,6 +90,6 @@ public class UserController {
     @DeleteMapping("/{user-id}")
     public ResponseEntity deleteUser(@PathVariable("user-id") long userId) {
         userService.deleteUser(userId);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

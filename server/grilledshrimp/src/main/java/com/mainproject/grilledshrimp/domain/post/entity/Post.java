@@ -49,7 +49,7 @@ public class Post {
     @Column(nullable = false)
     private LocalDateTime modified_at;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post" , cascade = CascadeType.PERSIST)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @OneToMany(mappedBy = "post")
