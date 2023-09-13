@@ -1,9 +1,11 @@
 package com.mainproject.grilledshrimp.domain.post.controller;
 
 import com.mainproject.grilledshrimp.domain.post.dto.PostsPostDto;
+import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseDto;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.post.mapper.PostsMapper;
 import com.mainproject.grilledshrimp.domain.user.service.UserService;
+import com.mainproject.grilledshrimp.global.image.AwsS3Service;
 import com.mainproject.grilledshrimp.global.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import com.mainproject.grilledshrimp.domain.post.service.PostsService;
@@ -12,10 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -26,19 +28,29 @@ public class PostsController {
     private final PostsService postsService;
     private final UserService userService;
     private final PostsMapper mapper;
+    private final AwsS3Service awsS3Service;
 
-    @PostMapping
-    public ResponseEntity postPosts(@Valid @RequestBody PostsPostDto postsPostDto) {
-        Posts posts = postsService.createPost(mapper.postsPostDtoToPosts(postsPostDto));
-        URI location = URI.create("/posts/" + posts.getPostId());
-        return ResponseEntity.created(location).build();
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity postPosts(
+            @RequestPart("data") PostsPostDto postsPostDto,
+            @RequestPart("postImage") MultipartFile file
+    ) {
+        String imgUrl = awsS3Service.uploadImage(file);
+        postsPostDto.setPostImage(imgUrl);
+        Posts createdPost = postsService.createPost(postsPostDto);
+
+        return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
+//        return new ResponseEntity<>(imgUrl, HttpStatus.CREATED);
     }
+
+
+
 
     @GetMapping("/{post-id}")
     public ResponseEntity getPost(@PathVariable("post-id")@Positive long postId){
-        Posts posts = postsService.findPost(postId);
+        PostsResponseDto responseDto = postsService.findPost(postId);
 
-        return new ResponseEntity<>(mapper.postsToPostsResponseDto(posts), HttpStatus.OK);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @GetMapping
