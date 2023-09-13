@@ -40,6 +40,8 @@ public enum ExceptionCode {
     USER_PASSWORD_NOT_MATCHED(401, "비밀번호가 일치하지 않습니다."),
     USER_PASSWORD_CHANGE_FAILED(500, "비밀번호 변경에 실패했습니다."),
 
+    // 북마크
+    BOOKMARK_NOT_FOUND(404, "해당 북마크를 찾을 수 없습니다."),
     
     // 이미지
     IMAGE_NOT_FOUND(404, "해당 이미지를 찾을 수 없습니다."),

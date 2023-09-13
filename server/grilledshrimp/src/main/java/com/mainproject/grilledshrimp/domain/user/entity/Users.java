@@ -63,13 +63,13 @@ public class Users {
     private List<Posts> posts = new ArrayList<>();
 
     // 북마크 일대다 관계
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
     private List<Bookmark> bookmarks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
     private List<RecommendPost> recommendPostList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
     private List<RecommendComment> recommendCommentList = new ArrayList<>();
 
     public enum UserStatus {

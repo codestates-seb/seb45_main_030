@@ -58,13 +58,11 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         String authorization = request.getHeader("Authorization");
         if (authorization == null)
         {
-            log.info("Authorization is null");
             return true;
         }
         if (!authorization.startsWith("Bearer "))
         {
-            log.info("Authorization is not Bearer");
-            throw new BusinessLogicException(ExceptionCode.AUTHORIZATION_NOT_BEARER);
+            return true;
         }
         if(jwtTokenizer.validateToken(authorization.replace("Bearer ", ""))) {
             String key = "JWT_TOKEN:" + jwtTokenizer.getUsername(authorization.replace("Bearer ", ""));
