@@ -51,6 +51,8 @@ public class Posts {
     @Column(name = "post_comment_permission", nullable = false)
     private boolean postCommentPermission;
 
+    public String thumbnail;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

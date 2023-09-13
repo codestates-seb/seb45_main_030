@@ -21,6 +21,7 @@ public class PostsResponseDto {
     private String postCaption;
     private String postImage;
     private String postAddress;
+    private String thumbnail;
     private boolean postCommentPermission;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
@@ -38,6 +39,7 @@ public class PostsResponseDto {
         postsResponseDto.setPostCaption(post.getPostCaption());
         postsResponseDto.setPostImage(post.getPostImage());
         postsResponseDto.setPostAddress(post.getPostAddress());
+        postsResponseDto.setThumbnail(post.getThumbnail());
         postsResponseDto.setPostCommentPermission(post.isPostCommentPermission());
         postsResponseDto.setCreatedAt(post.getCreatedAt());
         postsResponseDto.setModifiedAt(post.getModifiedAt());
