@@ -1,5 +1,8 @@
 package com.mainproject.grilledshrimp.domain.user.dto;
 
-public class UserProfileImageDto {
+import lombok.Getter;
 
+@Getter
+public class UserProfileImageDto {
+    private String profileImage;
 }
