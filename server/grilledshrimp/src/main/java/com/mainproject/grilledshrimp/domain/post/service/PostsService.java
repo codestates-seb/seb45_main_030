@@ -16,14 +16,12 @@ import com.mainproject.grilledshrimp.global.image.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import com.mainproject.grilledshrimp.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,7 +40,7 @@ public class PostsService {
     private TagRepository tagRepository;
 
     public Posts createPost(PostsPostDto postsPostDto) {
-        Users user = userRepository.findByuserId(postsPostDto.getUserId()).orElseThrow(
+        Users user = userRepository.findByUserId(postsPostDto.getUserId()).orElseThrow(
                 ()-> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         Posts post = postsPostDto.toPosts(user);
         addPostTagsToPost(postsPostDto.getTags(), post);
@@ -70,8 +68,11 @@ public class PostsService {
         return PostsResponseDto.of(post);
     }
 
-    public Page<Posts> findPosts(int page, int size){
-        return postsRepository.findAll(PageRequest.of(page, size, Sort.by("postId").descending()));
+    @Transactional(readOnly = true)
+    public Page<PostsResponseDto> findPosts(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Posts> pagePosts = postsRepository.findPosts(pageable);
+        return pagePosts.map(PostsResponseDto::of);
     }
 
     public void deletePost(long postId, Long userId){
