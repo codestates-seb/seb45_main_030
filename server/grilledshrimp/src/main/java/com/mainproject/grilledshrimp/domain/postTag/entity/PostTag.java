@@ -1,30 +1,34 @@
 package com.mainproject.grilledshrimp.domain.postTag.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.tag.entity.Tag;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
-@Setter
 public class PostTag {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_tag_id")
+    @GeneratedValue
+    @Column(name = "postTag_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
+    @JsonBackReference
     private Posts posts;
+
+    public PostTag(Posts post, Tag tag) {
+        this.posts = post;
+        this.tag = tag;
+    }
 }
