@@ -2,7 +2,7 @@ package com.mainproject.grilledshrimp.domain.bookmark.service;
 
 import com.mainproject.grilledshrimp.domain.bookmark.dto.BookmarkPostDto;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
-import com.mainproject.grilledshrimp.domain.post.entity.Post;
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
 import com.mainproject.grilledshrimp.global.exception.ExceptionCode;
@@ -31,7 +31,7 @@ public class BookmarkService {
         Optional<Users> findUser = usersRepository.findById(bookmarkPostDto.getUser_id());
         //Optional<Post> findPost = usersRepository.findById(bookmarkPostDto.getPost_id());
         Users user = findUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-        Post post = new Post();
+        Posts post = new Posts();
 
         Bookmark bookmark = bookmarkPostDto.dtoToEntity(user, post);
         Bookmark savedBookmark = bookmarkRepository.save(bookmark);

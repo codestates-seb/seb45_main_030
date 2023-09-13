@@ -27,6 +27,10 @@ spring:
 
 logging:
     level:
+        com:
+            amazonaws:
+                util:
+                    EC2MetadataUtils: error
         org:
             springframework:
                 orm:
@@ -39,6 +43,11 @@ jwt:
 
 cloud:
     aws:
+        credentials:
+            access-key: ${CLOUD_AWS_CREDENTIALS_ACCESSKEY}
+            secret-key: ${CLOUD_AWS_CREDENTIALS_SECRETKEY}
+        s3:
+            bucket: ${CLOUD_AWS_S3_BUCKET}
         region:
             static: ap-northeast-2
         stack:

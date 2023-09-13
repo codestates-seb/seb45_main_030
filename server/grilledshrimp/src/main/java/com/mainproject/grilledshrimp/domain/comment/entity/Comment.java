@@ -1,6 +1,6 @@
 package com.mainproject.grilledshrimp.domain.comment.entity;
 
-import com.mainproject.grilledshrimp.domain.post.entity.Post;
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.recommendComment.entity.RecommendComment;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import lombok.AllArgsConstructor;
@@ -29,7 +29,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Post post;
+    private Posts posts;
 
     @Column(nullable = false)
     private String comment_text;

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -34,9 +35,13 @@ public class UserController {
 
     // 유저 사진 등록
     @PostMapping("/{user-id}/image")
-    public ResponseEntity postUserImage(@PathVariable("user-id") Long userId, @Valid @RequestBody UserProfileImageDto userProfileImageDto) {
-        userService.updateProfileImage(userId, userProfileImageDto.getProfileImage());
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity postUserImage(
+            @PathVariable("user-id") long userId,
+            @RequestParam(value = "file")MultipartFile file) {
+        Users user = userService.uploadImage(userId, file);
+        UserResponseDto responseDto = mapper.userToUserResponseDto(user);
+
+        return new ResponseEntity<>((responseDto),HttpStatus.OK);
     }
 
     // 유저 로그아웃
@@ -45,14 +50,12 @@ public class UserController {
         userService.logoutUser(userLogoutDto.getEmail());
         return new ResponseEntity(HttpStatus.OK);
     }
-
-
-    // 유저 사진 수정
-    @PatchMapping("/{user-id}/image")
-    public ResponseEntity patchUserImage(@PathVariable("user-id") Long userId, @Valid @RequestBody UserProfileImageDto userProfileImageDto) {
-        userService.updateProfileImage(userId, userProfileImageDto.getProfileImage());
-        return new ResponseEntity(HttpStatus.OK);
-    }
+//    // 유저 사진 수정
+//    @PatchMapping("/{user-id}/image")
+//    public ResponseEntity patchUserImage(@Valid @RequestBody UserProfileImageDto userProfileImageDto) {
+//
+//        return new ResponseEntity(HttpStatus.OK);
+//    }
 
     // 유저 사진 삭제도 있어야 할 듯
 
