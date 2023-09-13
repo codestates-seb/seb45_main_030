@@ -1,5 +1,6 @@
 package com.mainproject.grilledshrimp.domain.post.controller;
 
+import com.mainproject.grilledshrimp.domain.post.dto.PostsPatchDto;
 import com.mainproject.grilledshrimp.domain.post.dto.PostsPostDto;
 import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseDto;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
@@ -46,6 +47,17 @@ public class PostsController {
 
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
 //        return new ResponseEntity<>(imgUrl, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{post-id}")
+    public ResponseEntity patchPosts(
+            @RequestBody PostsPatchDto postsPatchDto,
+            @PathVariable("post-id") long postId,
+            @Positive @RequestParam long userId
+            ){
+        Posts updatedPost = postsService.updatePost(postsPatchDto, postId, userId);
+
+        return new ResponseEntity<>(updatedPost, HttpStatus.OK);
     }
 
 
