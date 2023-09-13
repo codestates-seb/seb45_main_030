@@ -1,6 +1,8 @@
 package com.mainproject.grilledshrimp.domain.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.recommendComment.entity.RecommendComment;
 import com.mainproject.grilledshrimp.domain.recommendPost.entity.RecommendPost;
 import lombok.AllArgsConstructor;
@@ -55,6 +57,10 @@ public class Users {
 
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
+
+    @OneToMany(mappedBy = "users")
+    @JsonIgnore
+    private List<Posts> posts = new ArrayList<>();
 
     // 북마크 일대다 관계
     @OneToMany(mappedBy = "users")
