@@ -1,25 +1,43 @@
 package com.mainproject.grilledshrimp.domain.post.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mainproject.grilledshrimp.domain.comment.dto.CommentResponseDto;
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
+import com.mainproject.grilledshrimp.domain.tag.entity.Tag;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 // 게시글 클라이언트에게 응답
 @Data
 public class PostsResponseDto {
-    private Long user_id;
-    private Long post_id;
-    private String post_title;
-    private String post_caption;
-    private String post_image;
+    private Long userId;
+    private Long postId;
+    private String postTitle;
+    private String postCaption;
+    private String postImage;
+    private String postAddress;
+    private boolean postCommentPermission;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
     private List<String> tags;
-    private String post_address;
-    private boolean post_comment_permission;
-    private LocalDateTime created_at = LocalDateTime.now();
-    private LocalDateTime modified_at = LocalDateTime.now();
-
+//    private List<Tag> tags;
     // 댓글 리스트
     private List<CommentResponseDto> comments;
+
+    static public PostsResponseDto of(Posts post){
+        PostsResponseDto postsResponseDto = new PostsResponseDto();
+        postsResponseDto.setPostId(post.getPostId());
+        postsResponseDto.setUserId(post.getUsers().getUserId());
+        postsResponseDto.setPostTitle(post.getPostTitle());
+        postsResponseDto.setPostCaption(post.getPostCaption());
+        postsResponseDto.setPostImage(post.getPostImage());
+        postsResponseDto.setPostAddress(post.getPostAddress());
+        postsResponseDto.setPostCommentPermission(post.isPostCommentPermission());
+        postsResponseDto.setCreatedAt(post.getCreatedAt());
+        postsResponseDto.setModifiedAt(post.getModifiedAt());
+        return postsResponseDto;
+    }
 }
