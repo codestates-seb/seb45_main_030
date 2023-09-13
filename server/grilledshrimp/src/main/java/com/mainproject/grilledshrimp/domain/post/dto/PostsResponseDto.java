@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mainproject.grilledshrimp.domain.comment.dto.CommentResponseDto;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.tag.entity.Tag;
+import com.mainproject.grilledshrimp.domain.user.dto.UserResponseSimpleDto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,8 @@ public class PostsResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<String> tags;
+
+    private UserResponseSimpleDto user;
 //    private List<Tag> tags;
     // 댓글 리스트
     private List<CommentResponseDto> comments;
@@ -41,6 +44,7 @@ public class PostsResponseDto {
         postsResponseDto.setTags(post.getPostTags().stream()
                 .map(postTag -> postTag.getTag().getName())
                 .collect(Collectors.toList()));
+        postsResponseDto.setUser(UserResponseSimpleDto.of(post.getUsers()));
         return postsResponseDto;
     }
 }
