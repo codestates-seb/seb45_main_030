@@ -30,8 +30,7 @@ public class AwsS3Service {
     private final AmazonS3 amazonS3;
 
     public String uploadImage(MultipartFile multipartFile) {
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        // forEach 구문을 통해 multipartFile로 넘어온 파일들 하나씩 fileNameList에 추가
+        String fileName = "images/" + StringUtils.cleanPath(multipartFile.getOriginalFilename());
 
         try {
             ObjectMetadata objectMetadata = new ObjectMetadata();
