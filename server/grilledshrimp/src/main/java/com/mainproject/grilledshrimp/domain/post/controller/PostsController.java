@@ -6,10 +6,12 @@ import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.post.mapper.PostsMapper;
 import com.mainproject.grilledshrimp.domain.user.service.UserService;
 import com.mainproject.grilledshrimp.global.image.AwsS3Service;
-import com.mainproject.grilledshrimp.global.response.MultiResponseDto;
+import com.mainproject.grilledshrimp.global.exception.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import com.mainproject.grilledshrimp.domain.post.service.PostsService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/posts")
@@ -36,7 +39,9 @@ public class PostsController {
             @RequestPart("postImage") MultipartFile file
     ) {
         String imgUrl = awsS3Service.uploadImage(file);
+        String thumbUrl = awsS3Service.uploadThumbnail(file);
         postsPostDto.setPostImage(imgUrl);
+        postsPostDto.setThumbnail(thumbUrl);
         Posts createdPost = postsService.createPost(postsPostDto);
 
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
@@ -54,13 +59,20 @@ public class PostsController {
     }
 
     @GetMapping
-    public ResponseEntity getPosts(@Positive @RequestParam int page,
-                                   @Positive @RequestParam int size){
-        Page<Posts> pagePosts = postsService.findPosts(page, size);
-        List<Posts> posts = pagePosts.getContent();
+    public ResponseEntity getPosts(@Positive @RequestParam(defaultValue = "1") int page,
+                                   @Positive @RequestParam(defaultValue = "30") int size){
+        Page<PostsResponseDto> pagePosts = postsService.findPosts(page - 1, size);
+        MultiResponseDto<PostsResponseDto> response = new MultiResponseDto<>(pagePosts.getContent(), pagePosts);
 
-        return new ResponseEntity<>(
-                new MultiResponseDto<>(mapper.postsToPostsResponseDtos(posts), pagePosts), HttpStatus.OK);
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{post-id}")
+    public ResponseEntity deletePost(@PathVariable("post-id")@Positive long postId,
+                           @RequestParam @Positive long userId
+    ){
+        postsService.deletePost(postId, userId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }
