@@ -1,5 +1,6 @@
 package com.mainproject.grilledshrimp.domain.comment.dto;
 
+import com.mainproject.grilledshrimp.domain.comment.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,5 +22,9 @@ public class CommentResponseDto {
 
     public CommentResponseDto() {
 
+    }
+
+    public static Comment fromEntity(Comment updatedComment) {
+        return updatedComment;
     }
 }

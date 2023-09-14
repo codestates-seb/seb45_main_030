@@ -19,4 +19,8 @@ public class CommentRequestDto {
     public void setUserId(long l) {
         this.userId = l;
     }
+
+    public String getCommentText() {
+        return this.comment_text;
+    }
 }
