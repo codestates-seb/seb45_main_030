@@ -1,10 +1,14 @@
 package com.mainproject.grilledshrimp.domain.comment.controller;
 
+import com.mainproject.grilledshrimp.domain.comment.dto.CommentDTO;
 import com.mainproject.grilledshrimp.domain.comment.dto.CommentPatchDto;
 import com.mainproject.grilledshrimp.domain.comment.dto.CommentPostDto;
+import com.mainproject.grilledshrimp.domain.comment.dto.CommentResponseDto;
 import com.mainproject.grilledshrimp.domain.comment.service.CommentService;
 import com.mainproject.grilledshrimp.domain.post.service.PostsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -39,5 +43,15 @@ public class CommentController {
         commentService.deleteComment(commentId);
 
         return ResponseEntity.ok("삭제완료");
+    }
+
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<Page<CommentDTO>> getCommentsByPostId(
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size) {
+        Page<CommentDTO> comments = commentService.getCommentsByPostId(postId, PageRequest.of(page, size));
+
+        return ResponseEntity.ok(comments);
     }
 }

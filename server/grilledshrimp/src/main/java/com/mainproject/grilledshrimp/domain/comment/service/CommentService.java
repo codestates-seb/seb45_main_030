@@ -1,5 +1,7 @@
 package com.mainproject.grilledshrimp.domain.comment.service;
 
+import com.mainproject.grilledshrimp.domain.comment.dto.CommentDTO;
+import com.mainproject.grilledshrimp.domain.comment.dto.CommentResponseDto;
 import com.mainproject.grilledshrimp.domain.comment.entity.Comment;
 import com.mainproject.grilledshrimp.domain.comment.repository.CommentRepository;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
@@ -7,6 +9,9 @@ import com.mainproject.grilledshrimp.domain.post.repository.PostsRepository;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -62,5 +67,17 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
         commentRepository.delete(comment);
+    }
+
+    public Page<CommentDTO> getCommentsByPostId(Long postId, Pageable pageable) {
+        // postId로 해당 게시물의 댓글 조회 (페이지네이션 적용)
+        Page<Comment> comments = commentRepository.findByPostId(postId, pageable);
+        return comments.map(comment -> {
+            CommentDTO commentDTO = new CommentDTO();
+            commentDTO.setUserId(comment.getUser().getUserId());
+            commentDTO.setCommentText(comment.getCommentText());
+            commentDTO.setCommentId(comment.getCommentId());
+            return commentDTO;
+        });
     }
 }

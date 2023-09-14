@@ -72,6 +72,10 @@ public class Users {
     @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
     private List<RecommendComment> recommendCommentList = new ArrayList<>();
 
+    public Long getUserId() {
+        return userId;
+    }
+
     public enum UserStatus {
         USER_ACTIVE("활동중"),
         USER_SLEEP("휴면 상태"),

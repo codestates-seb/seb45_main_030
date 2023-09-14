@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Persistable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -56,5 +57,18 @@ public class Comment {
 
     public void setModifiedAt(LocalDateTime now) {
         this.modified_at = now;
+    }
+
+
+    public Users getUser() {
+        return users;
+    }
+
+    public String getCommentText() {
+        return comment_text;
+    }
+
+    public Users getCommentId() {
+        return users;
     }
 }
