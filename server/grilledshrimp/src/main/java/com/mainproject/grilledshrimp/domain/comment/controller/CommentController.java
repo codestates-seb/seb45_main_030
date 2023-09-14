@@ -1,9 +1,11 @@
 package com.mainproject.grilledshrimp.domain.comment.controller;
 
+import com.mainproject.grilledshrimp.domain.comment.dto.CommentPatchDto;
 import com.mainproject.grilledshrimp.domain.comment.dto.CommentPostDto;
 import com.mainproject.grilledshrimp.domain.comment.service.CommentService;
 import com.mainproject.grilledshrimp.domain.post.service.PostsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,5 +24,13 @@ public class CommentController {
                 commentPostDTO.getCommentText());
         return "redirect:/post/" + postId;
     }
+    @PutMapping("/{commentId}")
+    public ResponseEntity<String> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody CommentPatchDto commentUpdateDTO) {
+        // 댓글 수정 로직 구현
+        commentService.updateComment(commentId, commentUpdateDTO.getUpdatedText());
 
+        return ResponseEntity.ok("댓글이 성공적으로 수정되었습니다.");
+    }
 }

@@ -53,4 +53,8 @@ public class Comment {
     public void setCommentText(String commentText) {
         this.comment_text =commentText;
     }
+
+    public void setModifiedAt(LocalDateTime now) {
+        this.modified_at = now;
+    }
 }
