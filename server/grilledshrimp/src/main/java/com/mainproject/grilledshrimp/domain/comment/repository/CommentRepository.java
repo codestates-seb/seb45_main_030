@@ -11,5 +11,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     static List<Comment> findByPosts_PostId(Long postId) {
         return null;
     }
-    List<Comment> findByPost_Id(Long postId);
 }

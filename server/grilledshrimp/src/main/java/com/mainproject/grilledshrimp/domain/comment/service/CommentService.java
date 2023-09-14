@@ -12,9 +12,7 @@ import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class CommentService {
@@ -58,29 +56,5 @@ public class CommentService {
         responseDto.setModified_at(comment.getModified_at());
 
         return responseDto;
-    }
-    //댓글 수정
-    public Comment patchComment(Long commentId, CommentRequestDto requestDto) {
-        // commentId에 해당하는 댓글을 데이터베이스에서 조회
-        Comment existingComment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException("Comment not found with id: " + commentId));
-
-        // 수정할 내용을 requestDto에서 가져와서 업데이트
-        existingComment.setComment_text(requestDto.getCommentText());
-
-        // 수정된 댓글을 저장
-        Comment updatedComment = commentRepository.save(existingComment);
-
-        // 수정된 댓글을 CommentResponseDto로 변환하여 반환
-        return CommentResponseDto.fromEntity(updatedComment);
-    }
-
-    // 특정 게시물에 대한 댓글 목록 조회
-    public List<Comment> getCommentsByPostId(Long postId) {
-        return commentRepository.findByPost_Id(postId);
-    }
-    //삭제
-    public void deleteComment(Long commentId) {
-        commentRepository.deleteById(commentId);
     }
 }
