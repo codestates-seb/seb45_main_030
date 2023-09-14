@@ -5,4 +5,12 @@ public class CommentPostDto {
     private Long post_id;
     private Long user_id;
     private String comment_text;
+
+    public String getCommentText() {
+        return comment_text;
+    }
+
+    public Long getUserId() {
+        return user_id;
+    }
 }
