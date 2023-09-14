@@ -42,4 +42,15 @@ public class Comment {
 
     @OneToMany(mappedBy = "comment")
     private List<RecommendComment> recommendCommentList = new ArrayList<>();
+
+    public void setPost(Posts post) {
+        this.posts = post;
+    }
+    public void setUser(Users user) {
+        this.users = user;
+    }
+
+    public void setCommentText(String commentText) {
+        this.comment_text =commentText;
+    }
 }
