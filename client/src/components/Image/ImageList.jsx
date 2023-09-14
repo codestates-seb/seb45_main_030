@@ -26,41 +26,43 @@ function ImageList() {
     ImageDataDistributor();
 
     return (
-        <section className={styles.container}>
-            <div className={styles.top_grid}>
-                <div className={styles.column_grid}>
-                    {columns.first.map((el) => {
-                        return (
-                            <ImageItem
-                                key={el.id}
-                                postData={{ id: el.id, src: el.download_url, width: el.width, height: el.height }}
-                            />
-                        );
-                    })}
+        <>
+            <section className={styles.container}>
+                <div className={styles.top_grid}>
+                    <div className={styles.column_grid}>
+                        {columns.first.map((el) => {
+                            return (
+                                <ImageItem
+                                    key={el.id}
+                                    postData={{ id: el.id, src: el.download_url, width: el.width, height: el.height }}
+                                />
+                            );
+                        })}
+                    </div>
+                    <div className={styles.column_grid}>
+                        {columns.second.map((el) => {
+                            return (
+                                <ImageItem
+                                    key={el.id}
+                                    postData={{ id: el.id, src: el.download_url, width: el.width, height: el.height }}
+                                />
+                            );
+                        })}
+                    </div>
+                    <div className={styles.column_grid}>
+                        {columns.third.map((el) => {
+                            return (
+                                <ImageItem
+                                    key={el.id}
+                                    postData={{ id: el.id, src: el.download_url, width: el.width, height: el.height }}
+                                />
+                            );
+                        })}
+                    </div>
                 </div>
-                <div className={styles.column_grid}>
-                    {columns.second.map((el) => {
-                        return (
-                            <ImageItem
-                                key={el.id}
-                                postData={{ id: el.id, src: el.download_url, width: el.width, height: el.height }}
-                            />
-                        );
-                    })}
-                </div>
-                <div className={styles.column_grid}>
-                    {columns.third.map((el) => {
-                        return (
-                            <ImageItem
-                                key={el.id}
-                                postData={{ id: el.id, src: el.download_url, width: el.width, height: el.height }}
-                            />
-                        );
-                    })}
-                </div>
-            </div>
-            <div ref={sentinelRef}></div>
-        </section>
+            </section>
+            <div className={styles.ht1r} ref={sentinelRef}></div>
+        </>
     );
 }
 export default ImageList;
