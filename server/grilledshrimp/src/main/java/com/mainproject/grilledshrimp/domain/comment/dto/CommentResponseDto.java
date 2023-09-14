@@ -17,4 +17,9 @@ public class CommentResponseDto {
     private String comment_text;
     private LocalDateTime created_at = LocalDateTime.now();
     private LocalDateTime modified_at = LocalDateTime.now();
+
+
+    public CommentResponseDto() {
+
+    }
 }
