@@ -1,17 +1,22 @@
 .container {
-    max-width: 1320px;
-    background-color: grey;
+    display: flex;
+    justify-content: center;
 }
 .top_grid {
-    border: 1px solid yellow;
     display: grid;
+    width: 1500px;
     grid-template-columns: 1fr 1fr 1fr;
-    column-gap: 2rem;
-    row-gap: 2rem;
+    column-gap: 1.5rem;
+    row-gap: 1.5rem;
     /* grid-template-rows: fit-content */
 }
 .column_grid {
     display: grid;
+    justify-content: center;
     row-gap: 2rem;
     height: fit-content;
+}
+
+.ht1r{
+    height: 1rem;
 }
