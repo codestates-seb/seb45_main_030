@@ -82,7 +82,5 @@ public class Posts {
         return postTags;
     }
 
-    public Long getPost_id() {
-        return this.postId;
-    }
+
 }
