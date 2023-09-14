@@ -31,6 +31,13 @@ public class CommentController {
         // 댓글 수정 로직 구현
         commentService.updateComment(commentId, commentUpdateDTO.getUpdatedText());
 
-        return ResponseEntity.ok("댓글이 성공적으로 수정되었습니다.");
+        return ResponseEntity.ok("수정완료");
+    }
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
+        // 댓글 삭제 로직 구현
+        commentService.deleteComment(commentId);
+
+        return ResponseEntity.ok("삭제완료");
     }
 }

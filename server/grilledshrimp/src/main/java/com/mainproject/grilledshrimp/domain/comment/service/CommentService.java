@@ -56,4 +56,11 @@ public class CommentService {
         // 수정된 댓글을 저장
         commentRepository.save(comment);
     }
+    @Transactional
+    public void deleteComment(Long commentId) {
+        // commentId로 댓글을 조회하여 삭제
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+        commentRepository.delete(comment);
+    }
 }
