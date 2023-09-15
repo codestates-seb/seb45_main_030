@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long comment_id;
+    private Long commentId;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users users;
@@ -23,21 +24,10 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Posts posts;
     @Column(nullable = false)
-    private String comment_text;
+    private String commentText;
     @Column(nullable = false)
-    private LocalDateTime created_at = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
     @Column(nullable = false)
-    private LocalDateTime modified_at;
+    private LocalDateTime modifiedAt;
 
-
-    public void setPost(Posts post) {
-        this.posts = post;
-    }
-    public void setUser(Users user) {
-        this.users = user;
-    }
-
-    public void setCommentText(String commentText) {
-        this.comment_text =commentText;
-    }
 }
