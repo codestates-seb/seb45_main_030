@@ -1,5 +1,6 @@
 package com.mainproject.grilledshrimp.domain.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
 import com.mainproject.grilledshrimp.domain.comment.entity.Comment;
@@ -67,6 +68,7 @@ public class Users {
 
     // 북마크 일대다 관계
     @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
+    @JsonBackReference // 양방향 참조를 막기 위해 사용
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
