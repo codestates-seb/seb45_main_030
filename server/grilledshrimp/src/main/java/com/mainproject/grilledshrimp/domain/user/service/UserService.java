@@ -1,6 +1,7 @@
 package com.mainproject.grilledshrimp.domain.user.service;
 
 import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseDto;
+import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseSimpleDto;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.post.mapper.PostsMapper;
 import com.mainproject.grilledshrimp.domain.post.repository.PostsRepository;
@@ -129,10 +130,10 @@ public class UserService {
             throw new BusinessLogicException(ExceptionCode.USER_EXIST);
     }
 
-    public List<PostsResponseDto> findUserPosts(long userId) {
+    public List<PostsResponseSimpleDto> findUserPosts(long userId) {
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
 
-        return postsMapper.postsToPostsResponseDtos(postsRepository.findByUsers_UserId(userId));
+        return postsMapper.postsToPostsResponseSimpleDtos(postsRepository.findByUsers_UserId(userId));
     }
 }
