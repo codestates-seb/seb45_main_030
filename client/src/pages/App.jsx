@@ -1,5 +1,15 @@
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MyPage from "./MyPage";
+
 function App() {
-    return <div>기본 템플릿</div>;
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route exact path="/mypage/" element={<MyPage />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
