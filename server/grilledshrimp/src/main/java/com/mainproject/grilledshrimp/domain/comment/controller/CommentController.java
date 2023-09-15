@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/comments") // 기본 URL 경로를 "/comments"로 설정
 public class CommentController {
@@ -46,12 +48,12 @@ public class CommentController {
     }
 
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<Page<CommentDTO>> getCommentsByPostId(
+    public ResponseEntity<List<CommentDTO>> getCommentsByPostId(
             @PathVariable Long postId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "4") int size) {
         Page<CommentDTO> comments = commentService.getCommentsByPostId(postId, PageRequest.of(page, size));
-
-        return ResponseEntity.ok(comments);
+        List<CommentDTO> commentList = comments.getContent();
+        return ResponseEntity.ok(commentList);
     }
 }
