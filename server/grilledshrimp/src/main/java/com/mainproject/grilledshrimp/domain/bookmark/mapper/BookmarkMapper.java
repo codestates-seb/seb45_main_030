@@ -12,19 +12,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface BookmarkMapper {
-    default Bookmark bookmarkPostDtoToBookmark(BookmarkPostDto bookmarkPostDto) {
-        Bookmark bookmark = new Bookmark();
-        Users user = new Users();
-        Posts post = new Posts();
-        user.setUserId(bookmarkPostDto.getUser_id());
-        post.setPostId(bookmarkPostDto.getPost_id());
-
-        bookmark.setUsers(user);
-        bookmark.setPosts(post);
-        bookmark.setBookmarkName(bookmarkPostDto.getBookmarkName());
-        return bookmark;
-    }
-
     default BookmarkResponseDto bookmarkToBookmarkResponseDto(Bookmark bookmark) {
         return new BookmarkResponseDto(
                 bookmark.getUsers().getUserId(),

@@ -64,7 +64,7 @@ public class UserController {
     // 유저 정보 수정DTO에 수정할 정보 여러개 넣고 필요한 값만 받아 바꾸면 됨
     @PatchMapping("/{user-id}")
     public ResponseEntity patchUser(@Valid @RequestBody UserPatchDto userPatchDto, @PathVariable("user-id") Long userId) {
-        Users updateUser = userService.updateUser(userId, mapper.userPatchDtoToUser(userPatchDto));
+        Users updateUser = userService.updateUser(userId, userPatchDto);
         return new ResponseEntity(mapper.userToUserResponseDto(updateUser), HttpStatus.OK);
     }
 
@@ -86,7 +86,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity getAllUserInfo() {
         List<Users> users = userService.findAllUser();
-        return new ResponseEntity(users, HttpStatus.OK);
+        return new ResponseEntity(mapper.usersToUserResponseDtos(users), HttpStatus.OK);
     }
 
     // 특정 유저 삭제

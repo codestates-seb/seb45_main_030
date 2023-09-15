@@ -39,6 +39,14 @@ public class BookmarkController {
         return new ResponseEntity(mapper.bookmarkListToBookmarkResponseDtoList(findBookmark), HttpStatus.OK);
     }
 
+    // 특정 유저 특정 북마크 삭제
+    @DeleteMapping()
+    public ResponseEntity deleteBookmark(@Valid @RequestBody BookmarkPostDto bookmarkPostDto) {
+        bookmarkService.deleteBookmark(bookmarkPostDto.getUser_id(), bookmarkPostDto.getPost_id());
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+
     // 북마크 삭제
     @DeleteMapping("/{user-id}")
     public ResponseEntity deleteBookmark(@PathVariable("user-id") Long userId) {

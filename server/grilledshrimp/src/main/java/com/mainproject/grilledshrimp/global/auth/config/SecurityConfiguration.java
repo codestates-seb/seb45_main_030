@@ -65,6 +65,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers("/h2-console/*").permitAll()
                         //.antMatchers("/post/**").hasRole("USER")   // /post/** 경로에 대해서는 USER 권한이 있어야 접근 가능
+                        // 로그아웃은 USER 권한이 있어야 접근 가능
+                        .antMatchers("/users/logout").hasRole("USER")
                         .anyRequest().permitAll()    // 그 외 나머지 요청에 대해서는 인증 없이 접근 허용
                 )
         ;
