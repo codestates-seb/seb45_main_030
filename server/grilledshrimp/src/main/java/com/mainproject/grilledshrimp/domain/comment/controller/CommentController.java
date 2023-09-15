@@ -20,13 +20,13 @@ public class CommentController {
     private CommentService commentService;
     @PostMapping("/posts/{postId}")
     @ResponseBody // JSON 응답을 반환하기 위해 @ResponseBody 어노테이션 사용
-    public String addComment(
+    public ResponseEntity<String> addComment(
             @PathVariable("postId") Long postId,
             @RequestBody CommentPostDto commentPostDTO) {
         commentService.addComment(commentPostDTO.getUserId(),
                 postId,
                 commentPostDTO.getCommentText());
-        return "redirect:/post/" + postId;
+        return ResponseEntity.ok("작성완료");
     }
     @PutMapping("/{commentId}")
     public ResponseEntity<String> updateComment(
