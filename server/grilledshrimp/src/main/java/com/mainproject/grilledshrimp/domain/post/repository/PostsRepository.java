@@ -12,6 +12,6 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
     Page<Posts> findAll(Pageable pageable);
     @Query("SELECT p FROM Posts p ORDER BY p.postId DESC")
     Page<Posts> findPosts(Pageable pageable);
-
     List<Posts> findByUsers_UserId(Long userId);
+    List<Posts> findByPostTitleLike(String title);
 }

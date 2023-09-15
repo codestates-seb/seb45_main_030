@@ -23,15 +23,15 @@ public class Bookmark {
     // 외래키
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference // 양방향 참조 방지
     private Users users;
     
     // 외래키
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference // 양방향 참조 방지
     private Posts posts;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String bookmarkName;
 }

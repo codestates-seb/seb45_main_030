@@ -1,5 +1,7 @@
 package com.mainproject.grilledshrimp.domain.bookmark.controller;
 
+import com.mainproject.grilledshrimp.domain.bookmark.dto.BookmarkDeleteDto;
+import com.mainproject.grilledshrimp.domain.bookmark.dto.BookmarkPatchDto;
 import com.mainproject.grilledshrimp.domain.bookmark.dto.BookmarkPostDto;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
 import com.mainproject.grilledshrimp.domain.bookmark.mapper.BookmarkMapper;
@@ -39,18 +41,17 @@ public class BookmarkController {
         return new ResponseEntity(mapper.bookmarkListToBookmarkResponseDtoList(findBookmark), HttpStatus.OK);
     }
 
-    // 특정 유저 특정 북마크 삭제
-    @DeleteMapping()
-    public ResponseEntity deleteBookmark(@Valid @RequestBody BookmarkPostDto bookmarkPostDto) {
-        bookmarkService.deleteBookmark(bookmarkPostDto.getUser_id(), bookmarkPostDto.getPost_id());
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    // 북마크 이름 수정
+    @PatchMapping
+    public ResponseEntity patchBookmark(@Valid @RequestBody BookmarkPatchDto bookmarkPatchDto) {
+        List<Bookmark> bookmarkList = bookmarkService.patchBookmark(bookmarkPatchDto);
+        return new ResponseEntity(mapper.bookmarkListToBookmarkResponseDtoList(bookmarkList), HttpStatus.OK);
     }
 
-
-    // 북마크 삭제
-    @DeleteMapping("/{user-id}")
-    public ResponseEntity deleteBookmark(@PathVariable("user-id") Long userId) {
-        bookmarkService.deleteBookmark(userId);
+    // 특정 유저 특정 북마크 삭제
+    @DeleteMapping()
+    public ResponseEntity deleteBookmark(@Valid @RequestBody BookmarkDeleteDto bookmarkDeleteDto) {
+        bookmarkService.deleteBookmark(bookmarkDeleteDto);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
