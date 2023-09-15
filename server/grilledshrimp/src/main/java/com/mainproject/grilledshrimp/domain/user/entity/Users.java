@@ -2,11 +2,11 @@ package com.mainproject.grilledshrimp.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
 import com.mainproject.grilledshrimp.domain.comment.entity.Comment;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
-import com.mainproject.grilledshrimp.domain.recommendComment.entity.RecommendComment;
-import com.mainproject.grilledshrimp.domain.recommendPost.entity.RecommendPost;
+import com.mainproject.grilledshrimp.domain.recommend.entity.Recommend;
 import lombok.*;
 
 import javax.persistence.*;
@@ -72,10 +72,8 @@ public class Users {
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
-    private List<RecommendPost> recommendPostList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
-    private List<RecommendComment> recommendCommentList = new ArrayList<>();
+    @JsonManagedReference
+    private List<Recommend> recommendList = new ArrayList<>();
 
     public enum UserStatus {
         USER_ACTIVE("활동중"),

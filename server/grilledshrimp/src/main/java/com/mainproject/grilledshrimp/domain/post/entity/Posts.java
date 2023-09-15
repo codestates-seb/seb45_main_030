@@ -1,14 +1,10 @@
 package com.mainproject.grilledshrimp.domain.post.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
-import com.mainproject.grilledshrimp.domain.post.dto.PostsPostDto;
+import com.mainproject.grilledshrimp.domain.comment.entity.Comment;
 import com.mainproject.grilledshrimp.domain.postTag.entity.PostTag;
-import com.mainproject.grilledshrimp.domain.recommendPost.entity.RecommendPost;
-import com.mainproject.grilledshrimp.domain.tag.entity.Tag;
+import com.mainproject.grilledshrimp.domain.recommend.entity.Recommend;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,9 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -43,7 +37,7 @@ public class Posts {
     @Column(name = "post_caption", nullable = true)
     private String postCaption;
 
-    //@Column(name = "post_image", nullable = false)
+    @Column(name = "post_image", nullable = false)
     private String postImage;
 
     @Column(name = "post_address", nullable = true)
@@ -51,6 +45,9 @@ public class Posts {
 
     @Column(name = "post_comment_permission", nullable = false)
     private boolean postCommentPermission;
+
+    @Column(name = "thumbnail", nullable = false)
+    public String thumbnail;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
@@ -68,7 +65,11 @@ public class Posts {
     private List<PostTag> postTags;
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<RecommendPost> recommendPostList = new ArrayList<>();
+    @JsonManagedReference
+    private List<Recommend> recommendList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public void addUser(Users user){
         this.users = user;
@@ -82,6 +83,13 @@ public class Posts {
             postTags = new ArrayList<>();
         }
         return postTags;
+    }
+
+    public List<Comment> getComments() {
+        if(comments == null) {
+            comments = new ArrayList<>();
+        }
+        return comments;
     }
 
 

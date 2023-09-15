@@ -26,6 +26,7 @@ public class PostsPostDto {
     private String postCaption;
     private String postImage;
     private String postAddress;
+    private String thumbnail;
     private boolean postCommentPermission;
     @JsonProperty("tags")
     private List<String> tags;
@@ -37,6 +38,7 @@ public class PostsPostDto {
                 .postCaption(postCaption)
                 .postImage(postImage)
                 .postAddress(postAddress)
+                .thumbnail(thumbnail)
                 .postCommentPermission(postCommentPermission)
                 .build();
         post.addUser(user);

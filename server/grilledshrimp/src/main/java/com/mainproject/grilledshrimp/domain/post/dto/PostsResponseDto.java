@@ -21,13 +21,13 @@ public class PostsResponseDto {
     private String postCaption;
     private String postImage;
     private String postAddress;
+    private String thumbnail;
     private boolean postCommentPermission;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<String> tags;
 
     private UserResponseSimpleDto user;
-//    private List<Tag> tags;
     // 댓글 리스트
     private List<CommentResponseDto> comments;
 
@@ -38,6 +38,7 @@ public class PostsResponseDto {
         postsResponseDto.setPostCaption(post.getPostCaption());
         postsResponseDto.setPostImage(post.getPostImage());
         postsResponseDto.setPostAddress(post.getPostAddress());
+        postsResponseDto.setThumbnail(post.getThumbnail());
         postsResponseDto.setPostCommentPermission(post.isPostCommentPermission());
         postsResponseDto.setCreatedAt(post.getCreatedAt());
         postsResponseDto.setModifiedAt(post.getModifiedAt());
@@ -45,6 +46,10 @@ public class PostsResponseDto {
                 .map(postTag -> postTag.getTag().getName())
                 .collect(Collectors.toList()));
         postsResponseDto.setUser(UserResponseSimpleDto.of(post.getUsers()));
+        postsResponseDto.setComments(post.getComments().stream()
+                .map(CommentResponseDto::of)
+                .sorted(Comparator.comparing(CommentResponseDto::getCommentId))
+                .collect(Collectors.toList()));
         return postsResponseDto;
     }
 }

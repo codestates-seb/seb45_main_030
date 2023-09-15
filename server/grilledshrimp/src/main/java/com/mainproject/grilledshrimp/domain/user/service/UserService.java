@@ -1,6 +1,9 @@
 package com.mainproject.grilledshrimp.domain.user.service;
 
+import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseDto;
+import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseSimpleDto;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
+import com.mainproject.grilledshrimp.domain.post.mapper.PostsMapper;
 import com.mainproject.grilledshrimp.domain.post.repository.PostsRepository;
 import com.mainproject.grilledshrimp.domain.user.dto.UserPatchDto;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
@@ -24,6 +27,7 @@ import java.util.Optional;
 public class UserService {
     private final AwsS3Service awsS3Service;
     private final UserRepository userRepository;
+    private final PostsMapper postsMapper;
     private final PostsRepository postsRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -31,9 +35,10 @@ public class UserService {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public UserService(AwsS3Service awsS3Service, UserRepository userRepository, PostsRepository postsRepository, PasswordEncoder passwordEncoder, UserAuthorityUtils authorityUtils, RedisTemplate<String, Object> redisTemplate) {
+    public UserService(AwsS3Service awsS3Service, UserRepository userRepository, PostsMapper postsMapper, PostsRepository postsRepository, PasswordEncoder passwordEncoder, UserAuthorityUtils authorityUtils, RedisTemplate redisTemplate) {
         this.awsS3Service = awsS3Service;
         this.userRepository = userRepository;
+        this.postsMapper = postsMapper;
         this.postsRepository = postsRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
@@ -96,12 +101,6 @@ public class UserService {
         return userRepository.save(findUser);
     }
 
-    // 유저의 모든 게시글 가져오기
-    public List<Posts> getUsersPosts(long userId) {
-        List<Posts> postsList = postsRepository.findByUsers_UserId(userId);
-        return postsList;
-    }
-
     // 유저 로그아웃
     public void logoutUser(String email) {
         if(redisTemplate.opsForValue().get("JWT_TOKEN:" + email) == null) {
@@ -130,5 +129,12 @@ public class UserService {
         Optional<Users> user = userRepository.findByEmail(email);
         if (user.isPresent())
             throw new BusinessLogicException(ExceptionCode.USER_EXIST);
+    }
+
+    public List<PostsResponseSimpleDto> findUserPosts(long userId) {
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+
+        return postsMapper.postsToPostsResponseSimpleDtos(postsRepository.findByUsers_UserId(userId));
     }
 }

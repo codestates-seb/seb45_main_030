@@ -1,12 +1,9 @@
 package com.mainproject.grilledshrimp.domain.bookmark.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 
 
 import javax.persistence.*;

@@ -9,13 +9,8 @@ import java.util.List;
 // 게시글 수정
 @Data
 public class PostsPatchDto {
-    private Long user_id;
-    @NotNull
-    @Length(min = 1, max = 100)
-    private String post_title;
-    private String post_address;
-    private String post_caption;
-    private boolean post_comment_permission;
-    private List<String> tags;
-    private List<String> post_image;
+    private Long userId;
+    private Long postId;
+    private String postCaption;
+    private boolean postCommentPermission;
 }
