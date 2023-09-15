@@ -40,18 +40,19 @@ public class PostsService {
     @Autowired
     private TagRepository tagRepository;
 
-    public Posts createPost(PostsPostDto postsPostDto) {
+    public PostsResponseDto createPost(PostsPostDto postsPostDto) {
         Users user = userRepository.findByUserId(postsPostDto.getUserId()).orElseThrow(
                 ()-> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         Posts post = postsPostDto.toPosts(user);
         addPostTagsToPost(postsPostDto.getTags(), post);
-        return postsRepository.save(post);
+        postsRepository.save(post);
+        return PostsResponseDto.of(post);
 
     }
 
 
     @Transactional
-    public Posts updatePost(PostsPatchDto posts, Long postId, Long userId){
+    public PostsResponseDto updatePost(PostsPatchDto posts, Long postId, Long userId){
         Posts existingPost = postsRepository.findById(postId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.POST_NOT_FOUND));
 
@@ -64,7 +65,8 @@ public class PostsService {
 
         existingPost.setPostCaption(posts.getPostCaption());
         existingPost.setPostCommentPermission(posts.isPostCommentPermission());
-        return postsRepository.save(existingPost);
+        postsRepository.save(existingPost);
+        return PostsResponseDto.of(existingPost);
     }
 
     public String uploadImage(MultipartFile file){
