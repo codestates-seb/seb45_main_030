@@ -1,4 +1,4 @@
-package com.mainproject.grilledshrimp.domain.recommendPost.entity;
+package com.mainproject.grilledshrimp.domain.recommend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Setter
 @Builder
 @Entity
-public class RecommendPost {
+public class Recommend {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long recommend_post_id;

@@ -1,13 +1,9 @@
 package com.mainproject.grilledshrimp.domain.post.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
-import com.mainproject.grilledshrimp.domain.post.dto.PostsPostDto;
 import com.mainproject.grilledshrimp.domain.postTag.entity.PostTag;
-import com.mainproject.grilledshrimp.domain.recommendPost.entity.RecommendPost;
-import com.mainproject.grilledshrimp.domain.tag.entity.Tag;
+import com.mainproject.grilledshrimp.domain.recommend.entity.Recommend;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,9 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -70,7 +64,7 @@ public class Posts {
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonManagedReference
-    private List<RecommendPost> recommendPostList = new ArrayList<>();
+    private List<Recommend> recommendList = new ArrayList<>();
 
     public void addUser(Users user){
         this.users = user;

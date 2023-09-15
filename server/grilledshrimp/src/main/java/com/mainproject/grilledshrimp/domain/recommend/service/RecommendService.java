@@ -1,10 +1,10 @@
-package com.mainproject.grilledshrimp.domain.recommendPost.service;
+package com.mainproject.grilledshrimp.domain.recommend.service;
 
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.post.repository.PostsRepository;
-import com.mainproject.grilledshrimp.domain.recommendPost.dto.RecommendPostResponseDto;
-import com.mainproject.grilledshrimp.domain.recommendPost.entity.RecommendPost;
-import com.mainproject.grilledshrimp.domain.recommendPost.repository.RecommendPostRepository;
+import com.mainproject.grilledshrimp.domain.recommend.dto.RecommendResponseDto;
+import com.mainproject.grilledshrimp.domain.recommend.entity.Recommend;
+import com.mainproject.grilledshrimp.domain.recommend.repository.RecommendRepository;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
 import com.mainproject.grilledshrimp.global.exception.BusinessLogicException;
@@ -16,33 +16,33 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class RecommendPostService {
-    private final RecommendPostRepository recommendPostRepository;
+public class RecommendService {
+    private final RecommendRepository recommendRepository;
     private final UserRepository userRepository;
     private final PostsRepository postsRepository;
 
-    public RecommendPostResponseDto recommendPost(Long postId, Long userId) {
+    public RecommendResponseDto recommendPost(Long postId, Long userId) {
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         Posts post = postsRepository.findById(postId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.POST_NOT_FOUND));
 
-        Optional<RecommendPost> recommendPosts = recommendPostRepository.findByUsersAndPosts(user, post);
+        Optional<Recommend> recommendPosts = recommendRepository.findByUsersAndPosts(user, post);
         if (recommendPosts.isEmpty()){
-            RecommendPost recommendPost = RecommendPost.builder()
+            Recommend recommend = Recommend.builder()
                     .posts(post)
                     .users(user)
                     .build();
-            recommendPostRepository.save(recommendPost);
+            recommendRepository.save(recommend);
 
-            return RecommendPostResponseDto.builder()
+            return RecommendResponseDto.builder()
                     .post_id(postId)
                     .user_id(userId)
                     .build();
         }
 
-        RecommendPost recommendPost = recommendPosts.get();
-        recommendPostRepository.delete(recommendPost);
+        Recommend recommend = recommendPosts.get();
+        recommendRepository.delete(recommend);
         return null;
     }
 
