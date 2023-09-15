@@ -1,6 +1,7 @@
 package com.mainproject.grilledshrimp.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.recommendComment.entity.RecommendComment;
@@ -67,6 +68,7 @@ public class Users {
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
+    @JsonManagedReference
     private List<RecommendPost> recommendPostList = new ArrayList<>();
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
