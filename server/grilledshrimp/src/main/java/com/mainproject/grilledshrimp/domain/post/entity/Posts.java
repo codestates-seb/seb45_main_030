@@ -42,7 +42,7 @@ public class Posts {
     @Column(name = "post_caption", nullable = true)
     private String postCaption;
 
-    //@Column(name = "post_image", nullable = false)
+    @Column(name = "post_image", nullable = false)
     private String postImage;
 
     @Column(name = "post_address", nullable = true)
@@ -51,6 +51,7 @@ public class Posts {
     @Column(name = "post_comment_permission", nullable = false)
     private boolean postCommentPermission;
 
+    @Column(name = "thumbnail", nullable = false)
     public String thumbnail;
 
     @CreationTimestamp
@@ -68,6 +69,7 @@ public class Posts {
     private List<PostTag> postTags;
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonManagedReference
     private List<RecommendPost> recommendPostList = new ArrayList<>();
 
     public void addUser(Users user){
