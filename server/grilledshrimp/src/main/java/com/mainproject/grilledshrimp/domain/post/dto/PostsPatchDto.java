@@ -13,5 +13,4 @@ public class PostsPatchDto {
     private Long postId;
     private String postCaption;
     private boolean postCommentPermission;
-    private List<String> tags;
 }
