@@ -32,8 +32,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PostsController {
     private final PostsService postsService;
-    private final UserService userService;
-    private final PostsMapper mapper;
     private final AwsS3Service awsS3Service;
 
     @PostMapping(consumes = {"multipart/form-data"})
@@ -45,10 +43,9 @@ public class PostsController {
         String thumbUrl = awsS3Service.uploadThumbnail(file);
         postsPostDto.setPostImage(imgUrl);
         postsPostDto.setThumbnail(thumbUrl);
-        Posts createdPost = postsService.createPost(postsPostDto);
+        PostsResponseDto createdPost = postsService.createPost(postsPostDto);
 
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);
-//        return new ResponseEntity<>(imgUrl, HttpStatus.CREATED);
     }
 
     @PatchMapping("/{post-id}")
@@ -57,7 +54,7 @@ public class PostsController {
             @PathVariable("post-id") long postId,
             @Positive @RequestParam long userId
             ){
-        Posts updatedPost = postsService.updatePost(postsPatchDto, postId, userId);
+        PostsResponseDto updatedPost = postsService.updatePost(postsPatchDto, postId, userId);
 
         return new ResponseEntity<>(updatedPost, HttpStatus.OK);
     }
