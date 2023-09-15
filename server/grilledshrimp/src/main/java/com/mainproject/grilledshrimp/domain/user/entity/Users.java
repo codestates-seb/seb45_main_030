@@ -67,14 +67,12 @@ public class Users {
 
     // 북마크 일대다 관계
     @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
+    @JsonManagedReference
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
     @JsonManagedReference
     private List<Recommend> recommendList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
-    private List<RecommendComment> recommendCommentList = new ArrayList<>();
 
     public enum UserStatus {
         USER_ACTIVE("활동중"),
