@@ -1,6 +1,7 @@
 package com.mainproject.grilledshrimp.domain.user.controller;
 
 import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseDto;
+import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseSimpleDto;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.user.dto.*;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
@@ -53,15 +54,6 @@ public class UserController {
         userService.logoutUser(userLogoutDto.getEmail());
         return new ResponseEntity(HttpStatus.OK);
     }
-//    // 유저 사진 수정
-//    @PatchMapping("/{user-id}/image")
-//    public ResponseEntity patchUserImage(@Valid @RequestBody UserProfileImageDto userProfileImageDto) {
-//
-//        return new ResponseEntity(HttpStatus.OK);
-//    }
-
-    // 유저 사진 삭제도 있어야 할 듯
-
 
     // 유저 정보 수정
     // 유저 정보 수정DTO에 수정할 정보 여러개 넣고 필요한 값만 받아 바꾸면 됨
@@ -74,7 +66,7 @@ public class UserController {
     // 특정 유저의 전체 게시글 가져오기
     @GetMapping("/posts")
     public ResponseEntity getUserPosts(@RequestParam @Positive long userId) {
-        List<PostsResponseDto> posts = userService.findUserPosts(userId);
+        List<PostsResponseSimpleDto> posts = userService.findUserPosts(userId);
         return new ResponseEntity(posts, HttpStatus.OK);
     }
 
