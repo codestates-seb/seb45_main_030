@@ -1,5 +1,6 @@
 package com.mainproject.grilledshrimp.domain.post.service;
 
+import com.mainproject.grilledshrimp.domain.post.dto.PostsPatchDto;
 import com.mainproject.grilledshrimp.domain.post.dto.PostsPostDto;
 import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseDto;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
@@ -49,12 +50,21 @@ public class PostsService {
     }
 
 
-    public Posts updatePost(Posts post){
-        Posts findPosts = postsRepository.findById(post.getPostId()).orElseThrow(
-                ()-> new BusinessLogicException(ExceptionCode.POST_NOT_FOUND)
-        );
-        postsRepository.save(post);
-        return post;
+    @Transactional
+    public Posts updatePost(PostsPatchDto posts, Long postId, Long userId){
+        Posts existingPost = postsRepository.findById(postId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.POST_NOT_FOUND));
+
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+
+        if (!existingPost.getUsers().equals(user)) {
+            throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+        }
+
+        existingPost.setPostCaption(posts.getPostCaption());
+        existingPost.setPostCommentPermission(posts.isPostCommentPermission());
+        return postsRepository.save(existingPost);
     }
 
     public String uploadImage(MultipartFile file){
