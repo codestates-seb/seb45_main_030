@@ -1,5 +1,9 @@
 package com.mainproject.grilledshrimp.domain.user.service;
 
+import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseDto;
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
+import com.mainproject.grilledshrimp.domain.post.mapper.PostsMapper;
+import com.mainproject.grilledshrimp.domain.post.repository.PostsRepository;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
 import com.mainproject.grilledshrimp.global.image.AwsS3Service;
@@ -21,15 +25,19 @@ import java.util.Optional;
 public class UserService {
     private final AwsS3Service awsS3Service;
     private final UserRepository userRepository;
+    private final PostsMapper postsMapper;
+    private final PostsRepository postsRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final UserAuthorityUtils authorityUtils;
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public UserService(AwsS3Service awsS3Service, UserRepository userRepository, PasswordEncoder passwordEncoder, UserAuthorityUtils authorityUtils, RedisTemplate redisTemplate) {
+    public UserService(AwsS3Service awsS3Service, UserRepository userRepository, PostsMapper postsMapper, PostsRepository postsRepository, PasswordEncoder passwordEncoder, UserAuthorityUtils authorityUtils, RedisTemplate redisTemplate) {
         this.awsS3Service = awsS3Service;
         this.userRepository = userRepository;
+        this.postsMapper = postsMapper;
+        this.postsRepository = postsRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
         this.redisTemplate = redisTemplate;
@@ -115,5 +123,12 @@ public class UserService {
         Optional<Users> user = userRepository.findByEmail(email);
         if (user.isPresent())
             throw new BusinessLogicException(ExceptionCode.USER_EXIST);
+    }
+
+    public List<PostsResponseDto> findUserPosts(long userId) {
+        Users user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+
+        return postsMapper.postsToPostsResponseDtos(postsRepository.findByUsers_UserId(userId));
     }
 }
