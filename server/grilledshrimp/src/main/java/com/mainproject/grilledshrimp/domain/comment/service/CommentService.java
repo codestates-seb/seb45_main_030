@@ -22,10 +22,8 @@ public class CommentService {
 
     @Autowired
     private CommentRepository commentRepository;
-
     @Autowired
     private PostsRepository postRepository;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -40,8 +38,8 @@ public class CommentService {
                 .orElseThrow(() -> new IllegalArgumentException("게시물을 찾을 수 없습니다."));
         // 3. 댓글 엔티티 생성 및 필드 설정
         Comment comment = new Comment();
-        comment.setUser(user); // 댓글과 사용자 관계 설정
-        comment.setPost(post); // 댓글과 게시물 관계 설정
+        comment.setUser(user);
+        comment.setPost(post);
         comment.setCommentText(commentText);
         LocalDateTime currentTime = LocalDateTime.now();
         comment.setCreated_at(currentTime);
@@ -70,8 +68,7 @@ public class CommentService {
     }
 
     public Page<CommentDTO> getCommentsByPostId(Long postId, Pageable pageable) {
-        // postId로 해당 게시물의 댓글 조회 (페이지네이션 적용)
-        Page<Comment> comments = CommentRepository.findByPosts_postid(postId, pageable);
+        Page<Comment> comments = commentRepository.findByPosts_postid(postId, pageable);
         return comments.map(comment -> {
             CommentDTO commentDTO = new CommentDTO();
             commentDTO.setUserId(comment.getUser().getUserId());
