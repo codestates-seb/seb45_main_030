@@ -2,6 +2,8 @@ package com.mainproject.grilledshrimp.domain.post.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
+import com.mainproject.grilledshrimp.domain.comment.dto.CommentResponseDto;
+import com.mainproject.grilledshrimp.domain.comment.entity.Comment;
 import com.mainproject.grilledshrimp.domain.postTag.entity.PostTag;
 import com.mainproject.grilledshrimp.domain.recommend.entity.Recommend;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
@@ -56,6 +58,7 @@ public class Posts {
     private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonManagedReference
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.PERSIST, orphanRemoval = true)
@@ -65,6 +68,9 @@ public class Posts {
     @OneToMany(mappedBy = "posts", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonManagedReference
     private List<Recommend> recommendList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public void addUser(Users user){
         this.users = user;
@@ -78,6 +84,13 @@ public class Posts {
             postTags = new ArrayList<>();
         }
         return postTags;
+    }
+
+    public List<Comment> getComments() {
+        if(comments == null) {
+            comments = new ArrayList<>();
+        }
+        return comments;
     }
 
 
