@@ -68,7 +68,7 @@ public class CommentService {
     }
 
     public Page<CommentDTO> getCommentsByPostId(Long postId, Pageable pageable) {
-        Page<Comment> comments = commentRepository.findByPosts_postid(postId, pageable);
+        Page<Comment> comments = commentRepository.findByPosts_PostId(postId, pageable);
         return comments.map(comment -> {
             CommentDTO commentDTO = new CommentDTO();
             commentDTO.setUserId(comment.getUser().getUserId());
