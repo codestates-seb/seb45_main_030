@@ -1,5 +1,7 @@
 package com.mainproject.grilledshrimp.domain.user.service;
 
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
+import com.mainproject.grilledshrimp.domain.post.repository.PostsRepository;
 import com.mainproject.grilledshrimp.domain.user.dto.UserPatchDto;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
@@ -22,19 +24,22 @@ import java.util.Optional;
 public class UserService {
     private final AwsS3Service awsS3Service;
     private final UserRepository userRepository;
+    private final PostsRepository postsRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final UserAuthorityUtils authorityUtils;
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public UserService(AwsS3Service awsS3Service, UserRepository userRepository, PasswordEncoder passwordEncoder, UserAuthorityUtils authorityUtils, RedisTemplate redisTemplate) {
+    public UserService(AwsS3Service awsS3Service, UserRepository userRepository, PostsRepository postsRepository, PasswordEncoder passwordEncoder, UserAuthorityUtils authorityUtils, RedisTemplate<String, Object> redisTemplate) {
         this.awsS3Service = awsS3Service;
         this.userRepository = userRepository;
+        this.postsRepository = postsRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
         this.redisTemplate = redisTemplate;
     }
+
 
     // 패스워드를 암호화 해서 회원가입을 진행합니다.
     public Users createUser(Users user) {
@@ -89,6 +94,12 @@ public class UserService {
 
         findUser.setModifiedAt(LocalDateTime.now());
         return userRepository.save(findUser);
+    }
+
+    // 유저의 모든 게시글 가져오기
+    public List<Posts> getUsersPosts(long userId) {
+        List<Posts> postsList = postsRepository.findByUsers_UserId(userId);
+        return postsList;
     }
 
     // 유저 로그아웃
