@@ -1,11 +1,9 @@
 package com.mainproject.grilledshrimp.domain.recommendPost.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Entity
 public class RecommendPost {
     @Id
@@ -21,9 +20,11 @@ public class RecommendPost {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
+    @JsonBackReference
     private Posts posts;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private Users users;
 }
