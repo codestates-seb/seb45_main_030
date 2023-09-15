@@ -1,5 +1,7 @@
 package com.mainproject.grilledshrimp.domain.user.controller;
 
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
+import com.mainproject.grilledshrimp.domain.post.mapper.PostsMapper;
 import com.mainproject.grilledshrimp.domain.user.dto.*;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.mapper.UserMapper;
@@ -19,11 +21,15 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final UserMapper mapper;
+    private final PostsMapper postsMapper;
 
-    public UserController(UserService userService, UserMapper mapper) {
+    public UserController(UserService userService, UserMapper mapper, PostsMapper postsMapper) {
         this.userService = userService;
         this.mapper = mapper;
+        this.postsMapper = postsMapper;
     }
+
+
 
     // 유저 생성
     @PostMapping("/signup")
@@ -69,9 +75,10 @@ public class UserController {
     }
 
     // 특정 유저의 전체 게시글 가져오기
-    @GetMapping("/posts")
-    public ResponseEntity getUserPosts() {
-
+    @GetMapping("/posts/{user-id}")
+    public ResponseEntity getUserPosts(@PathVariable("user-id") long userId) {
+        //List<Posts> postsList = userService.getUsersPosts(userId);
+        //return new ResponseEntity(postsMapper.postsToPostsResponseDtos(postsList), HttpStatus.OK);
         return new ResponseEntity(HttpStatus.OK);
     }
 

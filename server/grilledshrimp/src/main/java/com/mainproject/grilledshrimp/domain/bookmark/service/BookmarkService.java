@@ -1,5 +1,7 @@
 package com.mainproject.grilledshrimp.domain.bookmark.service;
 
+import com.mainproject.grilledshrimp.domain.bookmark.dto.BookmarkDeleteDto;
+import com.mainproject.grilledshrimp.domain.bookmark.dto.BookmarkPatchDto;
 import com.mainproject.grilledshrimp.domain.bookmark.dto.BookmarkPostDto;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
@@ -11,7 +13,9 @@ import com.mainproject.grilledshrimp.domain.bookmark.repository.BookmarkReposito
 import com.mainproject.grilledshrimp.global.exception.BusinessLogicException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +44,10 @@ public class BookmarkService {
         existsBookmark(bookmarkPostDto);
 
         Bookmark bookmark = bookmarkPostDto.dtoToEntity(user, post);
+        if(bookmarkPostDto.getBookmarkName() != null) {
+            bookmark.setBookmarkName(bookmarkPostDto.getBookmarkName());
+        }
+
         Bookmark savedBookmark = bookmarkRepository.save(bookmark);
         log.info("북마크 생성");
         return savedBookmark;
@@ -51,19 +59,79 @@ public class BookmarkService {
         return findVerifiedBookmark(userId);
     }
 
-    // 특정 유저 북마크 전체 삭제
-    public void deleteBookmark(long userId) {
+    // 북마크 수정
+    public List<Bookmark> patchBookmark(BookmarkPatchDto bookmarkPatchDto) {
+        List<Bookmark> bookmarkList = new ArrayList<>();
+        if(bookmarkPatchDto.getPost_id() != null) {
+            // 북마크 존재 확인
+            List<Bookmark> findBookmarkList = bookmarkRepository.findByPosts_PostId(bookmarkPatchDto.getPost_id())
+                    .orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOOKMARK_NOT_FOUND));
 
-        bookmarkRepository.deleteById(userId);
+            // 북마크 이름 수정
+            for(Bookmark bookmark : findBookmarkList) {
+                bookmark.setBookmarkName(bookmarkPatchDto.getBookmark_name_new());
+                bookmarkList.add(bookmark);
+                bookmarkRepository.save(bookmark);
+            }
+        }
+        else {
+            // 북마크 존재 확인
+            Optional<List<Bookmark>> findBookmark = bookmarkRepository.findByUsers_UserIdAndBookmarkName(bookmarkPatchDto.getUser_id(), bookmarkPatchDto.getBookmark_name_old());
+            if(findBookmark.isEmpty()) {
+                throw new BusinessLogicException(ExceptionCode.BOOKMARK_NOT_FOUND);
+            }
+
+            // 북마크 이름 수정
+            for(Bookmark bookmark : findBookmark.get()) {
+                if(bookmark.getBookmarkName().equals(bookmarkPatchDto.getBookmark_name_old())) {
+                    bookmark.setBookmarkName(bookmarkPatchDto.getBookmark_name_new());
+                    bookmarkList.add(bookmark);
+                    bookmarkRepository.save(bookmark);
+                }
+            }
+        }
+        return bookmarkList;
     }
 
-    // 특정 유저 특정 북마크 삭제
-    public void deleteBookmark(long userId, long postId) {
-        Optional<Bookmark> findBookmark = bookmarkRepository.findByUsers_UserIdAndPosts_PostId(userId, postId);
+    // 특정 유저의 북마크 삭제
+    @Transactional
+    public void deleteBookmark(BookmarkDeleteDto bookmarkDeleteDto) {
+        // 북마크 존재 확인
+        List<Bookmark> findBookmark = findVerifiedBookmark(bookmarkDeleteDto.getUser_id());
+
+        // 북마크가 없다면 예외처리
         if(findBookmark.isEmpty()) {
             throw new BusinessLogicException(ExceptionCode.BOOKMARK_NOT_FOUND);
         }
-        bookmarkRepository.deleteById(findBookmark.get().getBookmarkId());
+
+        if(bookmarkDeleteDto.getBookmarkId() != null) {
+            bookmarkRepository.deleteById(bookmarkDeleteDto.getBookmarkId());
+            return;
+        }
+
+        // 유저 id만 있다면 해당 유저의 모든 북마크 삭제
+        if(bookmarkDeleteDto.getPost_id() == null && bookmarkDeleteDto.getBookmark_name() == null) {
+            bookmarkRepository.deleteByUsers_UserId(bookmarkDeleteDto.getUser_id());
+            return;
+        }
+
+        // 포스트 id만 있다면 해당 유저의 해당 포스트 북마크 삭제
+        if(bookmarkDeleteDto.getPost_id() != null && bookmarkDeleteDto.getBookmark_name() == null) {
+            bookmarkRepository.deleteByUsers_UserIdAndPosts_PostId(bookmarkDeleteDto.getUser_id(), bookmarkDeleteDto.getPost_id());
+            return;
+        }
+
+        // 북마크 이름만 있다면 해당 유저의 해당 북마크 삭제
+        if(bookmarkDeleteDto.getPost_id() == null && bookmarkDeleteDto.getBookmark_name() != null) {
+            bookmarkRepository.deleteByUsers_UserIdAndAndBookmarkName(bookmarkDeleteDto.getUser_id(), bookmarkDeleteDto.getBookmark_name());
+            return;
+        }
+
+        // 포스트 id, 북마크 이름이 있다면 해당 북마크 삭제
+        if(bookmarkDeleteDto.getPost_id() != null && bookmarkDeleteDto.getBookmark_name() != null) {
+            bookmarkRepository.deleteByUsers_UserIdAndPosts_PostIdAndBookmarkName(bookmarkDeleteDto.getUser_id(), bookmarkDeleteDto.getPost_id(), bookmarkDeleteDto.getBookmark_name());
+            return;
+        }
     }
 
     // 특정 북마크가 존재하는지 확인합니다.

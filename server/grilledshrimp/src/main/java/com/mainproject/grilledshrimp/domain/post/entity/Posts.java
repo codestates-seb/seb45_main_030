@@ -1,5 +1,6 @@
 package com.mainproject.grilledshrimp.domain.post.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -59,6 +60,7 @@ public class Posts {
     private LocalDateTime modifiedAt;
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JsonManagedReference // 양방향 참조 방지
     private List<Bookmark> bookmarks = new ArrayList<>();
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.PERSIST, orphanRemoval = true)
