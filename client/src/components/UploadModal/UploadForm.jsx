@@ -5,11 +5,18 @@ import { BsTrash3Fill } from "react-icons/bs";
 import { AiFillCloseCircle } from "react-icons/ai";
 
 export default function UploadForm({ onClose }) {
+    const userId = 1;
+
     const [image, setImage] = useState(null);
+    const [imageObjectURL, setImageObjectURL] = useState(null);
+
     const [place, setPlace] = useState("");
     const [description, setDescription] = useState("");
     const initialTags = [];
     const [tags, setTags] = useState(initialTags);
+    const [addressPermission, setAddressPermission] = useState(false);
+    const [commentPermission, setCommentPermission] = useState(false);
+
     const [uploading, setUploading] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [uploadError, setUploadError] = useState("");
@@ -31,33 +38,91 @@ export default function UploadForm({ onClose }) {
         }
     };
 
+    // const handleImageChange = (event) => {
+    //     const file = event.target.files[0];
+    //     if (file) {
+    //         setImage(file);
+    //         const objectURL = URL.createObjectURL(file);
+    //         setImageObjectURL(objectURL);
+    //         console.log(objectURL);
+    //     }
+    // };
+
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setImage(event.target.result);
+            const objectURL = URL.createObjectURL(file);
+
+            // 이미지를 미리 로드하여 가로 너비를 확인
+            const img = new Image();
+            img.src = objectURL;
+
+            img.onload = () => {
+                const maxWidth = 400; // 최대 가로 너비
+
+                let newWidth = img.width;
+                let newHeight = img.height;
+
+                // 이미지 크기가 제한값보다 큰 경우 가로 너비를 400px로 설정
+                if (img.width > maxWidth) {
+                    newWidth = maxWidth;
+                    newHeight = (img.height * maxWidth) / img.width;
+                }
+
+                // 조절된 크기로 이미지 리사이징
+                const canvas = document.createElement("canvas");
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+                // 리사이징된 이미지를 Blob으로 변환
+                canvas.toBlob((blob) => {
+                    setImage(blob);
+                    setImageObjectURL(URL.createObjectURL(blob));
+                }, file.type);
             };
-            reader.readAsDataURL(file);
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append("post_image", image);
-        formData.append("post_title", place);
-        formData.append("post_caption", description);
-        formData.append("post_hashtag", tags);
+        if (image) {
+            formData.append("postImage", image);
+        }
+        const json = JSON.stringify({
+            // 데이터를 추가
+            postTitle: place,
+            postCaption: description,
+            tags: tags,
+            postAddress: addressPermission,
+            postCommentPermission: commentPermission,
+            userId: userId,
+        });
+        const blob = new Blob([json], { type: "application/json" });
+        formData.append("data", blob);
+
+        const Alldata = Object.fromEntries(formData);
+        console.log("formdata", Alldata);
+        console.log(formData.get("postImage"));
 
         setUploading(true);
 
         try {
-            const response = await axios.post("http://localhost:8080/posts", formData, {
+            const axiosConfig = {
                 headers: {
                     "Content-Type": "multipart/form-data",
+                    // 헤더 추가
+                    "ngrok-skip-browser-warning": "69420",
                 },
-            });
+            };
+
+            const response = await axios.post(
+                "https://7568-218-151-64-223.ngrok-free.app/posts",
+                formData,
+                axiosConfig,
+            );
             console.log(response);
 
             setUploadSuccess(true);
@@ -95,14 +160,17 @@ export default function UploadForm({ onClose }) {
                 <form onSubmit={handleSubmit} className={styles.form_container}>
                     <label className={styles.image_section}>
                         <div className={styles.image_upload_label} onClick={handleClickUpload}>
-                            {image ? (
+                            {imageObjectURL ? (
                                 <>
-                                    <img src={image} alt="업로드된 사진" className={styles.image} />
+                                    <img src={imageObjectURL} alt="업로드된 사진" className={styles.image} />
                                     <button
                                         type="button"
                                         className={styles.delete_button}
                                         // setImage를 null로 처리하여 이미지를 없앰?
-                                        onClick={() => setImage(null)}
+                                        onClick={() => {
+                                            setImage(null);
+                                            setImageObjectURL(null);
+                                        }}
                                     >
                                         <BsTrash3Fill />
                                     </button>
@@ -175,6 +243,28 @@ export default function UploadForm({ onClose }) {
                 >
                     {uploading ? "업로드 중..." : "게시하기"}
                 </button>
+                {/* 정보 제공 동의 */}
+                <div>
+                    {/* 위치 정보 동의 체크박스 */}
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={addressPermission}
+                            onChange={() => setAddressPermission(!addressPermission)}
+                        />
+                        위치 정보 동의
+                    </label>
+
+                    {/* 댓글 기능 해제 체크박스 */}
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={commentPermission}
+                            onChange={() => setCommentPermission(!commentPermission)}
+                        />
+                        댓글 기능 해제
+                    </label>
+                </div>
             </div>
         </div>
     );
