@@ -9,6 +9,7 @@ import com.mainproject.grilledshrimp.global.image.AwsS3Service;
 import com.mainproject.grilledshrimp.global.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import com.mainproject.grilledshrimp.domain.post.service.PostsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.List;
 @RequestMapping("/posts")
 @Validated
 @RequiredArgsConstructor
+@Slf4j
 public class PostsController {
     private final PostsService postsService;
     private final UserService userService;
@@ -37,6 +39,7 @@ public class PostsController {
     ) {
         String imgUrl = awsS3Service.uploadImage(file);
         postsPostDto.setPostImage(imgUrl);
+
         Posts createdPost = postsService.createPost(postsPostDto);
 
         return new ResponseEntity<>(createdPost, HttpStatus.CREATED);

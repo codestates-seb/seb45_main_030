@@ -70,6 +70,11 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
                 log.info("이미 로그아웃된 유저");
                 throw new BusinessLogicException(ExceptionCode.USER_LOGOUTED);
             }
+            // 키는 있지만 값이 다르면 로그아웃된 유저
+            else if(!redisTemplate.opsForValue().get(key).equals(authorization.replace("Bearer ", ""))) {
+                log.info("로그아웃 키가 다름 {} / {}", redisTemplate.opsForValue().get(key), authorization.replace("Bearer ", ""));
+                throw new BusinessLogicException(ExceptionCode.AUTHENTICATION_FAILED);
+            }
         }
         return false;
     }
