@@ -3,6 +3,7 @@ package com.mainproject.grilledshrimp.domain.post.mapper;
 import com.mainproject.grilledshrimp.domain.post.dto.PostsPatchDto;
 import com.mainproject.grilledshrimp.domain.post.dto.PostsPostDto;
 import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseDto;
+import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseSimpleDto;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import org.mapstruct.Mapper;
 
@@ -14,6 +15,7 @@ public interface PostsMapper {
 
     PostsResponseDto postsToPostsResponseDto(Posts posts);
     List<PostsResponseDto> postsToPostsResponseDtos(List<Posts> posts);
+    List<PostsResponseSimpleDto> postsToPostsResponseSimpleDtos(List<Posts> posts);
 
     Posts postsPatchDtoToPosts(PostsPatchDto postsPatchDto);
 }
