@@ -4,6 +4,7 @@ import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseDto;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.post.mapper.PostsMapper;
 import com.mainproject.grilledshrimp.domain.post.repository.PostsRepository;
+import com.mainproject.grilledshrimp.domain.user.dto.UserPatchDto;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
 import com.mainproject.grilledshrimp.global.image.AwsS3Service;
@@ -56,6 +57,8 @@ public class UserService {
         // role을 유저에 맞게 설정합니다.
         List<String> roles = authorityUtils.createRoles(user.getEmail());
         user.setRole(roles);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUserStatus(Users.UserStatus.USER_ACTIVE);
 
         Users savedUser = userRepository.save(user);
         log.info("유저 생성");
@@ -70,6 +73,7 @@ public class UserService {
     }
 
     public Users findUser(long userId) {
+        Users findUser = findVerifiedUser(userId);
         return findVerifiedUser(userId);
     }
 
@@ -84,12 +88,12 @@ public class UserService {
     }
 
     // 유저 정보 수정
-    public Users updateUser(Long userId, Users user) {
-        user.setUserId(userId);
+    public Users updateUser(Long userId, UserPatchDto userPatchDto) {
         Users findUser = findVerifiedUser(userId);
-        Optional.ofNullable(user.getUsername()).ifPresent(findUser::setUsername);
-        Optional.ofNullable(user.getIntroduction()).ifPresent(findUser::setIntroduction);
-        Optional.ofNullable(user.getProfileImage()).ifPresent(findUser::setProfileImage);
+        Optional.ofNullable(userPatchDto.getUsername()).ifPresent(findUser::setUsername);
+        Optional.ofNullable(userPatchDto.getIntroduction()).ifPresent(findUser::setIntroduction);
+        Optional.ofNullable(userPatchDto.getProfile_image()).ifPresent(findUser::setProfileImage);
+        Optional.ofNullable(userPatchDto.getIntroduction());
 
         findUser.setModifiedAt(LocalDateTime.now());
         return userRepository.save(findUser);

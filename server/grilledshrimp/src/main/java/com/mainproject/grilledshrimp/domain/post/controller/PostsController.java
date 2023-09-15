@@ -10,6 +10,7 @@ import com.mainproject.grilledshrimp.global.image.AwsS3Service;
 import com.mainproject.grilledshrimp.global.exception.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import com.mainproject.grilledshrimp.domain.post.service.PostsService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/posts")
 @Validated
 @RequiredArgsConstructor
+@Slf4j
 public class PostsController {
     private final PostsService postsService;
     private final UserService userService;

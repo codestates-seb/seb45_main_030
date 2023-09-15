@@ -29,7 +29,8 @@ public class UserResponseDto {
     private LocalDateTime modifiedAt;
 
     private List<String> role;
-    private List<Bookmark> bookmarks;
-    private List<RecommendPost> recommendPostList;
-    private List<RecommendComment> recommendCommentList;
+//    private List<Bookmark> bookmarks;
+//    private List<RecommendPost> recommendPostList;
+//    private List<RecommendComment> recommendCommentList;
+
 }

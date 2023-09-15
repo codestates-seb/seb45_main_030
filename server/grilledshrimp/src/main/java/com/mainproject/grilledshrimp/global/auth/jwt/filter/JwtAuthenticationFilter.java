@@ -19,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -66,13 +67,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().write("{\"accessToken\": \"" + "Bearer " + accessToken + "\", \"refreshToken\": \"" + refreshToken + "\"}");
+
+        // 유저 구분을 위해 유저 id도 body에 추가
+        response.getWriter().write("{\"accessToken\": \"" + "Bearer " + accessToken + "\", \"refreshToken\": \"" + refreshToken + "\", \"userId\": \"" + users.getUserId() + "\"}");
 
         log.info("인증이 성공했을 때 JWT 토큰을 생성해서 응답 헤더에 추가");
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
 
         log.info("로그아웃을 구분하기 위해 redis에 accessToken 저장");
-        redisTemplate.opsForValue().set("JWT_TOKEN:"  + users.getEmail(), accessToken, jwtTokenizer.getAccessTokenExpirationMinutes() * 60 * 1000);
+        redisTemplate.opsForValue().set("JWT_TOKEN:"  + users.getEmail(), accessToken, Duration.ofMinutes(jwtTokenizer.getAccessTokenExpirationMinutes()));
     }
 
     // access token 생성

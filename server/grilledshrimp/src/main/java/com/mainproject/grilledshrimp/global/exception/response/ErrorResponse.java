@@ -2,6 +2,7 @@ package com.mainproject.grilledshrimp.global.exception.response;
 
 import com.mainproject.grilledshrimp.global.exception.ExceptionCode;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 
@@ -11,9 +12,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
+@Setter
 public class ErrorResponse {
     private int status;
     private String message;
+
     private List<FieldError> fieldErrors;
     private List<ConstraintViolationError> violationErrors;
 

@@ -3,13 +3,11 @@ package com.mainproject.grilledshrimp.domain.user.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
+import com.mainproject.grilledshrimp.domain.comment.entity.Comment;
 import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.recommendComment.entity.RecommendComment;
 import com.mainproject.grilledshrimp.domain.recommendPost.entity.RecommendPost;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,6 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
 public class Users {
     // 스네이크 케이스를 사용하면 jpaRepository에서 findByUsername등을 사용할 수 없다.
     // 그래서 카멜 케이스를 사용한다.
@@ -58,6 +57,10 @@ public class Users {
 
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
+
+    @OneToMany(mappedBy = "users")
+    @JsonIgnore
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "users")
     @JsonIgnore

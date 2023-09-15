@@ -41,6 +41,7 @@ public enum ExceptionCode {
     USER_PASSWORD_CHANGE_FAILED(500, "비밀번호 변경에 실패했습니다."),
 
     // 북마크
+    BOOKMARK_EXIST(409, "이미 존재하는 북마크입니다."),
     BOOKMARK_NOT_FOUND(404, "해당 북마크를 찾을 수 없습니다."),
     
     // 이미지
