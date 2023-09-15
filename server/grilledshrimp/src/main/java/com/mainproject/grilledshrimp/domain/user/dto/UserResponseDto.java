@@ -1,5 +1,6 @@
 package com.mainproject.grilledshrimp.domain.user.dto;
 
+import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
 import com.mainproject.grilledshrimp.domain.recommend.entity.Recommend;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import lombok.AllArgsConstructor;
@@ -25,8 +26,7 @@ public class UserResponseDto {
     private LocalDateTime modifiedAt;
 
     private List<String> role;
-//    private List<Bookmark> bookmarks;
-//    private List<RecommendPost> recommendPostList;
-//    private List<RecommendComment> recommendCommentList;
+    private List<Bookmark> bookmarks;
+    private List<Recommend> recommendPostList;
 
 }
