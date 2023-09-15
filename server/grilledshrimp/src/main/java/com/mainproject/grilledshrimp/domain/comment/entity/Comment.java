@@ -30,7 +30,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Posts posts;
+    private Posts post;
 
     @Column(nullable = false)
     private String comment_text;
@@ -45,7 +45,7 @@ public class Comment {
     private List<RecommendComment> recommendCommentList = new ArrayList<>();
 
     public void setPost(Posts post) {
-        this.posts = post;
+        this.post = post;
     }
     public void setUser(Users user) {
         this.users = user;

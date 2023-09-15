@@ -71,7 +71,7 @@ public class CommentService {
 
     public Page<CommentDTO> getCommentsByPostId(Long postId, Pageable pageable) {
         // postId로 해당 게시물의 댓글 조회 (페이지네이션 적용)
-        Page<Comment> comments = commentRepository.findByPostId(postId, pageable);
+        Page<Comment> comments = CommentRepository.findByPosts_postid(postId, pageable);
         return comments.map(comment -> {
             CommentDTO commentDTO = new CommentDTO();
             commentDTO.setUserId(comment.getUser().getUserId());
