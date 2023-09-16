@@ -6,6 +6,7 @@ import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.post.mapper.PostsMapper;
 import com.mainproject.grilledshrimp.domain.post.repository.PostsRepository;
 import com.mainproject.grilledshrimp.domain.user.dto.UserPatchDto;
+import com.mainproject.grilledshrimp.domain.user.dto.UserUpdatePasswordDto;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
 import com.mainproject.grilledshrimp.global.image.AwsS3Service;
@@ -79,6 +80,22 @@ public class UserService {
         return findVerifiedUser(userId);
     }
 
+    public Users findUserByUserName(String userName) {
+        Optional<Users> findUser = userRepository.findByUsername(userName);
+        return findUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+    }
+
+    public void updateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto) {
+        String username = userUpdatePasswordDto.getUsername();
+        String email = userUpdatePasswordDto.getEmail();
+        String password = userUpdatePasswordDto.getNewPassword();
+
+        Users findUser = findVerifiedUserNameAndEmail(username, email);
+
+        findUser.setPassword(passwordEncoder.encode(password));
+        userRepository.save(findUser);
+    }
+
     public List<Users> findAllUser() {
         return userRepository.findAll();
     }
@@ -116,6 +133,15 @@ public class UserService {
         Users findUser = findVerifiedUser(userId);
         userRepository.delete(findUser);
     }
+
+    // 유저 이름과 이메일 검증하기
+    public Users findVerifiedUserNameAndEmail(String username, String email) {
+        Optional<Users> user = userRepository.findByUsernameAndEmail(username, email);
+        Users findUser = user.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        log.info("유저 검증 완료");
+        return findUser;
+    }
+
 
     // 특정 유저가 존재하는지 확인
     public Users findVerifiedUser(long userId) {
