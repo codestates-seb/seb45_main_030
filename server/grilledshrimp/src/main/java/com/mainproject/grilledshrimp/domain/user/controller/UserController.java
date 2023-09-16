@@ -6,6 +6,7 @@ import com.mainproject.grilledshrimp.domain.user.dto.*;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.mapper.UserMapper;
 import com.mainproject.grilledshrimp.domain.user.service.UserService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,16 @@ public class UserController {
         Users findUser = userService.findUserByUserName(userFindEmailByUserNameDto.getUsername());
         JsonObject obj = new JsonObject();
         obj.addProperty("email", findUser.getEmail());
-        return new ResponseEntity(obj.toString(), HttpStatus.OK);
+        HttpHeaders header = new HttpHeaders();
+        header.add("Content-Type", "application/json; charset=UTF-8");
+        return new ResponseEntity(obj.toString(), header, HttpStatus.OK);
+    }
+
+    // 유저 이름과 이메일로 검증
+    @PostMapping("/userCheck")
+    public ResponseEntity checkUser(@Valid @RequestBody UserCheckDto userCheckDto) {
+        Users findUser = userService.findVerifiedUserNameAndEmail(userCheckDto.getUsername(), userCheckDto.getEmail());
+        return new ResponseEntity(mapper.userToUserResponseDto(findUser), HttpStatus.OK);
     }
 
     // 유저 비밀번호 변경

@@ -87,10 +87,11 @@ public class UserService {
 
     public void updateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto) {
         String username = userUpdatePasswordDto.getUsername();
-        String email = userUpdatePasswordDto.getUsername();
+        String email = userUpdatePasswordDto.getEmail();
         String password = userUpdatePasswordDto.getNewPassword();
 
-        Users findUser = userRepository.findByEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        Users findUser = findVerifiedUserNameAndEmail(username, email);
+
         findUser.setPassword(passwordEncoder.encode(password));
         userRepository.save(findUser);
     }
@@ -132,6 +133,15 @@ public class UserService {
         Users findUser = findVerifiedUser(userId);
         userRepository.delete(findUser);
     }
+
+    // 유저 이름과 이메일 검증하기
+    public Users findVerifiedUserNameAndEmail(String username, String email) {
+        Optional<Users> user = userRepository.findByUsernameAndEmail(username, email);
+        Users findUser = user.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        log.info("유저 검증 완료");
+        return findUser;
+    }
+
 
     // 특정 유저가 존재하는지 확인
     public Users findVerifiedUser(long userId) {
