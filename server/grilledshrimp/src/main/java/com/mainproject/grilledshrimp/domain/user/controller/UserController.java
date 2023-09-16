@@ -1,15 +1,13 @@
 package com.mainproject.grilledshrimp.domain.user.controller;
 
-import com.mainproject.grilledshrimp.domain.post.entity.Posts;
+import com.google.gson.JsonObject;
 import com.mainproject.grilledshrimp.domain.post.mapper.PostsMapper;
 import com.mainproject.grilledshrimp.domain.user.dto.*;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.mapper.UserMapper;
-import com.mainproject.grilledshrimp.domain.user.service.AuthUserDetailsService;
 import com.mainproject.grilledshrimp.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,6 +35,22 @@ public class UserController {
         Users users = userService.createUser(mapper.userPostDtoToUser(userPostDto));
         return new ResponseEntity(mapper.userToUserResponseDto(users), HttpStatus.CREATED);
         //return new ResponseEntity(mapper.userToUserResponseSimpleDto(users), HttpStatus.CREATED);
+    }
+
+    // 유저 이름으로 이메일 찾기
+    @PostMapping("/emailFind")
+    public ResponseEntity findUserEmail(@Valid @RequestBody UserFindEmailByUserNameDto userFindEmailByUserNameDto) {
+        Users findUser = userService.findUserByUserName(userFindEmailByUserNameDto.getUsername());
+        JsonObject obj = new JsonObject();
+        obj.addProperty("email", findUser.getEmail());
+        return new ResponseEntity(obj.toString(), HttpStatus.OK);
+    }
+
+    // 유저 비밀번호 변경
+    @PostMapping("/updatePassword")
+    public ResponseEntity updateUserPassword(@Valid @RequestBody UserUpdatePasswordDto userUpdatePasswordDto) {
+        userService.updateUserPassword(userUpdatePasswordDto);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     // 유저 사진 등록
