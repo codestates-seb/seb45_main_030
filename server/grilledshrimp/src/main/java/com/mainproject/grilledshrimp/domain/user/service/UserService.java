@@ -6,6 +6,7 @@ import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.post.mapper.PostsMapper;
 import com.mainproject.grilledshrimp.domain.post.repository.PostsRepository;
 import com.mainproject.grilledshrimp.domain.user.dto.UserPatchDto;
+import com.mainproject.grilledshrimp.domain.user.dto.UserUpdatePasswordDto;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
 import com.mainproject.grilledshrimp.global.image.AwsS3Service;
@@ -77,6 +78,21 @@ public class UserService {
     public Users findUser(long userId) {
         Users findUser = findVerifiedUser(userId);
         return findVerifiedUser(userId);
+    }
+
+    public Users findUserByUserName(String userName) {
+        Optional<Users> findUser = userRepository.findByUsername(userName);
+        return findUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+    }
+
+    public void updateUserPassword(UserUpdatePasswordDto userUpdatePasswordDto) {
+        String username = userUpdatePasswordDto.getUsername();
+        String email = userUpdatePasswordDto.getUsername();
+        String password = userUpdatePasswordDto.getNewPassword();
+
+        Users findUser = userRepository.findByEmail(email).orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        findUser.setPassword(passwordEncoder.encode(password));
+        userRepository.save(findUser);
     }
 
     public List<Users> findAllUser() {
