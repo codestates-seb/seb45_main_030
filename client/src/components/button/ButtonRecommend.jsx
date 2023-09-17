@@ -4,48 +4,56 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "../button/Button.module.css";
 
-const GET_URL = process.env.REACT_APP_RECOMMEND_GET_API_URL;
-const PATCH_URL = process.env.REACT_APP_RECOMMEND_PATCH_API_URL;
+// const GET_URL = process.env.REACT_APP_RECOMMEND_GET_API_URL;
 const RECOMMEND_COLOR = "blue";
 
-function ButtonRecommend({ postId }) {
+function ButtonRecommend(postId) {
     const [isRecommended, setIsRecommended] = useState(false);
-    // const isLoginNow = useRecoilValue(loginState);
-    // useEffect(() => {
-    //     if (isLoginNow) {
-    //         getData();
-    //     }
-    // }, []);
+    // const loginInfo = useRecoilValue(loginState);
 
-    const getData = async () => {
-        // const response = await axios.get(GET_URL);
-        // const data = await response.data;
-        // // response.data 가 {
-        // //     "user_id" : 1,
-        // //     "post_id" : 1,
-        // // } 이렇게 응답이 올 경우,
-        // if (postId === data.post_id) {
-        //     setIsBookmarked(true);
-        // } else {
-        //     setIsBookmarked(false);
-        // }
-    };
+    useEffect(() => {
+        //     if (loginInfo) {
+        // getRecommmend();
+        //     }
+    }, []);
 
-    const patchData = async () => {
+    // API 통신
+    const getRecommmend = async () => {
         try {
-            // const response = await axios.patch(PATCH_URL, {
-            //     post_id: 1,
-            // });
-            // 서버에서 response가 있다면
-            // response를 받고 isRecommend 상태를 서버의 추천여부로 업데이트함
-            // setIsRecommended(response);
-        } catch {}
+            const response = await axios.get(`1`);
+            const data = await response.data;
+
+            //서버의 추천여부를 화면에 적용한다.
+            // if (postId === data.post_id) {
+            //     setIsBookmarked(true);
+            // } else {
+            //     setIsBookmarked(false);
+            // }
+            
+        } catch (error) {
+            console.error(error.code, "추천 정보 get 실패");
+        }
     };
 
+    const postRecommmend = async () => {
+        try {
+            const response = await axios.post(`1`, {
+                post_id: 1,
+            });
+            if (response) {
+                console.log("추천 변경됨")
+                setIsRecommended(!isRecommended);
+            }
+        } catch (error) {
+            console.error(error.code, "추천 정보 post 실패");
+            alert("서버와의 통신 오류로 추천이 변경되지 않음")
+        }
+    };
+
+    // 이벤트리스너
     const handleRecommend = () => {
-        // console.log("북마크버튼 전달받은 id", postId);
-        // // patchData()
-        setIsRecommended(!isRecommended);
+        console.log("추천 클릭함", postId);
+        postRecommmend();
     };
 
     const RecommendIcon = () => {

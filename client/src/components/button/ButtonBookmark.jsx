@@ -4,8 +4,8 @@ import styles from "../button/Button.module.css";
 
 const BOOKMARK_COLOR = "red";
 
-function ButtonBookmark({postId, isIconOn}) {
-    const [isBookmarked, setIsBookmarked] = useState(isIconOn);
+function ButtonBookmark({postId, isMarked}) {
+    const [isBookmarked, setIsBookmarked] = useState(isMarked);
 
     const postBookmark = async () => {
         console.log("post 요청 시도");
