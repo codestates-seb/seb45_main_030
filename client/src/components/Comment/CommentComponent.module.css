@@ -1,0 +1,58 @@
+/* 스타일 수정 아이콘과 삭제 아이콘 */
+.commentContainer {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+} 
+
+.commentBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 25px;
+} 
+
+.commentText{ 
+    margin-left: 50px;
+}
+
+/* 댓글 스타일 */
+ul {
+    list-style: none;
+    padding: 5;
+}
+
+li {
+    margin: 16px 0;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+}
+
+/* 댓글 왼쪽에 user_name 표시 */
+/* li::before {
+    content: "user_name: ";
+    font-weight: bold;
+} */
+
+/* 댓글 추가 버튼 스타일 */
+.addBtn {
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.commentInput {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    width: 500px;
+    padding: 5px;
+    margin: 20px;
+} 
+
+.commentInput:focus {
+    outline: none;
+}
+
+

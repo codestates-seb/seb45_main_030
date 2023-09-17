@@ -1,6 +1,7 @@
 .button {
-    background-color: none;
-    border: none;
+    background-color: white;
+    border: 1px solid transparent;
+    border-radius: 1rem;
 }
 .img {
     width: 24px;
