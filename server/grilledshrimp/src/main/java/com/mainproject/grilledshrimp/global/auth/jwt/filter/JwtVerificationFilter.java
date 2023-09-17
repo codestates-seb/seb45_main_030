@@ -1,8 +1,11 @@
 package com.mainproject.grilledshrimp.global.auth.jwt.filter;
 
-import com.mainproject.grilledshrimp.global.utils.UserAuthorityUtils;
+import com.mainproject.grilledshrimp.domain.user.utils.UserAuthorityUtils;
 import com.mainproject.grilledshrimp.global.auth.jwt.JwtTokenizer;
+import com.mainproject.grilledshrimp.global.exception.BusinessLogicException;
+import com.mainproject.grilledshrimp.global.exception.ExceptionCode;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 // JWT를 이용한 인증을 위한 필터
+@Slf4j
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
     private final UserAuthorityUtils userAuthorityUtils;
@@ -52,10 +56,26 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     // 토큰이 없거나, Bearer로 시작하지 않는 경우 필터를 수행하지 않음
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Authorization");
-        if (authorization == null) return true;
-        if (!authorization.startsWith("Bearer ")) return true;
-        String isLogout = (String) redisTemplate.opsForValue().get("logout:" + authorization.replace("Bearer ", ""));
-        if(isLogout != null) return true;
+        if (authorization == null)
+        {
+            return true;
+        }
+        if (!authorization.startsWith("Bearer "))
+        {
+            return true;
+        }
+        if(jwtTokenizer.validateToken(authorization.replace("Bearer ", ""))) {
+            String key = "JWT_TOKEN:" + jwtTokenizer.getUsername(authorization.replace("Bearer ", ""));
+            if(redisTemplate.opsForValue().get(key) == null) {
+                log.info("이미 로그아웃된 유저");
+                throw new BusinessLogicException(ExceptionCode.USER_LOGOUTED);
+            }
+            // 키는 있지만 값이 다르면 로그아웃된 유저
+            else if(!redisTemplate.opsForValue().get(key).equals(authorization.replace("Bearer ", ""))) {
+                log.info("로그아웃 키가 다름 {} / {}", redisTemplate.opsForValue().get(key), authorization.replace("Bearer ", ""));
+                throw new BusinessLogicException(ExceptionCode.AUTHENTICATION_FAILED);
+            }
+        }
         return false;
     }
 
@@ -72,5 +92,6 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         List<GrantedAuthority> authorities = userAuthorityUtils.createAuthorities((List)claims.get("roles"));  // (4-2)
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);  // (4-3)
         SecurityContextHolder.getContext().setAuthentication(authentication); // (4-4)
+        log.info(authentication.getAuthorities().toString());
     }
 }

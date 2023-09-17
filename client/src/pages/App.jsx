@@ -1,4 +1,5 @@
 import MainPage from "./MainPage";
+import "../pages/App.module.css";
 
 function App() {
     return (
@@ -7,5 +8,4 @@ function App() {
         </>
     );
 }
-
 export default App;
