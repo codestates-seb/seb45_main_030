@@ -1,16 +1,11 @@
-import React from "react";
-import Modal from "../components/UploadModal/Modal";
-// import CommentComponent from "../components/Comment/CommentComponent";
-import PostComponent from "../components/PostData";
+import MainPage from "./MainPage";
+import "../pages/App.module.css";
 
 function App() {
     return (
-        <div>
-            {/* <Modal /> */}
-            {/* <CommentComponent /> */}
-            <PostComponent />
-        </div>
+        <>
+            <MainPage></MainPage>
+        </>
     );
 }
-
 export default App;
