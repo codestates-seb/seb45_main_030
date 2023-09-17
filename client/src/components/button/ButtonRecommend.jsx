@@ -7,7 +7,6 @@ import styles from "../button/Button.module.css";
 const RECOMMEND_COLOR = "blue";
 
 function ButtonRecommend({postId, isMarked}) {
-    console.log(isMarked)
     const [isRecommended, setIsRecommended] = useState(isMarked);
     // const loginInfo = useRecoilValue(loginState);
 

@@ -40,7 +40,7 @@ function MainPage() {
             <header>헤더 컴포넌트</header>
             <Banner />
             <Notice />
-            <ImageList />
+            <ImageList url={"https://picsum.photos/v2/list"} page={1} />
         </>
     );
 }

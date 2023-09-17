@@ -9,13 +9,18 @@ import { useEffect, useState } from "react";
 // import { loginState } from "../state/LoginState";
 // const loginInfo = useRecoilValue(loginState);
 
-function ImageList() {
+function ImageList({ url, page }) {
     // 북마크 했던 게시물 상태: 0,1,2번 게시물로 임시 하드코딩
     const [bookmarkedPostId, setBookmarkedPostId] = useState([0, 1, 2]);
     const [recommendedPostId, setRecommendeddPostId] = useState([3, 4, 5]);
 
     // 무한 스크롤 훅
-    const { fetchedData, sentinelRef } = useInfiniteGetImage("https://picsum.photos/v2/list");
+    const config = {
+        params: {
+            page: page,
+        },
+    };
+    const { fetchedData, sentinelRef } = useInfiniteGetImage(url, config);
 
     const [columnState, setColumnState] = useState({ first: [], second: [], third: [] });
 
@@ -35,7 +40,6 @@ function ImageList() {
             // } else {
             //     setIsBookmarked(false);
             // }
-            
         } catch (error) {
             console.error(error.code, "추천 정보 get 실패");
         }
