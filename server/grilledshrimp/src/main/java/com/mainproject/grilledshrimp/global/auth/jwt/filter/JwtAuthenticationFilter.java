@@ -6,9 +6,12 @@ import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.global.auth.jwt.JwtTokenizer;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -16,8 +19,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 // JWT를 이용한 인증을 위한 필터
@@ -25,10 +30,12 @@ import java.util.Map;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer, RedisTemplate<String, Object> redisTemplate) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenizer = jwtTokenizer;
+        this.redisTemplate = redisTemplate;
     }
 
     @SneakyThrows // 예외를 무시하고 실행
@@ -60,10 +67,15 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().write("{\"accessToken\": \"" + "Bearer " + accessToken + "\", \"refreshToken\": \"" + refreshToken + "\"}");
+
+        // 유저 구분을 위해 유저 id도 body에 추가
+        response.getWriter().write("{\"accessToken\": \"" + "Bearer " + accessToken + "\", \"refreshToken\": \"" + refreshToken + "\", \"userId\": \"" + users.getUserId() + "\"}");
 
         log.info("인증이 성공했을 때 JWT 토큰을 생성해서 응답 헤더에 추가");
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
+
+        log.info("로그아웃을 구분하기 위해 redis에 accessToken 저장");
+        redisTemplate.opsForValue().set("JWT_TOKEN:"  + users.getEmail(), accessToken, Duration.ofMinutes(jwtTokenizer.getAccessTokenExpirationMinutes()));
     }
 
     // access token 생성
@@ -92,4 +104,5 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         return refreshToken;
     }
+
 }

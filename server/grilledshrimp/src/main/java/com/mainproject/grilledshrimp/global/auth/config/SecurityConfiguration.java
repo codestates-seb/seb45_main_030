@@ -1,8 +1,9 @@
 package com.mainproject.grilledshrimp.global.auth.config;
 
+import com.mainproject.grilledshrimp.global.auth.jwt.filter.JwtExceptionFilter;
 import com.mainproject.grilledshrimp.global.auth.jwt.handler.UserAccessDeniedHandler;
 import com.mainproject.grilledshrimp.global.auth.jwt.handler.UserAuthenticationEntryPoint;
-import com.mainproject.grilledshrimp.global.utils.UserAuthorityUtils;
+import com.mainproject.grilledshrimp.domain.user.utils.UserAuthorityUtils;
 import com.mainproject.grilledshrimp.global.auth.jwt.filter.JwtAuthenticationFilter;
 import com.mainproject.grilledshrimp.global.auth.jwt.filter.JwtVerificationFilter;
 import com.mainproject.grilledshrimp.global.auth.jwt.handler.UserAuthenticationFailureHandler;
@@ -23,7 +24,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -45,22 +45,31 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .headers().frameOptions().disable() // h2-console 사용을 위한 설정
+                .and()
                 .csrf().disable()        // CSRF 공격 방지 비활성화
                 .cors(withDefaults())    // CORS 허용
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)    // 세션 비활성화
                 .and()
+
                 .formLogin().disable()   // form 기반 로그인 비활성화
                 .httpBasic().disable()   // http 기본 인증 비활성화
                 .exceptionHandling()
                 .authenticationEntryPoint(new UserAuthenticationEntryPoint())   // 인증 실패 시 처리
                 .accessDeniedHandler(new UserAccessDeniedHandler())   // 인가 실패 시 처리
                 .and()
+
                 .apply(new CustomFilterConfigurer()) // 커스텀 필터 적용
                 .and()
+
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/post/**").hasRole("USER")   // /post/** 경로에 대해서는 USER 권한이 있어야 접근 가능
+                        .antMatchers("/h2-console/*").permitAll()
+                        //.antMatchers("/post/**").hasRole("USER")   // /post/** 경로에 대해서는 USER 권한이 있어야 접근 가능
+                        // 로그아웃은 USER 권한이 있어야 접근 가능
+                        .antMatchers("/users/logout").hasRole("USER")
                         .anyRequest().permitAll()    // 그 외 나머지 요청에 대해서는 인증 없이 접근 허용
-                );
+                )
+        ;
         return http.build();
     }
 
@@ -91,13 +100,15 @@ public class SecurityConfiguration {
         public void configure(HttpSecurity http) throws Exception {
             AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
 
-            JwtAuthenticationFilter customFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
+            JwtAuthenticationFilter customFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, redisTemplate);
             customFilter.setFilterProcessesUrl("/users/login");
             customFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
             customFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
 
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, redisTemplate);
+            JwtExceptionFilter jwtExceptionFilter = new JwtExceptionFilter();
             http
+                    .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
                     .addFilter(customFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }

@@ -17,5 +17,6 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         log.info("UserAuthenticationSuccessHandler.onAuthenticationSuccess");
+
     }
 }

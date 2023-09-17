@@ -1,12 +1,13 @@
 package com.mainproject.grilledshrimp.domain.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mainproject.grilledshrimp.domain.bookmark.entity.Bookmark;
-import com.mainproject.grilledshrimp.domain.recommendComment.entity.RecommendComment;
-import com.mainproject.grilledshrimp.domain.recommendPost.entity.RecommendPost;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.mainproject.grilledshrimp.domain.comment.entity.Comment;
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
+import com.mainproject.grilledshrimp.domain.recommend.entity.Recommend;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,6 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
 public class Users {
     // 스네이크 케이스를 사용하면 jpaRepository에서 findByUsername등을 사용할 수 없다.
     // 그래서 카멜 케이스를 사용한다.
@@ -56,15 +58,22 @@ public class Users {
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
 
-    // 북마크 일대다 관계
     @OneToMany(mappedBy = "users")
+    @JsonIgnore
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "users")
+    @JsonIgnore
+    private List<Posts> posts = new ArrayList<>();
+
+    // 북마크 일대다 관계
+    @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
+    @JsonBackReference // 양방향 참조를 막기 위해 사용
     private List<Bookmark> bookmarks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "users")
-    private List<RecommendPost> recommendPostList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "users")
-    private List<RecommendComment> recommendCommentList = new ArrayList<>();
+    @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
+    @JsonManagedReference
+    private List<Recommend> recommendList = new ArrayList<>();
 
     public enum UserStatus {
         USER_ACTIVE("활동중"),

@@ -1,12 +1,8 @@
 package com.mainproject.grilledshrimp.global.auth.jwt.handler;
 
-import com.google.gson.Gson;
-
-import com.mainproject.grilledshrimp.global.response.ErrorResponse;
-import com.mainproject.grilledshrimp.global.utils.ErrorResponder;
+import com.mainproject.grilledshrimp.global.exception.response.ErrorResponder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
@@ -24,6 +20,7 @@ public class UserAuthenticationFailureHandler implements AuthenticationFailureHa
                                         AuthenticationException exception) throws IOException, ServletException {
         // 인증 실패 시, 에러 로그를 기록하거나 error response를 전송할 수 있다.
         log.error("# Authentication failed: {}", exception.getMessage());
-        ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
+        //ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
+        ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED, exception);
     }
 }

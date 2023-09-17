@@ -2,7 +2,7 @@ package com.mainproject.grilledshrimp.domain.user.service;
 
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
 import com.mainproject.grilledshrimp.domain.user.repository.UserRepository;
-import com.mainproject.grilledshrimp.global.utils.UserAuthorityUtils;
+import com.mainproject.grilledshrimp.domain.user.utils.UserAuthorityUtils;
 import com.mainproject.grilledshrimp.global.exception.BusinessLogicException;
 import com.mainproject.grilledshrimp.global.exception.ExceptionCode;
 import org.springframework.security.core.GrantedAuthority;
