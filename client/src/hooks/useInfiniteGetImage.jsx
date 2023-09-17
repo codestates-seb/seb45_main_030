@@ -2,71 +2,52 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 function useGetImageList(url) {
-    const sentinelRef = useRef();
-
-    const [state, setState] = useState({
-        pageNum: 1,
-        dataArr: [],
-    });
+    const sentinelRef = useRef(null); // DOM 요소
+    const [pageNum, setPageNum] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const [fetchedData, setFetchedData] = useState([]);
 
     // https://picsum.photos/ 더미 이미지 API
+    const getApiData = async () => {
+        try {
+            const config = {
+                params: {
+                    page: pageNum,
+                },
+            };
+            const response = await axios.get(url, config);
+            // console.log("response:", response.data);
+            setFetchedData([...response.data]);
+            setLoading(false);
+        } catch (error) {
+            console.error("데이터를 불러오는 중 오류 발생:", error);
+            // 오류 토스트 컴포넌트를 여기에 추가할 수 있습니다.
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const currentRefValue = sentinelRef.current;
-
-        const getApiData = async () => {
-            try {
-                const response = await axios.get(`https://picsum.photos/v2/list?page=${state.pageNum}`);
-                setState((prevState) => {
-                    return {
-                        ...prevState,
-                        pageNum: prevState.pageNum + 1,
-                        dataArr: [...prevState.dataArr, ...response.data],
-                    };
-                });
-            } catch (error) {
-                console.error("데이터를 불러오는 중 오류 발생:", error);
-                // 오류 토스트 컴포넌트를 여기에 추가할 수 있습니다.
-            }
-        };
-
-        // 백엔드 API 적용 코드
-        // const getApiData = async () => {
-        //     try {
-        //         const response = await axios.get(`${url}?page=${state.pageNum}`);
-        //         setState((prevState) => {
-        //             return {
-        //                 ...prevState,
-        //                 pageNum: prevState.pageNum + 1,
-        //                 dataArr: [...prevState.dataArr, ...response.data.data],
-        //             };
-        //         });
-        //     } catch (error) {
-        //         console.error("데이터를 불러오는 중 오류 발생:", error);
-        //         // 오류 토스트 컴포넌트를 여기에 추가할 수 있습니다.
-        //     }
-        // };
-
         const io = new IntersectionObserver((entries, observer) => {
             entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    getApiData();
-                    observer.unobserve(entry.target)
-                } else {
+                if (loading === false && entry.isIntersecting) {
+                    setPageNum((prev) => prev + 1);
                 }
             });
-        }, {});
+        });
 
-        if (currentRefValue) {
-            io.observe(currentRefValue);
+        if (sentinelRef.current) {
+            io.observe(sentinelRef.current);
         }
-
         return () => {
-            if (currentRefValue) {
-                io.unobserve(currentRefValue);
+            if (sentinelRef.current) {
+                io.unobserve(sentinelRef.current);
             }
         };
-    }, [url, state.pageNum]);
+    }, [loading]);
+    useEffect(() => {
+        getApiData();
+    }, [pageNum]);
 
-    return { state, sentinelRef };
+    return { fetchedData, sentinelRef };
 }
 export default useGetImageList;
