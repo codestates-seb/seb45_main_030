@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "../button/Button.module.css";
 
-// const GET_URL = process.env.REACT_APP_RECOMMEND_GET_API_URL;
 const RECOMMEND_COLOR = "blue";
 
-function ButtonRecommend(postId) {
-    const [isRecommended, setIsRecommended] = useState(false);
+function ButtonRecommend({postId, isMarked}) {
+    console.log(isMarked)
+    const [isRecommended, setIsRecommended] = useState(isMarked);
     // const loginInfo = useRecoilValue(loginState);
 
     useEffect(() => {
@@ -18,42 +18,26 @@ function ButtonRecommend(postId) {
     }, []);
 
     // API 통신
-    const getRecommmend = async () => {
-        try {
-            const response = await axios.get(`1`);
-            const data = await response.data;
-
-            //서버의 추천여부를 화면에 적용한다.
-            // if (postId === data.post_id) {
-            //     setIsBookmarked(true);
-            // } else {
-            //     setIsBookmarked(false);
-            // }
-            
-        } catch (error) {
-            console.error(error.code, "추천 정보 get 실패");
-        }
-    };
-
     const postRecommmend = async () => {
-        try {
-            const response = await axios.post(`1`, {
-                post_id: 1,
-            });
-            if (response) {
-                console.log("추천 변경됨")
-                setIsRecommended(!isRecommended);
-            }
-        } catch (error) {
-            console.error(error.code, "추천 정보 post 실패");
-            alert("서버와의 통신 오류로 추천이 변경되지 않음")
-        }
+        console.log("추천 변경 시도");
+        // try {
+        //     const response = await axios.post(`1`, {
+        //         post_id: 1,
+        //     });
+        //     if (response) {
+        //         console.log("추천 변경됨")
+        //         setIsRecommended(!isRecommended);
+        //     }
+        // } catch (error) {
+        //     console.error(error.code, "추천 정보 post 실패");
+        //     alert("서버와의 통신 오류로 추천이 변경되지 않음")
+        // }
     };
 
-    // 이벤트리스너
+    // 클릭 이벤트리스너
     const handleRecommend = () => {
-        console.log("추천 클릭함", postId);
         postRecommmend();
+        setIsRecommended((prev) => !prev);
     };
 
     const RecommendIcon = () => {

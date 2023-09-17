@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-
+import axios from "axios";
 import styles from "../button/Button.module.css";
 
 const BOOKMARK_COLOR = "red";
 
-function ButtonBookmark({postId, isMarked}) {
+function ButtonBookmark({ postId, isMarked }) {
     const [isBookmarked, setIsBookmarked] = useState(isMarked);
 
     const postBookmark = async () => {
@@ -29,13 +29,12 @@ function ButtonBookmark({postId, isMarked}) {
         // }
     };
 
-    // 이벤트리스너
+    // 클릭 이벤트리스너
     const handleBookmark = () => {
         isBookmarked ? deleteBookmark() : postBookmark();
-        setIsBookmarked(!isBookmarked);
+        setIsBookmarked((prev)=>!prev);
     };
 
-    // svg를 import할때 오류가 발생해 컴포넌트화 했습니다.
     const BookmarkIcon = () => {
         return (
             <svg
