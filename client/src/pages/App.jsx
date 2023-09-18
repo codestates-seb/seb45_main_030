@@ -5,19 +5,7 @@ import PostModal from "../components/PostDetail/PostModal";
 
 function App() {
     return (
-        <div>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+        <div>            
             {/* <Modal /> */}
             <PostModal />
         </div>

@@ -3,24 +3,32 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 import axios from "axios";
 import styles from "./CommentComponent.module.css";
 import { useRecoilValue } from "recoil";
-import { loginState } from "../state/LoginState";
+// import { loginState } from "../state/LoginState";
 
 function CommentComponent() {
-    const [comments, setComments] = useState([]);
-    const [newComment, setNewComment] = useState("");
-    const [userName, setUserName] = useState("초기 사용자");
-    const [postId, setPostId] = useState(1); // 게시글 ID
+    const [comments, setComments] = useState([]); // 댓글 데이터를 저장할 상태
+    const [newComment, setNewComment] = useState(""); // 새 댓글 입력 상태
+    const [userName, setUserName] = useState("초기 사용자"); // 사용자 이름 상태
+    const [postId, setPostId] = useState(8); // 게시글 ID
 
-    const currentUser = useRecoilValue(loginState);
+    // const currentUser = useRecoilValue(loginState);
+    const currentUser = 3;
 
     // 게시글의 댓글을 가져오는 API 요청
     useEffect(() => {
+        // axios.get(`https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/${postId}`, {
         axios
-            .get(`https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/${postId}`) // ngrok 서버 주소로 변경
+            .get("https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/8", {
+                headers: {
+                    "ngrok-skip-browser-warning": true,
+                },
+            })
             .then((response) => {
-                // API에서 가져온 댓글 목록을 상태에 저장함.
+                // API에서 가져온 댓글 데이터를 상태에 저장함.
                 const allComments = response.data.data;
                 setComments(allComments);
+                console.log(allComments);
+                console.log(allComments[0].user);
             })
             .catch((error) => {
                 console.error("댓글 목록을 가져오는 데 실패했습니다.", error);
@@ -32,16 +40,26 @@ function CommentComponent() {
         if (newComment.trim() !== "") {
             try {
                 const commentData = {
-                    userId: currentUser.userId, // 현재 사용자의 userId
+                    // userId: currentUser.userId, // 현재 사용자의 userId
+                    userId: currentUser,
                     commentText: newComment,
                 };
-                const response = await axios.post(
-                    `https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/${postId}`,
-                    commentData,
-                ); // ngrok 서버 주소로 변경
+
+                // axios.post(`https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/${postId}`, commentData, {
+                await axios.post("https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/8", commentData, {
+                    headers: {
+                        "ngrok-skip-browser-warning": true,
+                    },
+                });
 
                 // 응답에서 생성된 댓글 정보를 가져와서 상태에 추가합니다.
-                const newCommentObject = response.data;
+                const newCommentObject = {
+                    postId: postId,
+                    // userId: currentUser.userId,
+                    userId: currentUser,
+                    commentText: newComment,
+                };
+
                 setComments([...comments, newCommentObject]);
                 setNewComment("");
             } catch (error) {
@@ -53,7 +71,13 @@ function CommentComponent() {
     // 댓글을 삭제하는 API 요청
     const handleDeleteComment = async (id) => {
         try {
-            await axios.delete(`https://d4ec-218-151-64-223.ngrok-free.app/comments/${id}`); // ngrok 서버 주소로 변경
+            // axios.delete(`https://d4ec-218-151-64-223.ngrok-free.app/comments/${id}`, {
+            await axios.delete(`https://d4ec-218-151-64-223.ngrok-free.app/comments/${id}`, {
+                headers: {
+                    "ngrok-skip-browser-warning": true,
+                },
+            });
+
             const updatedComments = comments.filter((comment) => comment.commentId !== id);
             setComments(updatedComments);
         } catch (error) {
@@ -69,10 +93,19 @@ function CommentComponent() {
         );
         if (editedComment !== null) {
             try {
-                const response = await axios.patch(`https://d4ec-218-151-64-223.ngrok-free.app/comments/${id}`, {
-                    userId: currentUser.userId, // 현재 사용자의 userId
-                    commentText: editedComment,
-                });
+                const response = await axios.patch(
+                    `https://d4ec-218-151-64-223.ngrok-free.app/comments/${id}`,
+                    {
+                        // userId: currentUser.userId, // 현재 사용자의 userId
+                        userId: currentUser,
+                        commentText: editedComment,
+                    },
+                    {
+                        headers: {
+                            "ngrok-skip-browser-warning": true,
+                        },
+                    },
+                );
 
                 // 응답에서 수정된 댓글 정보를 가져와서 상태를 업데이트합니다.
                 const updatedComment = response.data;
@@ -87,13 +120,14 @@ function CommentComponent() {
     };
 
     return (
-        <div>
-            <div className={styles.commentContainer}>
+        <div className={styles.commentContainer}>
+            <div className={styles.commentList}>
                 <ul>
                     {comments.map((comment) => (
                         <li key={comment.commentId} className={styles.commentItem}>
+                            <span className={styles.commentUser}>{comment.user.username}</span>
                             <span className={styles.commentText}> {comment.commentText} </span>
-                            {userName === comment.user.username && (
+                            {currentUser === comment.user.userId && (
                                 <>
                                     <button
                                         onClick={() => handleDeleteComment(comment.commentId)}
@@ -113,8 +147,8 @@ function CommentComponent() {
                     ))}
                 </ul>
             </div>
-            <div>
-                <span>사용자 이름: {userName}</span>
+            <div className={styles.addComment}>
+                <span className={styles.userName}>{userName}</span>
                 <input
                     type="text"
                     value={newComment}
