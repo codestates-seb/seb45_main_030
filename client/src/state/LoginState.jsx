@@ -7,6 +7,7 @@ export const loginState = atom({
     password: '',
     login_error: false,
     login_status: false,
-    invalid_email: false,
+    invalidEmail: false,
+    invalidPassword: false,
   },
 });

@@ -1,9 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Login.css";
 import "./WarningMsg.css";
 import { LoginActions } from '../action/LoginAction';
+import OAuth from "../components/OAuth";
+import FindID from "./FindID";
+import FindPassword from "./FindPassword";
 
 function Login() {
+  const [isFindIdPopupOpen, setIsFindIdPopupOpen] = useState(false);
+  const [isForgotPasswordPopupOpen, setIsForgotPasswordPopupOpen] = useState(false);
+
+  const openFindIdPopup  = () => {
+    setIsFindIdPopupOpen(true);
+  };
+
+  const closeFindIdPopup  = () => {
+    setIsFindIdPopupOpen(false);
+  };
+
+  const openForgotPasswordPopup = () => {
+    setIsForgotPasswordPopupOpen(true);
+  };
+
+  const closeForgotPasswordPopup = () => {
+    setIsForgotPasswordPopupOpen(false);
+  };
+
   const {
     email,
     setEmail,
@@ -11,6 +33,9 @@ function Login() {
     setPassword,
     handleSubmit,
     setInvalidEmail,
+    setInvalidPassword,
+    invalidEmail,
+    invalidPassword,
   } = LoginActions();
 
   const handleFormSubmit = (e) => {
@@ -18,44 +43,52 @@ function Login() {
     handleSubmit(); // 폼 제출 처리 함수 호출
   };
 
+  
   return (
     <>
-      <form className="login box" onSubmit={handleFormSubmit}>
-        <div className="emailpart">
-          <div className="guide">
-            <div className="text">Email</div>
-          </div>
+      <form className="login_box" onSubmit={handleFormSubmit}>
+        <div className="category_label"> 로그인 </div>
+        <div className="id_input">
           <input
-            className={`inputprofile ${setInvalidEmail ? "invalid" : ""}`}
-            placeholder="Enter the email"
+            className={`inputprofile ${invalidEmail ? "invalid" : ""}`}
+            placeholder="ID를 입력하세요"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setInvalidEmail(false);
+            }}
           ></input>
-          <div className="invalidwarn">
-            <p className={`invalidmsg ${setInvalidEmail ? "show" : ""}`}>
-              유효한 이메일이 아닙니다
-            </p>
-          </div>
+          <p className={`warn_inputId_message ${invalidEmail ? "show" : ""}`}>아이디를 정확히 입력해주세요.</p>
         </div>
-        <div className="passwordpart">
-          <div className="textgroup">
-            <div className="text">Password</div>
-            <div className="findpassword" /*onClick={handleFindPassword}*/>Forget Password?</div>
-          </div>
+
+        <div className="password_input">
           <input
             type="password"
-            className="inputprofile"
-            placeholder="Enter the password"
+            className={`inputprofile ${invalidPassword ? "invalid" : ""}`}
+            placeholder="비밀번호를 입력하세요."
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></input>
-          {/* <div className="invalidwarn">
-            <p className={`invalidmsg ${loginError ? "show" : ""}`}>
-              일치하는 회원정보가 없습니다
-            </p>
-          </div> */}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setInvalidPassword(false);
+            }}
+          >
+          </input>
+          <p className={`warn_inputPassword_message ${invalidPassword ? "show" : ""}`}>비밀번호를 입력해주세요.</p>
         </div>
-        <button className="loginbutton">Log in</button>
+
+        {(invalidEmail || invalidPassword) && <p className="warn_login_message">아이디 혹은 비밀번호가 틀렸습니다.</p>}
+        <button className="login_button">로그인</button>
+        <div className="find_userinfo">
+          <p className="find_ID" onClick={openFindIdPopup}>ID를 잊으셨나요?</p>
+          <FindID onClose={closeFindIdPopup} isFindIdPopupOpen={isFindIdPopupOpen} />
+          <p className="find_password" onClick={openForgotPasswordPopup}>비밀번호를 잊으셨나요?</p>
+          <FindPassword onClose={closeForgotPasswordPopup} isForgotPasswordPopupOpen={isForgotPasswordPopupOpen} />
+        </div>
+        < OAuth/>
+        <div className="add_user">
+          <p className="add_guide">계정이 없으신가요?</p>
+          <p className="add_msg">회원가입</p>
+        </div>
       </form>
     </>
   );

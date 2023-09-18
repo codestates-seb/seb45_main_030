@@ -6,5 +6,8 @@ export const signupState = atom({
     email: '',
     username: '',
     password: '',
+    agreed: false,
+    invalidEmail: false,
+    invalidPassword: false,
   },
 });

@@ -1,11 +1,5 @@
-.social {
-  border: 2px solid #d9d9d9;
-  border-radius: 5px;
-  width: 314px;
-  height: 52px;
+.kakao {
   text-align: center;
-  font: Inter;
-  line-height: 29.05px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -13,51 +7,11 @@
   margin-bottom: 7px;
 }
 
-.logo {
-  vertical-align: middle;
-  width: 31px;
-  height: 31px;
-  margin-right: 10px;
-}
-
-.google {
-  background-color: white;
-}
-
-.googlecontents {
-  margin-right: 15px;
-  display: flex;
-  line-height: 52px;
-  align-items: center;
-}
-
-.github {
-  color: white;
-  background-color: #2f3337;
-}
-
-.githubcontents {
-  margin-right: 15px;
-  display: flex;
-  line-height: 52px;
-  align-items: center;
-}
-
-.facebook {
-  color: white;
-  background-color: #385499;
-}
-
-.facebookcontents {
-  margin-right: 15px;
-  display: flex;
-  line-height: 52px;
-  align-items: center;
-}
-
-.facebook:hover,
-.github:hover,
-.google:hover {
+.kakao:hover {
   cursor: pointer;
   filter: brightness(0.9);
+}
+
+.Social_Login_Btn {
+  border: none;
 }

@@ -16,7 +16,7 @@ function App() {
 
 
     </BrowserRouter> */}
-    <LoginPage />
+    <SignupPage />
     </>
   );
 }

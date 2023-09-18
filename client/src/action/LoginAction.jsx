@@ -15,7 +15,11 @@ export function LoginActions() {
     };
 
     const setInvalidEmail = (value) => {
-      setLoginInfo((prevState) => ({ ...prevState, invalid_email: value }));
+      setLoginInfo((prevState) => ({ ...prevState, invalidEmail: value }));
+    };
+  
+    const setInvalidPassword = (value) => {
+      setLoginInfo((prevState) => ({ ...prevState, invalidPassword: value }));
     };
 
     const isValidEmail = (email) => {
@@ -24,12 +28,19 @@ export function LoginActions() {
     };
   
     const handleSubmit = async () => {
+      setInvalidEmail(false);
+      setInvalidPassword(false);
+
       if (!isValidEmail(currentState.email)) {
         setInvalidEmail(true);
         return; // 유효하지 않은 이메일일 경우 로그인 중단
-      } else {
-        setInvalidEmail(false);
       }
+
+      if (currentState.password === '') {
+        setInvalidPassword(true);
+        return; // 비밀번호가 비어있을 경우 로그인 중단
+      }
+  
       
       const requestData = {
         email: currentState.email,
@@ -37,7 +48,7 @@ export function LoginActions() {
       };
 
       try {
-        const response = await axios.post('https://2610-183-107-174-160.ngrok-free.app/users/login',requestData);
+        const response = await axios.post('https://4c44-183-107-174-160.ngrok-free.app/users/login',requestData);
         console.log('로그인을 시도합니다:', response.data);
         const accessToken = response.data.accessToken;
         const refreshToken = response.data.refreshToken;
@@ -65,7 +76,7 @@ export function LoginActions() {
           if (refreshToken) {
             try {
               // 리프레쉬토큰을 사용하여 새로운 Access Token 발급 요청
-              const refreshResponse = await axios.post('https://2610-183-107-174-160.ngrok-free.app/users/login', refreshToken);
+              const refreshResponse = await axios.post('https://4c44-183-107-174-160.ngrok-free.app/users/login', refreshToken);
               const newAccessToken = refreshResponse.data.token;
               localStorage.setItem("accessToken", newAccessToken);
               axios.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
@@ -73,7 +84,7 @@ export function LoginActions() {
                 email: currentState.email,
                 password: currentState.password,
               };
-              const retryResponse = await axios.post('https://2610-183-107-174-160.ngrok-free.app/users/login',retryRequestData);
+              const retryResponse = await axios.post('https://4c44-183-107-174-160.ngrok-free.app/users/login',retryRequestData);
               console.log('로그인을 재시도합니다:', retryResponse.data);
               
             } catch (refreshError) {
@@ -97,5 +108,8 @@ export function LoginActions() {
     setPassword,
     handleSubmit,
     setInvalidEmail,
+    setInvalidPassword,
+    invalidEmail: loginInfo.invalidEmail,
+    invalidPassword: loginInfo.invalidPassword,
   };
 }
