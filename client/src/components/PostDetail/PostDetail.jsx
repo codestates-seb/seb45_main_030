@@ -16,7 +16,7 @@ function PostComponent({ onClose }) {
     // 제일 먼저 특정 게시글의 전체 데이터를 받아와서 postData에 넣어줌
     useEffect(() => {
         axios
-            .get("http://localhost:8080/posts/2")
+            .get("https://d4ec-218-151-64-223.ngrok-free.app/posts/2") // ngrok 서버 주소로 변경
             .then((response) => {
                 setPostData(response.data);
                 setEditedCaption(response.data.postCaption); // 초기값으로 캡션 설정
@@ -48,7 +48,10 @@ function PostComponent({ onClose }) {
                 tags: postData.tags, // 태그 정보는 그대로 사용
             };
             axios
-                .patch(`http://localhost:8080/posts/${postData.id}?userId=${currentUserId}`, editData)
+                .patch(
+                    `https://d4ec-218-151-64-223.ngrok-free.app/posts/${postData.id}?userId=${currentUserId}`,
+                    editData,
+                ) // ngrok 서버 주소로 변경
                 .then((response) => {
                     console.log("게시글 수정 성공:", response.data);
                     // 수정된 내용을 화면에 반영
@@ -72,7 +75,7 @@ function PostComponent({ onClose }) {
         if (currentUserId === postUserId) {
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
-                .delete(`http://localhost:8080/posts/${postData.id}?userId=${currentUserId}`)
+                .delete(`https://d4ec-218-151-64-223.ngrok-free.app/posts/${postData.id}?userId=${currentUserId}`) // ngrok 서버 주소로 변경
                 .then((response) => {
                     // 게시글 삭제가 성공한 경우 처리
                     console.log("게시글 삭제 성공:", response.data);

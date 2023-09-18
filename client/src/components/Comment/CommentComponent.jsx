@@ -16,7 +16,7 @@ function CommentComponent() {
     // 게시글의 댓글을 가져오는 API 요청
     useEffect(() => {
         axios
-            .get(`http://localhost:8080/comments/posts/${postId}`)
+            .get(`https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/${postId}`) // ngrok 서버 주소로 변경
             .then((response) => {
                 // API에서 가져온 댓글 목록을 상태에 저장함.
                 const allComments = response.data.data;
@@ -35,7 +35,10 @@ function CommentComponent() {
                     userId: currentUser.userId, // 현재 사용자의 userId
                     commentText: newComment,
                 };
-                const response = await axios.post(`http://localhost:8080/comments/posts/${postId}`, commentData);
+                const response = await axios.post(
+                    `https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/${postId}`,
+                    commentData,
+                ); // ngrok 서버 주소로 변경
 
                 // 응답에서 생성된 댓글 정보를 가져와서 상태에 추가합니다.
                 const newCommentObject = response.data;
@@ -50,7 +53,7 @@ function CommentComponent() {
     // 댓글을 삭제하는 API 요청
     const handleDeleteComment = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/comments/${id}`);
+            await axios.delete(`https://d4ec-218-151-64-223.ngrok-free.app/comments/${id}`); // ngrok 서버 주소로 변경
             const updatedComments = comments.filter((comment) => comment.commentId !== id);
             setComments(updatedComments);
         } catch (error) {
@@ -66,7 +69,7 @@ function CommentComponent() {
         );
         if (editedComment !== null) {
             try {
-                const response = await axios.patch(`http://localhost:8080/comments/${id}`, {
+                const response = await axios.patch(`https://d4ec-218-151-64-223.ngrok-free.app/comments/${id}`, {
                     userId: currentUser.userId, // 현재 사용자의 userId
                     commentText: editedComment,
                 });
