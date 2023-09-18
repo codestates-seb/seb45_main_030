@@ -4,35 +4,44 @@ import styles from "../button/Button.module.css";
 
 const BOOKMARK_COLOR = "red";
 
+const URL = "https://d4ec-218-151-64-223.ngrok-free.app"
+const USER_ID = 3
+
 function ButtonBookmark({ postId, isMarked }) {
     const [isBookmarked, setIsBookmarked] = useState(isMarked);
 
     const postBookmark = async () => {
         console.log("post 요청 시도");
-        // try {
-        //     const response = await axios.post(`localhost:8080/bookmarks`, {
-        //         user_id: 1,
-        //         post_id: 1,
-        //         bookmark_name: "집",
-        //     });
-        // } catch (error) {
-        //     console.error(error.code, "북마크 정보 post 실패");
-        // }
+        try {
+            const response = await axios.post(`${URL}/bookmarks`, {
+                user_id: USER_ID,
+                post_id: postId,
+                bookmark_name: "집",
+            });
+            setIsBookmarked(true);
+        } catch (error) {
+            console.error(error.code, "북마크 정보 post 실패");
+        }
     };
 
     const deleteBookmark = async () => {
         console.log("delete 요청 시도");
-        // try {
-        //     const response = await axios.delete(`localhost:8080/bookmarks/1`);
-        // } catch (error) {
-        //     console.error(error.code, "북마크 정보 delete 실패");
-        // }
+        try {
+            console.log(postId)
+            const response = await axios.delete(`${URL}/bookmarks`, {
+                user_id: USER_ID,
+                post_id: postId,
+            });
+            setIsBookmarked(false);
+        } catch (error) {
+            console.error(error.code, "북마크 정보 delete 실패");
+        }
     };
 
     // 클릭 이벤트리스너
     const handleBookmark = () => {
         isBookmarked ? deleteBookmark() : postBookmark();
-        setIsBookmarked((prev)=>!prev);
+        setIsBookmarked((prev) => !prev);
     };
 
     const BookmarkIcon = () => {
