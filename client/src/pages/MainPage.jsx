@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import Header from "../components/Common/Header";
 import ImageList from "../components/Image/ImageList";
 import styles from "./MainPage.module.css";
 function MainPage() {
@@ -37,7 +37,7 @@ function MainPage() {
     };
     return (
         <>
-            <header>헤더 컴포넌트</header>
+            <Header />
             <Banner />
             <Notice />
             <ImageList url={"https://d4ec-218-151-64-223.ngrok-free.app/posts"} page={1} />
