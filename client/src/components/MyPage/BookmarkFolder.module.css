@@ -1,0 +1,68 @@
+.addBtn {
+    width: 240px;
+    height: 240px;
+    cursor: pointer;
+
+}
+
+.folder_container {
+    display: grid;
+    width: 1500px;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 1.5rem;
+    row-gap: 1.5rem;
+}
+
+.bookmarkItem {
+    width: 100px; 
+    height: 100px;
+    background-color: #ccc; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    /* padding: 20px;
+    text-align: center; */
+}
+
+.folder {
+    display: flex;
+    width: 350px;
+    height: 350px;
+    justify-content: center;
+    align-items: center;
+}
+
+.deleteButton {
+    display: none;
+}
+
+.editButton {
+    display: none;
+}
+
+.bookmarkItem {
+    width: 350px;
+    height: 350px;
+}
+  
+.bookmarkItem:hover .deleteButton {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.bookmarkItem:hover .editButton {
+    display: inline-block;
+    cursor: pointer;
+}
+
+ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.bookmark_container {
+    display: flex;
+}
+

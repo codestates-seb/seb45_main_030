@@ -1,0 +1,73 @@
+.userinfo_container {
+    /* display: flex;
+    align-items: center;
+    justify-content: center; */
+    display: grid;
+    column-gap: 24px;
+    grid-column: span 12;
+    grid-template-columns: repeat(12,1fr);
+}
+
+.img_container {
+    display: flex;
+    grid-column: span 4;
+}
+
+.user_img {
+    margin-left: auto;
+    margin-right: 32px;
+    width: 150px;
+    height: 150px;
+}
+
+.info_container {
+    /* display: flex;
+    flex-direction: column; */
+    grid-column: span 8;
+}
+
+.introduction_container {
+    display: flex;
+    margin-left: 20px;
+}
+
+.name_container{
+    display: flex;
+    align-items: center;
+}
+
+.editbtn {
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+h1 {
+    margin-top: 0px;
+    margin-left: 20px;
+    margin-bottom: 0px;
+}
+
+.p_email {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 20px;
+    color: gray;
+}
+
+.p_introduction {
+    margin: 0;
+}
+
+button {
+    border: none;
+    margin-left: 5px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.margin_left {
+    display: flex;
+    margin-left: 20px;
+}
