@@ -91,10 +91,8 @@ function ImageList({ url, page }) {
                 {column.map((el) => {
                     return (
                         <ImageItem
-                            key={el.id}
-                            id={el.id}
-                            width={el.width}
-                            height={el.height}
+                            key={el.postId}
+                            data={el}
                             isMarked={{
                                 recommend: recommendedPostId.includes(Number(el.id)),
                                 bookmark: bookmarkedPostId.includes(Number(el.id)),
