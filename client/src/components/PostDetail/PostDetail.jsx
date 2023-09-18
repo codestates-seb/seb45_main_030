@@ -4,6 +4,7 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import styles from "PostDetail.module.css";
 import { useRecoilValue } from "recoil";
 import { loginState } from "../state/LoginState"; // 사용자 정보를 담은 recoil 상태
+import CommentComponent from "../Comment/CommentComponent";
 
 function PostComponent({ onClose }) {
     const [postData, setPostData] = useState(null);
@@ -125,6 +126,8 @@ function PostComponent({ onClose }) {
 
                 {/* 삭제 버튼 */}
                 <button onClick={handleDeletePost}>게시글 삭제</button>
+
+                <CommentComponent />
             </div>
         </div>
     );

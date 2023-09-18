@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import PostComponent from "./PostDetail";
 
-export default function Modal() {
+export default function PostModal() {
     const [showPostModal, setShowPostModal] = useState(false);
     return (
         <>
