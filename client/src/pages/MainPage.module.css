@@ -1,0 +1,56 @@
+.banner {
+    position: relative;
+    height: 450px;
+    border: 2px solid grey;
+    background-image: url("../assets/image/banner.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 25% 75%;
+    color: white;
+    line-height: 1.5;
+}
+.inner_container {
+    position: absolute;
+    top: 6rem;
+    left: 3rem;
+    
+}
+.banner h1 {
+    font-size: 36px;
+    font-weight: bold;
+}
+.banner label {
+    font-size: 28px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 그림자 설정 */
+}
+.banner input {
+    font-size: 1.5rem;
+    text-indent: 1rem;
+    height: 40px;
+    width: 40rem;
+    border: none;
+    opacity: 0.9;
+    background-color: #E8E8E8;
+}
+.banner .tags{
+    margin-top: 10px;
+    font-size: 1.2rem;
+}
+.banner .tags span{
+    margin-left: 1rem;
+}
+.banner .tags span::before{
+    content: "#";
+}
+.notice_container{
+    display: flex;
+    justify-content: center;
+    margin: 3rem 0;
+}
+.notice_container p {
+    display: flex;
+    align-items: center;
+}
+.notice_container span{
+    font-size: 2rem;
+}

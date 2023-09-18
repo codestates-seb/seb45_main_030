@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
+.top_grid {
+    display: grid;
+    width: 1500px;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 1.5rem;
+    row-gap: 1.5rem;
+    /* grid-template-rows: fit-content */
+}
+.column_grid {
+    display: grid;
+    justify-content: center;
+    row-gap: 2rem;
+    height: fit-content;
+}
+
+.ht1r{
+    height: 1rem;
+}

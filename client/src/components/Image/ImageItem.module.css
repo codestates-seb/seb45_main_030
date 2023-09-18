@@ -1,0 +1,46 @@
+.container {
+    overflow: hidden;
+    width: 400px;
+    /* border: 1px solid black; */
+}
+.figure{
+    display: flex;
+    justify-content: center;
+    position: relative;
+    height: fit-content;
+    
+}
+.fig_img {
+    max-width: 400px;
+    transition: transform 0.3s;
+}
+.figure:hover .fig_img{
+    transform: scale(1.03);
+}
+
+.figcaption {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+}
+
+.figcaption > div {
+    margin-left: 0.5rem;
+    display: flex;
+    position: absolute;
+    left: 0.5rem;
+    bottom: 0.5rem;
+    color: white;
+} 
+.figcaption > div div {
+    margin-right: 0.5rem;
+}
+.figure:hover .figcaption{
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.189);
+}
