@@ -1,6 +1,5 @@
 import React from "react";
 import "./Login.css";
-import "./WarningMsg.css";
 import { LoginActions } from '../action/LoginAction';
 
 function Login() {
@@ -49,11 +48,6 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           ></input>
-          {/* <div className="invalidwarn">
-            <p className={`invalidmsg ${loginError ? "show" : ""}`}>
-              일치하는 회원정보가 없습니다
-            </p>
-          </div> */}
         </div>
         <button className="loginbutton">Log in</button>
       </form>
