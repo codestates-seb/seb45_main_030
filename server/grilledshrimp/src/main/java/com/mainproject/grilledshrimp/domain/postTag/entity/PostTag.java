@@ -1,23 +1,22 @@
 package com.mainproject.grilledshrimp.domain.postTag.entity;
 
-import com.mainproject.grilledshrimp.domain.post.entity.Post;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.tag.entity.Tag;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
-@Setter
 public class PostTag {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long post_tag_id;
+    @GeneratedValue
+    @Column(name = "postTag_id")
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "tag_id")
@@ -25,5 +24,11 @@ public class PostTag {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Post post;
+    @JsonBackReference
+    private Posts posts;
+
+    public PostTag(Posts post, Tag tag) {
+        this.posts = post;
+        this.tag = tag;
+    }
 }
