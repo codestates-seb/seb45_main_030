@@ -32,7 +32,11 @@ function SignupPage() {
                         type="email"
                         placeholder="로그인에 사용할 이메일을 입력하세요."
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => {
+                            setEmail(e.target.value)
+                            setInvalidEmail(false);
+                        }}
+                        
                     />
                     <p className={`warn_inputEmail_message ${invalidEmail ? "show" : ""}`}>이메일을 정확히 입력해주세요.</p>
                 </div>
@@ -51,7 +55,10 @@ function SignupPage() {
                         type="password"
                         placeholder="비밀번호를 입력하세요."
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => {
+                            setPassword(e.target.value)
+                            setInvalidPassword(false);
+                        }}
                     />
                     <p className={`warn_inputPassword_message ${invalidPassword ? "show" : ""}`}>비밀번호를 입력해주세요.</p>
                 </div>

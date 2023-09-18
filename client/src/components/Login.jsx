@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./Login.css";
-import "./WarningMsg.css";
 import { LoginActions } from '../action/LoginAction';
 import OAuth from "../components/OAuth";
 import FindID from "./FindID";
