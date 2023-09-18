@@ -4,8 +4,8 @@ import styles from "../button/Button.module.css";
 
 const BOOKMARK_COLOR = "red";
 
-const URL = "https://d4ec-218-151-64-223.ngrok-free.app"
-const USER_ID = 3
+const URL = "https://d4ec-218-151-64-223.ngrok-free.app";
+const USER_ID = 3;
 
 function ButtonBookmark({ postId, isMarked }) {
     const [isBookmarked, setIsBookmarked] = useState(isMarked);
@@ -27,14 +27,16 @@ function ButtonBookmark({ postId, isMarked }) {
     const deleteBookmark = async () => {
         console.log("delete 요청 시도");
         try {
-            console.log(postId)
+            console.log(postId);
             const response = await axios.delete(`${URL}/bookmarks`, {
-                user_id: USER_ID,
-                post_id: postId,
+                data: {
+                    user_id: USER_ID,
+                    post_id: postId,
+                },
             });
             setIsBookmarked(false);
         } catch (error) {
-            console.error(error.code, "북마크 정보 delete 실패");
+            console.error(error, "북마크 정보 delete 실패");
         }
     };
 

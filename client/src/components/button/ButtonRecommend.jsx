@@ -6,10 +6,10 @@ import styles from "../button/Button.module.css";
 
 const RECOMMEND_COLOR = "blue";
 
-const URL = "https://d4ec-218-151-64-223.ngrok-free.app"
-const USER_ID = 3
+const URL = "https://d4ec-218-151-64-223.ngrok-free.app";
+const USER_ID = 3;
 
-function ButtonRecommend({postId, isMarked}) {
+function ButtonRecommend({ postId, isMarked }) {
     const [isRecommended, setIsRecommended] = useState(isMarked);
     // const loginInfo = useRecoilValue(loginState);
 
@@ -24,13 +24,11 @@ function ButtonRecommend({postId, isMarked}) {
         console.log("추천 변경 시도");
         try {
             const response = await axios.post(`${URL}/recommend/${postId}?userId=${USER_ID}`);
-            if (response) {
-                console.log("추천 변경됨")
-                setIsRecommended(!isRecommended);
-            }
+            console.log("추천 변경됨");
+            setIsRecommended(prev=>!prev);
         } catch (error) {
             console.error(error.code, "추천 정보 post 실패");
-            alert("서버와의 통신 오류로 추천이 변경되지 않음")
+            alert("서버와의 통신 오류로 추천이 변경되지 않음");
         }
     };
 
