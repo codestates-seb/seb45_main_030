@@ -66,6 +66,7 @@ function Login() {
             className={`inputprofile ${invalidPassword ? "invalid" : ""}`}
             placeholder="비밀번호를 입력하세요."
             value={password}
+
             onChange={(e) => {
               setPassword(e.target.value);
               setInvalidPassword(false);
@@ -87,6 +88,7 @@ function Login() {
         <div className="add_user">
           <p className="add_guide">계정이 없으신가요?</p>
           <p className="add_msg">회원가입</p>
+
         </div>
       </form>
     </>
