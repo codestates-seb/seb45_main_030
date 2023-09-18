@@ -40,7 +40,7 @@ function MainPage() {
             <header>헤더 컴포넌트</header>
             <Banner />
             <Notice />
-            <ImageList url={"https://picsum.photos/v2/list"} page={1} />
+            <ImageList url={"https://d4ec-218-151-64-223.ngrok-free.app/posts"} page={1} />
         </>
     );
 }
