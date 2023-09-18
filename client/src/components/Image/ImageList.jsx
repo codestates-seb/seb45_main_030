@@ -8,11 +8,11 @@ import { useEffect, useState } from "react";
 // import { useRecoilValue } from "recoil";
 // import { loginState } from "../state/LoginState";
 // const loginInfo = useRecoilValue(loginState);
-
+const URL = "https://d4ec-218-151-64-223.ngrok-free.app";
+const USER_ID = 3;
 function ImageList({ url, page }) {
-    // 북마크 했던 게시물 상태: 0,1,2번 게시물로 임시 하드코딩
-    const [bookmarkedPostId, setBookmarkedPostId] = useState([0, 1, 2]);
-    const [recommendedPostId, setRecommendeddPostId] = useState([3, 4, 5]);
+    const [bookmarkedPostId, setBookmarkedPostId] = useState([]);
+    const [recommendedPostId, setRecommendeddPostId] = useState([]);
 
     // 무한 스크롤 훅
     const config = {
@@ -25,21 +25,29 @@ function ImageList({ url, page }) {
     const [columnState, setColumnState] = useState({ first: [], second: [], third: [] });
 
     useEffect(() => {
+        getRecommmend();
+        getBookmark();
+    }, []);
+
+    useEffect(() => {
         ImageDistributer();
     }, [fetchedData]);
 
     // 추천 get 통신
     const getRecommmend = async () => {
         try {
-            const response = await axios.get(`1`);
+            const response = await axios.get(`${URL}/recommend/${USER_ID}`, {
+                headers: {
+                    "ngrok-skip-browser-warning": true,
+                },
+            });
             const data = await response.data;
 
-            // 서버의 추천여부를 화면에 적용한다.
-            // if (postId === data.post_id) {
-            //     setIsBookmarked(true);
-            // } else {
-            //     setIsBookmarked(false);
-            // }
+            setRecommendeddPostId(
+                data.map((el) => {
+                    return el.postId;
+                }),
+            );
         } catch (error) {
             console.error(error.code, "추천 정보 get 실패");
         }
@@ -48,7 +56,7 @@ function ImageList({ url, page }) {
     //북마크 get 통신
     const getBookmark = async () => {
         try {
-            const response = await axios.get(`https://07bb-183-107-174-160.ngrok-free.app/bookmarks/1`, {
+            const response = await axios.get(`${URL}/bookmarks/${USER_ID}`, {
                 headers: {
                     "ngrok-skip-browser-warning": true,
                 },
@@ -91,13 +99,11 @@ function ImageList({ url, page }) {
                 {column.map((el) => {
                     return (
                         <ImageItem
-                            key={el.id}
-                            id={el.id}
-                            width={el.width}
-                            height={el.height}
+                            key={el.postId}
+                            data={el}
                             isMarked={{
-                                recommend: recommendedPostId.includes(Number(el.id)),
-                                bookmark: bookmarkedPostId.includes(Number(el.id)),
+                                recommend: recommendedPostId.includes(Number(el.postId)),
+                                bookmark: bookmarkedPostId.includes(Number(el.postId)),
                             }}
                         />
                     );

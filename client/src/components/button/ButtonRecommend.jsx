@@ -6,7 +6,10 @@ import styles from "../button/Button.module.css";
 
 const RECOMMEND_COLOR = "blue";
 
-function ButtonRecommend({postId, isMarked}) {
+const URL = "https://d4ec-218-151-64-223.ngrok-free.app";
+const USER_ID = 3;
+
+function ButtonRecommend({ postId, isMarked }) {
     const [isRecommended, setIsRecommended] = useState(isMarked);
     // const loginInfo = useRecoilValue(loginState);
 
@@ -19,24 +22,19 @@ function ButtonRecommend({postId, isMarked}) {
     // API 통신
     const postRecommmend = async () => {
         console.log("추천 변경 시도");
-        // try {
-        //     const response = await axios.post(`1`, {
-        //         post_id: 1,
-        //     });
-        //     if (response) {
-        //         console.log("추천 변경됨")
-        //         setIsRecommended(!isRecommended);
-        //     }
-        // } catch (error) {
-        //     console.error(error.code, "추천 정보 post 실패");
-        //     alert("서버와의 통신 오류로 추천이 변경되지 않음")
-        // }
+        try {
+            const response = await axios.post(`${URL}/recommend/${postId}?userId=${USER_ID}`);
+            console.log("추천 변경됨");
+            setIsRecommended(prev=>!prev);
+        } catch (error) {
+            console.error(error.code, "추천 정보 post 실패");
+            alert("서버와의 통신 오류로 추천이 변경되지 않음");
+        }
     };
 
     // 클릭 이벤트리스너
     const handleRecommend = () => {
         postRecommmend();
-        setIsRecommended((prev) => !prev);
     };
 
     const RecommendIcon = () => {
