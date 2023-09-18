@@ -2,6 +2,7 @@ import React from "react";
 import './App.css';
 import SignupPage from "./SignupPage";
 import LoginPage from "./LoginPage";
+import Login from "../components/Login";
 
 function App() {
   return (
