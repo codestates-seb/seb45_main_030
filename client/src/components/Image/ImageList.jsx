@@ -8,10 +8,9 @@ import { useEffect, useState } from "react";
 // import { useRecoilValue } from "recoil";
 // import { loginState } from "../state/LoginState";
 // const loginInfo = useRecoilValue(loginState);
-const URL = "https://d4ec-218-151-64-223.ngrok-free.app"
-const USER_ID = 3
+const URL = "https://d4ec-218-151-64-223.ngrok-free.app";
+const USER_ID = 3;
 function ImageList({ url, page }) {
-
     const [bookmarkedPostId, setBookmarkedPostId] = useState([]);
     const [recommendedPostId, setRecommendeddPostId] = useState([]);
 
@@ -43,19 +42,12 @@ function ImageList({ url, page }) {
                 },
             });
             const data = await response.data;
-            console.log("추천: ", data);
+
             setRecommendeddPostId(
                 data.map((el) => {
                     return el.postId;
                 }),
             );
-
-            // 서버의 추천여부를 화면에 적용한다.
-            // if (postId === data.post_id) {
-            //     setIsBookmarked(true);
-            // } else {
-            //     setIsBookmarked(false);
-            // }
         } catch (error) {
             console.error(error.code, "추천 정보 get 실패");
         }
@@ -70,7 +62,6 @@ function ImageList({ url, page }) {
                 },
             });
             const data = await response.data;
-            console.log("북마크: ", data);
 
             setBookmarkedPostId(data.map((el) => el.post_id));
         } catch (error) {
@@ -111,8 +102,8 @@ function ImageList({ url, page }) {
                             key={el.postId}
                             data={el}
                             isMarked={{
-                                recommend: recommendedPostId.includes(Number(el.id)),
-                                bookmark: bookmarkedPostId.includes(Number(el.id)),
+                                recommend: recommendedPostId.includes(Number(el.postId)),
+                                bookmark: bookmarkedPostId.includes(Number(el.postId)),
                             }}
                         />
                     );
