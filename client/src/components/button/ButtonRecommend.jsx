@@ -6,7 +6,7 @@ import styles from "../button/Button.module.css";
 
 const RECOMMEND_COLOR = "blue";
 
-const URL = "https://d4ec-218-151-64-223.ngrok-free.app";
+const BASE_URL =  process.env.REACT_APP_API_URL
 const USER_ID = 3;
 
 function ButtonRecommend({ postId, isMarked }) {
@@ -23,7 +23,7 @@ function ButtonRecommend({ postId, isMarked }) {
     const postRecommmend = async () => {
         console.log("추천 변경 시도");
         try {
-            const response = await axios.post(`${URL}/recommend/${postId}?userId=${USER_ID}`);
+            const response = await axios.post(`${BASE_URL}/recommend/${postId}?userId=${USER_ID}`);
             console.log("추천 변경됨");
             setIsRecommended(prev=>!prev);
         } catch (error) {

@@ -1,11 +1,10 @@
 import React from "react";
-import './App.css';
+import "./App.css";
 import "../pages/App.module.css";
 import MainPage from "./MainPage";
 import SignupPage from "./SignupPage";
 import LoginPage from "./LoginPage";
-import Login from "../components/Login";
-
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 function App() {
   return (
     <>

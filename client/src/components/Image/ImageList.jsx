@@ -5,14 +5,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 // 로그인 상태 확인 기능
-// import { useRecoilValue } from "recoil";
-// import { loginState } from "../state/LoginState";
-// const loginInfo = useRecoilValue(loginState);
-const URL = "https://d4ec-218-151-64-223.ngrok-free.app";
+import { useRecoilValue } from "recoil";
+import { loginState } from "../../state/LoginState";
+
+const BASE_URL =  process.env.REACT_APP_API_URL
 const USER_ID = 3;
 function ImageList({ url, page }) {
     const [bookmarkedPostId, setBookmarkedPostId] = useState([]);
     const [recommendedPostId, setRecommendeddPostId] = useState([]);
+    const loginInfo = useRecoilValue(loginState);
 
     // 무한 스크롤 훅
     const config = {
@@ -36,7 +37,7 @@ function ImageList({ url, page }) {
     // 추천 get 통신
     const getRecommmend = async () => {
         try {
-            const response = await axios.get(`${URL}/recommend/${USER_ID}`, {
+            const response = await axios.get(`${BASE_URL}/recommend/${USER_ID}`, {
                 headers: {
                     "ngrok-skip-browser-warning": true,
                 },
@@ -56,7 +57,7 @@ function ImageList({ url, page }) {
     //북마크 get 통신
     const getBookmark = async () => {
         try {
-            const response = await axios.get(`${URL}/bookmarks/${USER_ID}`, {
+            const response = await axios.get(`${BASE_URL}/bookmarks/${USER_ID}`, {
                 headers: {
                     "ngrok-skip-browser-warning": true,
                 },
