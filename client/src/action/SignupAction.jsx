@@ -17,20 +17,58 @@ export function SignupActions() {
   const setPassword = (password) => {
     setSignupState((prevState) => ({ ...prevState, password }));
   };
+  
+  const setAgreed = (agreed) => {
+    setSignupState((prevState) => ({ ...prevState, agreed }));
+  };
+
+  const setInvalidEmail = (value) => {
+    setSignupState((prevState) => ({ ...prevState, invalidEmail: value }));
+  };
+
+  const setInvalidPassword = (value) => {
+    setSignupState((prevState) => ({ ...prevState, invalidPassword: value }));
+  };
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[\w.-]+@[\w.-]+\.\w+$/;
+    return emailRegex.test(email);
+  };
 
   const resetSignupState = () => {
     setSignupState({
       email: '',
       username: '',
       password: '',
+      agreed: false,
     });
   };
 
   const submitAccount = async () => {
+    setInvalidEmail(false);
+    setInvalidPassword(false);
+
+    if (!isValidEmail(currentState.email)) {
+      setInvalidEmail(true);
+      return; // 유효하지 않은 이메일일 경우 로그인 중단
+    }
+
+    if (currentState.password === '') {
+      setInvalidPassword(true);
+      return; // 비밀번호가 비어있을 경우 로그인 중단
+    }
+
+    const { email, username, password, agreed } = currentState;
+
+    if (!agreed) {
+      console.error('개인정보 처리 방침에 동의해야 합니다.');
+      return;
+    }
+
     const requestData = {
-      email: currentState.email,
-      username: currentState.username,
-      password: currentState.password,
+      email,
+      username,
+      password,
     };
 
     try {
@@ -43,12 +81,18 @@ export function SignupActions() {
   };
 
   return { 
-    email: signupState.email,
-    username: signupState.username,
-    password: signupState.password,
+    email: currentState.email,
+    username: currentState.username,
+    password: currentState.password,
+    agreed: currentState.agreed,
     setUsername,
     setEmail,
     setPassword,
+    setAgreed,
     submitAccount,
+    setInvalidEmail,
+    setInvalidPassword,
+    invalidEmail: currentState.invalidEmail,
+    invalidPassword: currentState.invalidPassword,
   };
 }

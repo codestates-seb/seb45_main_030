@@ -8,186 +8,137 @@ html {
   background-color: #f5f5f5;
 }
 
-.Signup-Wrapper {
+.Signup_Wrapper {
     text-align: center;
 }
 
-.mainlogo {
-  margin-bottom: 17px;
-}
-
-.mainlogo:hover {
-  cursor: pointer;
-}
-
-.Signup-Box {
+.Signup_Box {
     background-color: white;
     border: 2px solid #d9d9d9;
     border-radius: 5px;
-    width: 100%;
+    width: 400px;
+    height: 550px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
     margin-top: 20px;
     margin-bottom: 10px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0.7; 
 }
 
-.Category-Text {
-    margin-top: 30px;
-    margin-bottom: 0px;
-    font-size: 24px;
-}
-  
-.Username-Wrapper {
-    text-align: left;
-    margin-top: 10px;
-}
-
-.Email-Wrapper {
-    text-align: left;
-    margin-top: 10px;
-}
-  
-.Password-Wrapper {
-    text-align: left;
-    margin-top: 10px;
-}
-
-.Nick-Wrapper {
-    text-align: left;
-    margin-top: 10px;
-}
-
-.Phone-Wrapper {
-    text-align: left;
-    margin-top: 10px;
-}
-
-.Signup-Title {
-    font-size: 16px;
+.Category_Label {
+    font: Inter;
     font-weight: bold;
-    margin-bottom: 10px;
+    font-size: larger;
+    border-radius: 5px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
-
-.Gender-Wrapper {
+  
+.Username_Wrapper {
     text-align: left;
     margin-top: 10px;
-    width:75%
 }
 
-.Btn-Wrapper {
+.Email_Wrapper {
+    text-align: left;
+    margin-top: 10px;
+}
+  
+.Password_Wrapper {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.Agreement_Wrapper {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.Agreement_Label {
+    color: #0a95ff;
+    font-size:small;
+}
+
+.Btn_Wrapper {
     text-align: center;
     margin-top: 30px;
     width:75%
 }
 
-.Gender-Group {
-    display: flex;
+.Username_Input {
+    border: 2px solid #d9d9d9;
+    width: 280px;
+    height: 5.5vh;
+    margin-bottom: 5px;
 }
 
-.Gender-Label {
-    margin-top:5px;
-    margin-left: 20px;
-    margin-right: 30px; 
+.Email_Input {
+    border: 2px solid #d9d9d9;
+    width: 280px;
+    height: 5.5vh;
+    margin-bottom: 5px;
 }
 
-.Gender-Label:last-child {
-    margin-right: 0; 
+.Password_Input {
+    border: 2px solid #d9d9d9;
+    width: 280px;
+    height: 5.5vh;
+    margin-bottom: 5px;
 }
 
-.Username-Input {
+.Btn_Submit {
     border: 2px solid #d9d9d9;
     border-radius: 5px;
-    width: 230px;
-    height: 3vh;
-    margin-top : 0px;
-}
-
-.Email-Input {
-    border: 2px solid #d9d9d9;
-    border-radius: 5px;
-    width: 230px;
-    height: 3vh;
-    margin-top : 0px;
-}
-
-.Password-Input {
-    border: 2px solid #d9d9d9;
-    border-radius: 5px;
-    width: 230px;
-    height: 3vh;
-    margin-top : 0px;
-}
-
-.Phone-Input {
-    border: 2px solid #d9d9d9;
-    border-radius: 5px;
-    width: 230px;
-    height: 3vh;
-    margin-top : 0px;
-}
-
-.Nick-Input {
-    border: 2px solid #d9d9d9;
-    border-radius: 5px;
-    width: 230px;
-    height: 3vh;
-    margin-top : 0px;
-}
-
-.Gender-Label span {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 2px solid #d9d9d9;
-    border-radius: 50%;
-    margin-right: 10px;
-    vertical-align: middle;
-    cursor: pointer;
-  }
-  
-.Gender-Label input[type="radio"]:checked + span {
-    background-color: #0a95ff;
-    border-color: #0a95ff;
-}
-
-.Btn-Submit {
-    border: 2px solid #d9d9d9;
-    border-radius: 5px;
-    width: 300px;
-    height: 4.5vh;
+    width: 290px;
+    height: 5.5vh;
     color: white;
     background-color: #0a95ff;
     font: Inter;
     text-align: center;
     line-height: 34px;
-    margin-bottom: 15px;
+    margin-top: 15px;
 }
   
-.Btn-Submit:hover {
+.Btn_Submit:hover {
     cursor: pointer;
     filter: brightness(0.9);
 }
   
-.warn {
-    display: flex;
-    flex-direction: flex-start;
+
+.warn_inputEmail_message {
+    display: none;
+    height: 28px;
+    margin-top: -6px;
+    font-weight: 700;
+    letter-spacing: -.6px;
+    text-align: left;
+    color: #ff6060;
 }
-  
-.warningmsg {
-    display: block;
-    color: red;
-    margin-top: 3px;
-    font-size: 13px;
+
+.warn_inputPassword_message {
+    display: none;
+    height: 28px;
+    margin-top: -6px;
+    font-weight: 700;
+    letter-spacing: -.6px;
+    text-align: left;
+    color: #ff6060;
 }
-  
+
+.warn_login_message {
+    height: 28px;
+    margin-top: -6px;
+    font-weight: 700;
+    letter-spacing: -.6px;
+    text-align: left;
+    color: #ff6060;
+}
+
+.invalid {
+    border-color: #ff6060;
+}
+
 .show {
     display: block;
 }
-  
-.invalid {
-    border: 2px solid red;
-}
-  
