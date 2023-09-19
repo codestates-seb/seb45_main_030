@@ -38,16 +38,6 @@ export default function UploadForm({ onClose }) {
         }
     };
 
-    // const handleImageChange = (event) => {
-    //     const file = event.target.files[0];
-    //     if (file) {
-    //         setImage(file);
-    //         const objectURL = URL.createObjectURL(file);
-    //         setImageObjectURL(objectURL);
-    //         console.log(objectURL);
-    //     }
-    // };
-
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -166,7 +156,6 @@ export default function UploadForm({ onClose }) {
                                     <button
                                         type="button"
                                         className={styles.delete_button}
-                                        // setImage를 null로 처리하여 이미지를 없앰?
                                         onClick={() => {
                                             setImage(null);
                                             setImageObjectURL(null);
@@ -246,23 +235,25 @@ export default function UploadForm({ onClose }) {
                 {/* 정보 제공 동의 */}
                 <div>
                     {/* 위치 정보 동의 체크박스 */}
-                    <label>
+                    <label className={styles.checkbox}>
                         <input
                             type="checkbox"
                             checked={addressPermission}
                             onChange={() => setAddressPermission(!addressPermission)}
+                            required
                         />
-                        위치 정보 동의
+                        위치 정보 수집에 동의하시나요?
                     </label>
 
                     {/* 댓글 기능 해제 체크박스 */}
-                    <label>
+                    <label className={styles.checkbox}>
                         <input
                             type="checkbox"
                             checked={commentPermission}
                             onChange={() => setCommentPermission(!commentPermission)}
+                            required
                         />
-                        댓글 기능 해제
+                        댓글 기능 해제하기
                     </label>
                 </div>
             </div>

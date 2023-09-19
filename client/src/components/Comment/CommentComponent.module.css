@@ -1,58 +1,77 @@
 /* 스타일 수정 아이콘과 삭제 아이콘 */
 .commentContainer {
     display: flex;
-    justify-content: space-between; 
-    align-items: center; 
+ flex-direction: column;
 } 
 
 .commentBtn {
     background: none;
     border: none;
     cursor: pointer;
-    margin-left: 25px;
 } 
-
-.commentText{ 
-    margin-left: 50px;
-}
 
 /* 댓글 스타일 */
 ul {
     list-style: none;
-    padding: 5;
 }
 
 li {
-    margin: 16px 0;
-    padding: 8px;
+    margin: 3px;
     display: flex;
     align-items: center;
 }
 
-/* 댓글 왼쪽에 user_name 표시 */
-/* li::before {
-    content: "user_name: ";
-    font-weight: bold;
-} */
+.commentUser {
+    width: 100px;
+    margin-right: 20px;
+}
+
+.commentList {
+    margin-left: 0;
+}
+
+.commentText {
+    width: 350px;
+}
 
 /* 댓글 추가 버튼 스타일 */
 .addBtn {
-    border: none;
-    padding: 8px 16px;
+    background-color: #d9f2d8;
+    border-radius: 10px;
     cursor: pointer;
+    border: none;
+    margin-top: 5px;
+    width: 100px;
+    height: 30px;
 }
 
 .commentInput {
     border-top: none;
     border-left: none;
     border-right: none;
-    width: 500px;
+    width: 400px;
     padding: 5px;
-    margin: 20px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 5px;
 } 
 
 .commentInput:focus {
     outline: none;
+}
+
+.addComment {
+    display: flex;
+}
+
+.userName {
+    padding-top: 10px;
+    width: 120px;
+}
+
+::placeholder {
+    font-size: 15px;
 }
 
 

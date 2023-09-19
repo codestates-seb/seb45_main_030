@@ -37,13 +37,18 @@ function useGetImageList(url, config) {
     const getApiData = async () => {
         try {
             const config = {
+                headers: {
+                    "ngrok-skip-browser-warning": true,
+                },
                 params: {
                     page: pageNum,
                 },
             };
             // https://picsum.photos/ 더미 이미지 API
             const response = await axios.get(url, config);
-            setFetchedData([...response.data]);
+            const responseData = response.data
+            console.log(responseData)
+            setFetchedData([...responseData.data]);
         } catch (error) {
             console.error("데이터를 불러오는 중 오류 발생:", error);
             // 오류 토스트 컴포넌트를 여기에 추가할 수 있습니다.

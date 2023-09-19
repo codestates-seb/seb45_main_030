@@ -15,9 +15,9 @@
 .modal_content {
   display: flex;
   width: 100%;
-  height: 80%;
+  height: 90%;
   max-width: 850px;
-  max-height: 700px;
+  max-height: 800px;
   background-color: white;
   padding-left: 30px;
   padding-right: 30px;
@@ -277,6 +277,28 @@
 .tag_input::placeholder {
   font-size: 15px;
 }
+
+/* CSS 파일 또는 스타일 컴포넌트에 추가 */
+.checkbox {
+  display: flex;
+  align-items: center;
+  font-size: 20px; /* 텍스트 크기 조절 */
+  margin-bottom: 5px;
+}
+
+.checkbox input[type="checkbox"] {
+  width: 20px; /* 체크박스의 가로 크기 조절 */
+  height: 20px; /* 체크박스의 세로 크기 조절 */
+  margin-right: 8px; /* 체크박스와 텍스트 사이 여백 조절 */
+}
+
+.checkbox input[type="checkbox"]:checked {
+  /* 체크박스의 체크 마크 색상 변경 */
+  background-color: #d9f2d8;
+  /* 다른 스타일 속성들 */
+}
+
+
 
   
   
