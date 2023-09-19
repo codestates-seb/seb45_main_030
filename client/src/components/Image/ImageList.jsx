@@ -10,13 +10,12 @@ import { loginState } from "../../state/LoginState";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
-
 function ImageList({ url, page }) {
     const [bookmarkedPostId, setBookmarkedPostId] = useState([]);
     const [recommendedPostId, setRecommendeddPostId] = useState([]);
-
     const [isLogin, setIsLogin] = useState(false);
-    const [userId, setUserId] = useState(null)
+    const [userId, setUserId] = useState(null);
+
     const loginInfo = useRecoilValue(loginState);
     useEffect(() => {
         if (loginInfo.login_status) {
