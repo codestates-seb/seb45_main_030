@@ -54,9 +54,6 @@ function PostComponent({ onClose }) {
         const postUserId = postData.user.userId;
         console.log(postUserId);
 
-        // 로그인한 사용자의 ID를 사용
-        // const currentUserId = currentUser.userId;
-
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 수정 가능
         if (currentUser === postUserId) {
             setIsEditing(true);
@@ -87,10 +84,8 @@ function PostComponent({ onClose }) {
     const handleDeletePost = () => {
         const postUserId = postData.user.userId;
 
-        const currentUserId = currentUser.userId;
-
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 삭제 가능
-        if (currentUserId === postUserId) {
+        if (currentUser === postUserId) {
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
                 .delete(
