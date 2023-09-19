@@ -3,13 +3,17 @@ import styles from "./UploadForm.module.css";
 import axios from "axios";
 import { BsTrash3Fill } from "react-icons/bs";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { LoginActions } from "../../action/LoginAction";
 
 export default function UploadForm({ onClose }) {
     // const currentUser = useRecoilValue(loginState);
     // const currentUserId = currentUser.userId;
 
     // 일단은 하드 코딩
-    const userId = 3;
+    // const userId = 3;
+    const { userId } = LoginActions();
+    console.log(userId);
+    // console.log(userName);
 
     const [image, setImage] = useState(null);
     const [imageObjectURL, setImageObjectURL] = useState(null);
@@ -176,7 +180,7 @@ export default function UploadForm({ onClose }) {
                         required
                     />
                     <div className={styles.text_section}>
-                        <h2 className={styles.user_name}>user_name</h2>
+                        {/* <h2 className={styles.user_name}>{email}</h2> */}
                         <input
                             placeholder="사진 속 장소는 어디인가요?"
                             type="text"

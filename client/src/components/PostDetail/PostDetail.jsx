@@ -6,6 +6,9 @@ import { useRecoilValue } from "recoil";
 //import { loginState } from "../state/LoginState"; // 사용자 정보를 담은 recoil 상태
 import CommentComponent from "../Comment/CommentComponent";
 import { FaUser } from "react-icons/fa";
+import { LoginActions } from "../../action/LoginAction";
+import ButtonBookmark from "../button/ButtonBookmark";
+import ButtonRecommend from "../button/ButtonRecommend";
 
 function PostComponent({ onClose }) {
     const [postData, setPostData] = useState(null);
@@ -13,7 +16,8 @@ function PostComponent({ onClose }) {
     const [isEditing, setIsEditing] = useState(false);
 
     // const currentUser = useRecoilValue(loginState);
-    const currentUser = 1;
+    const { userId } = LoginActions();
+    const currentUser = userId;
     // const postId = 8;
 
     // 제일 먼저 특정 게시글의 전체 데이터를 받아와서 postData에 넣어줌
@@ -141,6 +145,8 @@ function PostComponent({ onClose }) {
                                     </div>
                                 )}
                                 <p className={styles.username}>작성자: {postData.user.username}</p>
+                                <ButtonRecommend />
+                                <ButtonBookmark />
                             </div>
 
                             {/* 날짜 */}

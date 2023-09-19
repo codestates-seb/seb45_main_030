@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import axios from "axios";
 import styles from "./CommentComponent.module.css";
-import { useRecoilValue } from "recoil";
-// import { loginState } from "../state/LoginState";
+import { LoginActions } from "../../action/LoginAction";
 
 function CommentComponent() {
     const [comments, setComments] = useState([]); // 댓글 데이터를 저장할 상태
@@ -12,7 +11,8 @@ function CommentComponent() {
     const [postId, setPostId] = useState(8); // 게시글 ID
 
     // const currentUser = useRecoilValue(loginState);
-    const currentUser = 3;
+    const { userId } = LoginActions();
+    const currentUser = userId;
 
     // 게시글의 댓글을 가져오는 API 요청
     useEffect(() => {

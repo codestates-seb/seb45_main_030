@@ -58,7 +58,7 @@
 /* 닫기 버튼 */
 .close_button {
   position: relative;
-  left: 23rem;
+  left: 22rem;
   border-radius: 10px;
   cursor: pointer;
   border: none;
@@ -70,7 +70,7 @@
 /* 게시하기 제출 버튼 */
 .submit_button {
   position: relative;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 500;
   top: 1rem;
   left: 39rem;
@@ -262,7 +262,7 @@
   outline: none;
   border: none;
   height: 46px;
-  font-size: 1rem;
+  font-size: 0.7rem;
 }
 
 ::placeholder {
@@ -272,7 +272,7 @@
 }
 
 .tag_input::placeholder {
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 
 /* CSS 파일 또는 스타일 컴포넌트에 추가 */
@@ -292,6 +292,11 @@
   /* 체크박스의 체크 마크 색상 변경 */
   background-color: #d9f2d8;
   /* 다른 스타일 속성들 */
+}
+
+.tag_title {
+  font-size: 0.7rem;
+  font-weight: 600;
 }
 
   

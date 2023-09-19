@@ -33,6 +33,7 @@ li {
 .commentText {
     width: 20rem;
     font-size: 0.7rem;
+    margin: 0.3rem;
 }
 
 /* 댓글 추가 버튼 스타일 */
