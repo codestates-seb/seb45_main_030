@@ -63,7 +63,7 @@ export function LoginActions() {
         console.log('로그인을 시도합니다:', response.data);
         const accessToken = response.data.accessToken;
         const refreshToken = response.data.refreshToken;
-        setUserId(response.data.userid);
+        setUserId(response.data.userId);
         // console.log(
         //   `엑세스토큰 : ${accessToken}, 리프레쉬토큰 : ${refreshToken}`
         // );

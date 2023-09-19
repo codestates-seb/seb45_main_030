@@ -3,9 +3,17 @@ import styles from "./UploadForm.module.css";
 import axios from "axios";
 import { BsTrash3Fill } from "react-icons/bs";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { LoginActions } from "../../action/LoginAction";
 
 export default function UploadForm({ onClose }) {
-    const userId = 1;
+    // const currentUser = useRecoilValue(loginState);
+    // const currentUserId = currentUser.userId;
+
+    // 일단은 하드 코딩
+    // const userId = 3;
+    const { userId } = LoginActions();
+    console.log(userId);
+    // console.log(userName);
 
     const [image, setImage] = useState(null);
     const [imageObjectURL, setImageObjectURL] = useState(null);
@@ -37,7 +45,6 @@ export default function UploadForm({ onClose }) {
             }
         }
     };
-
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -48,29 +55,22 @@ export default function UploadForm({ onClose }) {
             img.src = objectURL;
 
             img.onload = () => {
-                const maxWidth = 400; // 최대 가로 너비
+                const minWidth = 400; // 최소 가로 너비 (수정)
 
                 let newWidth = img.width;
                 let newHeight = img.height;
 
-                // 이미지 크기가 제한값보다 큰 경우 가로 너비를 400px로 설정
-                if (img.width > maxWidth) {
-                    newWidth = maxWidth;
-                    newHeight = (img.height * maxWidth) / img.width;
+                // 이미지 크기가 최소 너비보다 작은 경우 최소 가로 너비로 설정 (수정)
+                if (img.width < minWidth) {
+                    newWidth = minWidth;
+                    newHeight = (img.height * minWidth) / img.width;
                 }
 
-                // 조절된 크기로 이미지 리사이징
-                const canvas = document.createElement("canvas");
-                canvas.width = newWidth;
-                canvas.height = newHeight;
-                const ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0, newWidth, newHeight);
-
-                // 리사이징된 이미지를 Blob으로 변환
-                canvas.toBlob((blob) => {
-                    setImage(blob);
-                    setImageObjectURL(URL.createObjectURL(blob));
-                }, file.type);
+                // 이미지를 미리보기에 설정
+                setImage(file);
+                const objectURL = URL.createObjectURL(file);
+                setImageObjectURL(objectURL);
+                console.log(objectURL);
             };
         }
     };
@@ -103,17 +103,15 @@ export default function UploadForm({ onClose }) {
             const axiosConfig = {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    // 헤더 추가
-                    "ngrok-skip-browser-warning": "69420",
                 },
             };
 
             const response = await axios.post(
-                "https://7568-218-151-64-223.ngrok-free.app/posts",
+                "http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts",
                 formData,
                 axiosConfig,
             );
-            console.log(response);
+            console.log(response.data);
 
             setUploadSuccess(true);
             console.log(uploadSuccess);
@@ -182,7 +180,7 @@ export default function UploadForm({ onClose }) {
                         required
                     />
                     <div className={styles.text_section}>
-                        <h2 className={styles.user_name}>user_name</h2>
+                        {/* <h2 className={styles.user_name}>{email}</h2> */}
                         <input
                             placeholder="사진 속 장소는 어디인가요?"
                             type="text"

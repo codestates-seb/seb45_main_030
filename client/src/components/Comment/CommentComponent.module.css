@@ -16,14 +16,14 @@ ul {
 }
 
 li {
-    margin: 3px;
+    margin: 0.2rem;
     display: flex;
     align-items: center;
 }
 
 .commentUser {
-    width: 100px;
-    margin-right: 20px;
+    width: 10rem;
+    font-size: 0.7rem;
 }
 
 .commentList {
@@ -31,7 +31,9 @@ li {
 }
 
 .commentText {
-    width: 350px;
+    width: 20rem;
+    font-size: 0.7rem;
+    margin: 0.3rem;
 }
 
 /* 댓글 추가 버튼 스타일 */
@@ -41,20 +43,22 @@ li {
     cursor: pointer;
     border: none;
     margin-top: 5px;
-    width: 100px;
-    height: 30px;
+    font-size: 0.7rem;
+    width: 5rem;
+    height: 2rem;
 }
 
 .commentInput {
     border-top: none;
     border-left: none;
     border-right: none;
-    width: 400px;
+    width: 15rem;
     padding: 5px;
+    max-width: 30rem;
     margin-bottom: 20px;
-    margin-left: 20px;
     margin-right: 20px;
     margin-top: 5px;
+    font-size: 0.7rem;
 } 
 
 .commentInput:focus {
@@ -66,12 +70,14 @@ li {
 }
 
 .userName {
+    font-size: 0.7rem;
     padding-top: 10px;
     width: 120px;
 }
 
 ::placeholder {
-    font-size: 15px;
+    font-size: 0.8rem;
 }
+
 
 

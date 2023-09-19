@@ -14,10 +14,10 @@
   /* 모달 컨테이너 */
   .modal_content {
     display: flex;
-    width: 100%;
+    width: 80%;
     height: 100%;
-    max-width: 500px;
-    max-height: 760px;
+    max-width: 35%;
+    max-height: 90%;
     background-color: white;
     padding-left: 30px;
     padding-right: 30px;
@@ -33,7 +33,7 @@
 
   .image {
     max-width: 60%; /* 이미지 최대 너비 */
-    height: 40%; /* 자동 높이 조정 */
+    height: 50%; /* 자동 높이 조정 */
   }
 
   .profileImage {
@@ -41,30 +41,71 @@
     height: 30px;
   }
 
+  .postTitle {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
   .tags {
-    margin-top: 0;
+    margin-top: 0.8rem;
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+  }
+
+  .postAddress {
+    font-size: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .createdAt {
+    font-size: 0.7rem;
+    margin-bottom: 0.5rem;
   }
 
   .username {
     margin-left: 20px;
     width: 150px;
     height: 20px;
+    font-size: 0.7rem;
+    margin-top: 0.3rem;
   }
 
   .userInfo {
     display: flex;
   }
 
-  /* 수정 버튼 스타일 */
-.edit_button {
+  .postCaption {
+    font-size: 0.7rem;
+    margin-bottom: 0.5rem;
+  }
+
+.profileIcon {
+  margin-bottom: 10px;
+}
+
+/* 닫기 버튼 */
+.close_button {
   position: relative;
-  left: 110px;
-  bottom: 150px;
+  left: 33rem;
+  bottom: 20rem;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
   font-size: 1rem;
+  color: black;
+}
+
+/* 수정 버튼 스타일 */
+.edit_button {
+  position: fixed;
+  left: 55rem;
+  bottom: 35rem;
+  font-size: 0.7rem;
   font-weight: 500;
   padding: 8px;
-  height: 40px;
-  width: 90px;
+  height: 2rem;
+  width: 5rem;
   background-color: #d9f2d8;
   border-radius: 10px;
   cursor: pointer;
@@ -73,36 +114,26 @@
 
 /* 삭제 버튼 스타일 */
 .delete_button {
-  position: relative;
-  left: 20px;
-  bottom: 200px;
-  font-size: 1rem;
+  position: fixed;
+  left: 55rem;
+  bottom: 31rem;
+  font-size: 0.7rem;
   font-weight: 500;
   padding: 8px;
-  height: 40px;
-  width: 90px;
+  height: 2rem;
+  width: 5rem;
   background-color: #d9f2d8;
   border-radius: 10px;
   cursor: pointer;
   border: none;
 }
 
-
-/* 닫기 버튼 */
-.close_button {
-  position: relative;
-  left: 550px;
-  bottom: 350px;
-  height: 30px;
-  width: 50px;
-  border-radius: 10px;
-  cursor: pointer;
-  border: none;
-  background-color: transparent;
-  font-size: 1.5rem;
-  color: black;
-}
-
-.profileIcon {
-  padding-top: 10px;
+@media (max-width: 500px) {
+  /* 화면 너비가 768px 이하일 때 버튼 위치 조정 */
+  .edit_button {
+    left: 40rem;
+  }
+  .delete_button {
+    right: 10px;
+  }
 }
