@@ -9,12 +9,13 @@ import { useRecoilValue } from "recoil";
 import { loginState } from "../../state/LoginState";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
-const USER_ID = 3;
+
 function ImageList({ url, page }) {
     const [bookmarkedPostId, setBookmarkedPostId] = useState([]);
     const [recommendedPostId, setRecommendeddPostId] = useState([]);
 
     const [isLogin, setIsLogin] = useState(false);
+    const [userId, setUserId] = useState(null);
     const loginInfo = useRecoilValue(loginState);
     useEffect(() => {
         if (loginInfo.login_status) {
@@ -47,7 +48,7 @@ function ImageList({ url, page }) {
     const getRecommmend = async () => {
         try {
             // ``
-            const response = await axios.get(`${BASE_URL}/recommend/${USER_ID}`);
+            const response = await axios.get(`${BASE_URL}/recommend/${userId}`);
             const data = await response.data;
 
             setRecommendeddPostId(
@@ -63,7 +64,7 @@ function ImageList({ url, page }) {
     //북마크 get 통신
     const getBookmark = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/bookmarks/${USER_ID}`);
+            const response = await axios.get(`${BASE_URL}/bookmarks/${userId}`);
             const data = await response.data;
 
             setBookmarkedPostId(data.map((el) => el.post_id));
