@@ -10,15 +10,19 @@ import { LoginActions } from "../../action/LoginAction";
 import ButtonBookmark from "../button/ButtonBookmark";
 import ButtonRecommend from "../button/ButtonRecommend";
 
-function PostComponent({ onClose }) {
+const BASE_URL = process.env.REACT_APP_API_URL;
+
+function PostComponent({ postId, onClose }) {
+    console.log("포스트 컴포넌트", postId);
     const [postData, setPostData] = useState(null);
     const [editedCaption, setEditedCaption] = useState(""); // 수정한 캡션을 저장
     const [isEditing, setIsEditing] = useState(false);
+    const [bookmarkedPostId, setBookmarkedPostId] = useState([]);
+    const [recommendedPostId, setRecommendeddPostId] = useState([]);
 
     // const currentUser = useRecoilValue(loginState);
     const { userId } = LoginActions();
     const currentUser = userId;
-    // const postId = 8;
 
     // 특정 게시글의 데이터를 받아오는 함수
     const fetchPostData = async () => {
@@ -37,6 +41,53 @@ function PostComponent({ onClose }) {
 
     // 컴포넌트가 처음 렌더링될 때 한 번만 데이터를 받아옵니다.
     useEffect(() => {
+
+        console.log("요청", postData);
+        axios
+            .get(`${BASE_URL}/posts/${postId}`)
+            .then((response) => {
+                console.log("GET 요청 성공:", response.data);
+                setPostData(response.data);
+                setEditedCaption(response.data.postCaption);
+            })
+            .catch((error) => {
+                console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
+            });
+        getRecommmend();
+        getBookmark();
+    }, []);
+
+    // 추천 get 통신
+    const getRecommmend = async () => {
+        try {
+            // ``
+            const response = await axios.get(`${BASE_URL}/recommend/${userId}`);
+            const data = await response.data;
+
+            setRecommendeddPostId(
+                data.map((el) => {
+                    return el.postId;
+                }),
+            );
+        } catch (error) {
+            console.error(error.code, "추천 정보 get 실패");
+        }
+    };
+
+    //북마크 get 통신
+    const getBookmark = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/bookmarks/${userId}`);
+            const data = await response.data;
+
+            setBookmarkedPostId(data.map((el) => el.post_id));
+        } catch (error) {
+            console.error(error.code, "북마크 정보 get 실패");
+        }
+    };
+
+    console.log(postData);
+
         fetchPostData();
     }, []);
 
@@ -47,6 +98,7 @@ function PostComponent({ onClose }) {
         const day = String(date.getDate()).padStart(2, "0");
         return `${year}.${month}.${day}`;
     }
+
 
     // 게시글 수정 함수
     const handleEditPost = () => {
@@ -67,7 +119,9 @@ function PostComponent({ onClose }) {
             };
             axios
                 .patch(
-                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/${postId}?userId=${currentUserId}`,
+
+                    `${BASE_URL}/posts/${postId}?userId=${currentUserId}`,
+
                     editData,
                 ) // ngrok 서버 주소로 변경
                 .then((response) => {
@@ -94,7 +148,9 @@ function PostComponent({ onClose }) {
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
                 .delete(
-                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/${postId}?userId=${currentUserId}`,
+
+                    `${BASE_URL}/posts/${postId}?userId=${currentUserId}`,
+
                 ) // ngrok 서버 주소로 변경
                 .then((response) => {
                     // 게시글 삭제가 성공한 경우 처리
@@ -156,9 +212,11 @@ function PostComponent({ onClose }) {
                                         <FaUser size={20} />
                                     </div>
                                 )}
+
                                 <p className={styles.username}>{postData.user.username}</p>
                                 <ButtonRecommend />
                                 <ButtonBookmark />
+
                             </div>
 
                             {/* 날짜 */}

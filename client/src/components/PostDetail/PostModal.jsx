@@ -2,8 +2,8 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import PostComponent from "./PostDetail";
 
-export default function Modal({ children }) {
-
+export default function Modal({postId, children }) {
+    console.log(postId)
     const [showPostModal, setShowPostModal] = useState(false);
 
     const renderModal = (bool) => {
@@ -13,7 +13,7 @@ export default function Modal({ children }) {
     return (
         <>
             <div onClick={() => renderModal(true)}>{children}</div>
-            {showPostModal && createPortal(<PostComponent onClose={() => setShowPostModal(false)} />, document.body)}
+            {showPostModal && createPortal(<PostComponent postId={postId} onClose={() => setShowPostModal(false)} />, document.body)}
         </>
     );
 }
