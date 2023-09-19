@@ -16,7 +16,6 @@ function CommentComponent() {
 
     // 게시글의 댓글을 가져오는 API 요청
     useEffect(() => {
-        // axios.get(`https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/${postId}`, {
         axios
             .get("http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/posts/8")
             .then((response) => {
@@ -41,7 +40,6 @@ function CommentComponent() {
                     commentText: newComment,
                 };
 
-                // axios.post(`https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/${postId}`, commentData, {
                 await axios.post(
                     "http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/posts/8",
                     commentData,
@@ -72,7 +70,6 @@ function CommentComponent() {
     // 댓글을 삭제하는 API 요청
     const handleDeleteComment = async (id) => {
         try {
-            // axios.delete(`https://d4ec-218-151-64-223.ngrok-free.app/comments/${id}`, {
             await axios.delete(`http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/${id}`);
 
             const updatedComments = comments.filter((comment) => comment.commentId !== id);
