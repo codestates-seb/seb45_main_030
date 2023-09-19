@@ -5,6 +5,7 @@ import styles from "../button/Button.module.css";
 const BOOKMARK_COLOR = "red";
 
 const BASE_URL =  process.env.REACT_APP_API_URL
+console.log(BASE_URL)
 const USER_ID = 3;
 
 function ButtonBookmark({ postId, isMarked }) {
@@ -27,7 +28,6 @@ function ButtonBookmark({ postId, isMarked }) {
     const deleteBookmark = async () => {
         console.log("delete 요청 시도");
         try {
-            console.log(postId);
             const response = await axios.delete(`${BASE_URL}/bookmarks`, {
                 data: {
                     user_id: USER_ID,

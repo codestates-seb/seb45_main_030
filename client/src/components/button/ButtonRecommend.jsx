@@ -24,7 +24,6 @@ function ButtonRecommend({ postId, isMarked }) {
         console.log("추천 변경 시도");
         try {
             const response = await axios.post(`${BASE_URL}/recommend/${postId}?userId=${USER_ID}`);
-            console.log("추천 변경됨");
             setIsRecommended(prev=>!prev);
         } catch (error) {
             console.error(error.code, "추천 정보 post 실패");

@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { loginState } from "../../state/LoginState";
 
-const BASE_URL =  process.env.REACT_APP_API_URL
+const BASE_URL = process.env.REACT_APP_API_URL;
 const USER_ID = 3;
 function ImageList({ url, page }) {
     const [bookmarkedPostId, setBookmarkedPostId] = useState([]);
@@ -37,11 +37,8 @@ function ImageList({ url, page }) {
     // 추천 get 통신
     const getRecommmend = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/recommend/${USER_ID}`, {
-                headers: {
-                    "ngrok-skip-browser-warning": true,
-                },
-            });
+            // ``
+            const response = await axios.get(`${BASE_URL}/recommend/${USER_ID}`);
             const data = await response.data;
 
             setRecommendeddPostId(
@@ -57,11 +54,7 @@ function ImageList({ url, page }) {
     //북마크 get 통신
     const getBookmark = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/bookmarks/${USER_ID}`, {
-                headers: {
-                    "ngrok-skip-browser-warning": true,
-                },
-            });
+            const response = await axios.get(`${BASE_URL}/bookmarks/${USER_ID}`);
             const data = await response.data;
 
             setBookmarkedPostId(data.map((el) => el.post_id));
