@@ -1,4 +1,3 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainPage from "./MainPage";
 import MyPage from "../components/MyPage/MyPage";
 import React from "react";
