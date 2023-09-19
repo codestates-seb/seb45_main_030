@@ -4,21 +4,20 @@ import styles from "../button/Button.module.css";
 import { useRecoilValue } from "recoil";
 import { loginState } from "../../state/LoginState";
 
-const BOOKMARK_COLOR = "red";
+const BOOKMARK_COLOR = "#FFC436";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 console.log(BASE_URL);
 
-
 function ButtonBookmark({ postId, isMarked }) {
     const [isBookmarked, setIsBookmarked] = useState(isMarked);
     const [isLogin, setIsLogin] = useState(false);
-    const [userId, setUserId] = useState(null)
+    const [userId, setUserId] = useState(null);
     const loginInfo = useRecoilValue(loginState);
     useEffect(() => {
         if (loginInfo.login_status) {
             setIsLogin(true);
-            setUserId(loginInfo.userId)
+            setUserId(loginInfo.userId);
         }
     }, []);
 
@@ -30,7 +29,7 @@ function ButtonBookmark({ postId, isMarked }) {
                 post_id: postId,
                 bookmark_name: "",
             });
-            console.log(response)
+            console.log(response);
             if (response.status === 201) {
                 setIsBookmarked(true);
             } else {
@@ -50,7 +49,7 @@ function ButtonBookmark({ postId, isMarked }) {
                     post_id: postId,
                 },
             });
-            if (response.status === 200, response.status === 204) {
+            if ((response.status === 200, response.status === 204)) {
                 setIsBookmarked(false);
             } else {
                 console.error("북마크 정보 post 실패. 응답 코드:", response.status);
@@ -62,7 +61,7 @@ function ButtonBookmark({ postId, isMarked }) {
 
     // 클릭 이벤트리스너
     const handleBookmark = () => {
-        console.log("포스트아이디: ",postId,"유저아이디 ",userId)
+        console.log("포스트아이디: ", postId, "유저아이디 ", userId);
         if (!isLogin) {
             alert("먼저 로그인을 해주세요");
             return;
