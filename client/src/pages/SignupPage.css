@@ -10,6 +10,8 @@ html {
 
 .Signup_Wrapper {
     text-align: center;
+    height: 100vh;
+    background-image: url("../assets/image/loginBg.jpg");
 }
 
 .Signup_Box {
