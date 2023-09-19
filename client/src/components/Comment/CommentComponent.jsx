@@ -18,17 +18,13 @@ function CommentComponent() {
     useEffect(() => {
         // axios.get(`https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/${postId}`, {
         axios
-            .get("https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/8", {
-                headers: {
-                    "ngrok-skip-browser-warning": true,
-                },
-            })
+            .get("http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/posts/8")
             .then((response) => {
                 // API에서 가져온 댓글 데이터를 상태에 저장함.
                 const allComments = response.data.data;
                 setComments(allComments);
                 console.log(allComments);
-                console.log(allComments[0].user);
+                console.log(allComments[1].user);
             })
             .catch((error) => {
                 console.error("댓글 목록을 가져오는 데 실패했습니다.", error);
@@ -46,21 +42,26 @@ function CommentComponent() {
                 };
 
                 // axios.post(`https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/${postId}`, commentData, {
-                await axios.post("https://d4ec-218-151-64-223.ngrok-free.app/comments/posts/8", commentData, {
-                    headers: {
-                        "ngrok-skip-browser-warning": true,
-                    },
-                });
+                await axios.post(
+                    "http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/posts/8",
+                    commentData,
+                );
 
                 // 응답에서 생성된 댓글 정보를 가져와서 상태에 추가합니다.
                 const newCommentObject = {
                     postId: postId,
-                    // userId: currentUser.userId,
-                    userId: currentUser,
+                    user: {
+                        // userId: currentUser.userId,
+                        userId: currentUser,
+                        userName: userName,
+                        // username, email 등 다른 사용자 정보도 필요하다면 여기에 추가
+                    },
                     commentText: newComment,
                 };
 
                 setComments([...comments, newCommentObject]);
+                // setComments((prevComments) => [...prevComments, newCommentObject]);
+                console.log(setComments);
                 setNewComment("");
             } catch (error) {
                 console.error("댓글 생성에 실패했습니다.", error);
@@ -72,11 +73,7 @@ function CommentComponent() {
     const handleDeleteComment = async (id) => {
         try {
             // axios.delete(`https://d4ec-218-151-64-223.ngrok-free.app/comments/${id}`, {
-            await axios.delete(`https://d4ec-218-151-64-223.ngrok-free.app/comments/${id}`, {
-                headers: {
-                    "ngrok-skip-browser-warning": true,
-                },
-            });
+            await axios.delete(`http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/${id}`);
 
             const updatedComments = comments.filter((comment) => comment.commentId !== id);
             setComments(updatedComments);
@@ -94,16 +91,11 @@ function CommentComponent() {
         if (editedComment !== null) {
             try {
                 const response = await axios.patch(
-                    `https://d4ec-218-151-64-223.ngrok-free.app/comments/${id}`,
+                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/${id}`,
                     {
                         // userId: currentUser.userId, // 현재 사용자의 userId
                         userId: currentUser,
                         commentText: editedComment,
-                    },
-                    {
-                        headers: {
-                            "ngrok-skip-browser-warning": true,
-                        },
                     },
                 );
 
@@ -121,32 +113,39 @@ function CommentComponent() {
 
     return (
         <div className={styles.commentContainer}>
-            <div className={styles.commentList}>
-                <ul>
-                    {comments.map((comment) => (
-                        <li key={comment.commentId} className={styles.commentItem}>
-                            <span className={styles.commentUser}>{comment.user.username}</span>
-                            <span className={styles.commentText}> {comment.commentText} </span>
-                            {currentUser === comment.user.userId && (
-                                <>
-                                    <button
-                                        onClick={() => handleDeleteComment(comment.commentId)}
-                                        className={styles.commentBtn}
-                                    >
-                                        <FaTrash />
-                                    </button>
-                                    <button
-                                        onClick={() => handleEditComment(comment.commentId)}
-                                        className={styles.commentBtn}
-                                    >
-                                        <FaEdit />
-                                    </button>
-                                </>
-                            )}
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            {/* comments 배열이 비어있을 때 렌더링하지 않도록 조건부 렌더링 */}
+            {comments.length > 0 && (
+                <div className={styles.commentList}>
+                    <ul>
+                        {comments.map((comment) => (
+                            <li key={comment.commentId} className={styles.commentItem}>
+                                {comment.user && (
+                                    <>
+                                        <span className={styles.commentUser}>{comment.user.username}</span>
+                                        <span className={styles.commentText}> {comment.commentText} </span>
+                                    </>
+                                )}
+                                {currentUser === comment.user?.userId && (
+                                    <>
+                                        <button
+                                            onClick={() => handleDeleteComment(comment.commentId)}
+                                            className={styles.commentBtn}
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                        <button
+                                            onClick={() => handleEditComment(comment.commentId)}
+                                            className={styles.commentBtn}
+                                        >
+                                            <FaEdit />
+                                        </button>
+                                    </>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
             <div className={styles.addComment}>
                 <span className={styles.userName}>{userName}</span>
                 <input

@@ -18,13 +18,11 @@ function PostComponent({ onClose }) {
 
     // 제일 먼저 특정 게시글의 전체 데이터를 받아와서 postData에 넣어줌
     useEffect(() => {
+        console.log("요청", postData);
         axios
-            .get("https://d4ec-218-151-64-223.ngrok-free.app/posts/8", {
-                headers: {
-                    "ngrok-skip-browser-warning": true,
-                },
-            })
+            .get("http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/8")
             .then((response) => {
+                console.log("GET 요청 성공:", response.data);
                 setPostData(response.data);
                 setEditedCaption(response.data.postCaption);
             })
@@ -34,11 +32,6 @@ function PostComponent({ onClose }) {
     }, []);
 
     console.log(postData);
-
-    // 데이터가 로드되지 않았을 때의 처리
-    if (!postData) {
-        return <div>Loading...</div>;
-    }
 
     // 게시글 수정 함수
     const handleEditPost = () => {
@@ -58,7 +51,7 @@ function PostComponent({ onClose }) {
             };
             axios
                 .patch(
-                    `https://d4ec-218-151-64-223.ngrok-free.app/posts/${postData.id}?userId=${currentUserId}`,
+                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/${postData.id}?userId=${currentUserId}`,
                     editData,
                 ) // ngrok 서버 주소로 변경
                 .then((response) => {
@@ -84,7 +77,9 @@ function PostComponent({ onClose }) {
         if (currentUserId === postUserId) {
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
-                .delete(`https://d4ec-218-151-64-223.ngrok-free.app/posts/${postData.id}?userId=${currentUserId}`) // ngrok 서버 주소로 변경
+                .delete(
+                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/${postData.id}?userId=${currentUserId}`,
+                ) // ngrok 서버 주소로 변경
                 .then((response) => {
                     // 게시글 삭제가 성공한 경우 처리
                     console.log("게시글 삭제 성공:", response.data);
@@ -101,60 +96,73 @@ function PostComponent({ onClose }) {
 
     return (
         <div className={styles.modal}>
-            <button onClick={onClose} className={styles.close_button}>
-                <AiFillCloseCircle />
-            </button>
-            <div className={styles.modal_content}>
-                <div className={styles.postContainer}>
-                    {/* 이미지 */}
-                    <img src={postData.postImage} alt="게시글 이미지" className={styles.image} />
-
-                    {/* 수정 버튼 */}
-                    <button onClick={handleEditPost} className={styles.edit_button}>
-                        게시글 수정
+            {postData && (
+                <>
+                    {" "}
+                    <button onClick={onClose} className={styles.close_button}>
+                        <AiFillCloseCircle />
                     </button>
+                    <div className={styles.modal_content}>
+                        <div className={styles.postContainer}>
+                            {/* 이미지 */}
+                            <img src={postData.postImage} alt="게시글 이미지" className={styles.image} />
 
-                    {/* 삭제 버튼 */}
-                    <button onClick={handleDeletePost} className={styles.delete_button}>
-                        게시글 삭제
-                    </button>
+                            {/* 수정 버튼 */}
+                            <button onClick={handleEditPost} className={styles.edit_button}>
+                                게시글 수정
+                            </button>
 
-                    {/* 태그 */}
-                    <div className={styles.tags}>
-                        {postData.tags && postData.tags.map((tag) => <span key={tag}>{tag}</span>)}
-                    </div>
+                            {/* 삭제 버튼 */}
+                            <button onClick={handleDeletePost} className={styles.delete_button}>
+                                게시글 삭제
+                            </button>
 
-                    {/* 제목 */}
-                    <h2 className={styles.postTitle}>{postData.postTitle}</h2>
-
-                    {/* 주소 */}
-                    <h3 className={styles.postAddress}>{postData.postAddress}</h3>
-
-                    <div className={styles.userInfo}>
-                        {postData.user.profileImage ? (
-                            <img src={postData.user.profileImage} alt="프로필 이미지" className={styles.profileImage} />
-                        ) : (
-                            <div className={styles.profileIcon}>
-                                <FaUser size={25}/>
+                            {/* 태그 */}
+                            <div className={styles.tags}>
+                                {postData.tags && postData.tags.map((tag) => <span key={tag}>#{tag}</span>)}
                             </div>
-                        )}
-                        <p className={styles.username}>작성자: {postData.user.username}</p>
-                    </div>
 
-                    {/* 날짜 */}
-                    <p className={styles.createdAt}>작성 날짜: {postData.createdAt}</p>
+                            {/* 제목 */}
+                            <p className={styles.postTitle}>{postData.postTitle}</p>
 
-                    {/* 캡션 */}
-                    {/* 수정 중이 아니라면 내용을 나타나게 하고, 수정 중이라면 textarea가 나타나도록 함. */}
-                    {isEditing ? (
-                        <textarea value={editedCaption} onChange={(e) => setEditedCaption(e.target.value)} rows="5" />
-                    ) : (
-                        <p className={styles.post_caption}>{postData.postCaption}</p>
-                    )}
+                            {/* 주소 */}
+                            <p className={styles.postAddress}>{postData.postAddress}</p>
 
-                    <CommentComponent />
-                </div>
-            </div>
+                            <div className={styles.userInfo}>
+                                {postData.user.profileImage ? (
+                                    <img
+                                        src={postData.user.profileImage}
+                                        alt="프로필 이미지"
+                                        className={styles.profileImage}
+                                    />
+                                ) : (
+                                    <div className={styles.profileIcon}>
+                                        <FaUser size={20} />
+                                    </div>
+                                )}
+                                <p className={styles.username}>작성자: {postData.user.username}</p>
+                            </div>
+
+                            {/* 날짜 */}
+                            <p className={styles.createdAt}>작성 날짜: {postData.createdAt}</p>
+
+                            {/* 캡션 */}
+                            {/* 수정 중이 아니라면 내용을 나타나게 하고, 수정 중이라면 textarea가 나타나도록 함. */}
+                            {isEditing ? (
+                                <textarea
+                                    value={editedCaption}
+                                    onChange={(e) => setEditedCaption(e.target.value)}
+                                    rows="5"
+                                />
+                            ) : (
+                                <p className={styles.postCaption}>{postData.postCaption}</p>
+                            )}
+
+                            <CommentComponent />
+                        </div>
+                    </div>{" "}
+                </>
+            )}
         </div>
     );
 }
