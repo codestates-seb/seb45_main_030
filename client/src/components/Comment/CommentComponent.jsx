@@ -3,25 +3,29 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 import axios from "axios";
 import styles from "./CommentComponent.module.css";
 import { LoginActions } from "../../action/LoginAction";
+import { useRecoilValue } from "recoil";
+import { loginState } from "../../state/LoginState";
 
-function CommentComponent() {
+function CommentComponent({ postId }) {
     const [comments, setComments] = useState([]); // 댓글 데이터를 저장할 상태
     const [newComment, setNewComment] = useState(""); // 새 댓글 입력 상태
-    const [userName, setUserName] = useState("초기 사용자"); // 사용자 이름 상태
-    const [postId, setPostId] = useState(8); // 게시글 ID
+    const [userName, setUserName] = useState("사용자"); // 사용자 이름 상태
+    const [isLogin, setIsLogin] = useState(false);
 
     // const currentUser = useRecoilValue(loginState);
     const { userId } = LoginActions();
     const currentUser = userId;
+    const loginInfo = useRecoilValue(loginState);
 
     // 게시글의 댓글을 가져오는 API 요청
     useEffect(() => {
         axios
-            .get("http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/posts/8")
+            .get(`http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/posts/${postId}`)
             .then((response) => {
                 // API에서 가져온 댓글 데이터를 상태에 저장함.
                 const allComments = response.data.data;
                 setComments(allComments);
+                // setPostId(allComments.postId);
                 console.log(allComments);
                 console.log(allComments[1].user);
             })
@@ -30,6 +34,26 @@ function CommentComponent() {
             });
     }, [postId]);
 
+    useEffect(() => {
+        if (loginInfo.login_status) {
+            setIsLogin(true);
+            fetchUserData(loginInfo.userId);
+        }
+        console.log(loginInfo);
+    }, []);
+
+    const fetchUserData = async (userId) => {
+        try {
+            const response = await axios.get(
+                `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/${userId}`,
+            );
+            console.log(response);
+            const data = response.data.username;
+            setUserName(data);
+        } catch (error) {
+            console.log("사용자 정보를 가져오는 데 실패했습니다.", error);
+        }
+    };
     // 새 댓글을 생성하는 API 요청
     const handleAddComment = async () => {
         if (newComment.trim() !== "") {
@@ -41,7 +65,7 @@ function CommentComponent() {
                 };
 
                 await axios.post(
-                    "http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/posts/8",
+                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/posts/${postId}`,
                     commentData,
                 );
 
