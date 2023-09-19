@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import axios from "axios";
-import { bookmarkFoldersState, userState } from "../../recoil/atom";
+import { bookmarkFoldersState, loginState } from "../../recoil/atom";
 import addBtn from "../../assets/icon/myaddfolder.svg";
 import styles from "./BookmarkFolder.module.css";
 
@@ -13,9 +13,10 @@ export default function BookmarkFolder() {
     const [editedFolderName, setEditedFolderName] = useState("");
     const [editingIndex, setEditingIndex] = useState(null);
     const [thumbnailImages, setThumbnailImages] = useState([]);
+    const [loginData,setLoginData] = useRecoilState(loginState);
 
     const BASE_URL = process.env.REACT_APP_API_URL;
-    const USER_ID = 3;
+    const USER_ID = loginData.userId;
     // post_id 8 9 10 11 12 만 존재함
 
     // 북마크 폴더 데이터를 서버에서 가져오는 함수

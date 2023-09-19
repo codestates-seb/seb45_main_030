@@ -11,6 +11,7 @@ const BASE_URL = process.env.REACT_APP_API_URL;
 console.log(BASE_URL);
 
 function ButtonBookmark({ postId, isMarked }) {
+    console.log(isMarked);
     const [isBookmarked, setIsBookmarked] = useState(isMarked);
     const [isLogin, setIsLogin] = useState(false);
     const [userId, setUserId] = useState(null);
