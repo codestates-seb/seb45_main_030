@@ -3,20 +3,22 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "../button/Button.module.css";
+import { useRecoilValue } from "recoil";
+import { loginState } from "../../state/LoginState";
 
 const RECOMMEND_COLOR = "blue";
 
-const BASE_URL =  process.env.REACT_APP_API_URL
+const BASE_URL = process.env.REACT_APP_API_URL;
 const USER_ID = 3;
 
 function ButtonRecommend({ postId, isMarked }) {
     const [isRecommended, setIsRecommended] = useState(isMarked);
-    // const loginInfo = useRecoilValue(loginState);
-
+    const [isLogin, setIsLogin] = useState(false);
+    const loginInfo = useRecoilValue(loginState);
     useEffect(() => {
-        //     if (loginInfo) {
-        // getRecommmend();
-        //     }
+        if (loginInfo.login_status) {
+            setIsLogin(true);
+        }
     }, []);
 
     // API 통신
@@ -24,15 +26,23 @@ function ButtonRecommend({ postId, isMarked }) {
         console.log("추천 변경 시도");
         try {
             const response = await axios.post(`${BASE_URL}/recommend/${postId}?userId=${USER_ID}`);
-            setIsRecommended(prev=>!prev);
+            if (response.status === 200) {
+                setIsRecommended((prev) => !prev);
+            } else {
+                console.error("북마크 정보 post 실패. 응답 코드:", response.status);
+            }
         } catch (error) {
             console.error(error.code, "추천 정보 post 실패");
-            alert("서버와의 통신 오류로 추천이 변경되지 않음");
+            alert("서버와의 통신 오류로 추천이 변경되지 않았습니다.");
         }
     };
 
     // 클릭 이벤트리스너
     const handleRecommend = () => {
+        if (!isLogin) {
+            alert("먼저 로그인을 해주세요");
+            return;
+        }
         postRecommmend();
     };
 

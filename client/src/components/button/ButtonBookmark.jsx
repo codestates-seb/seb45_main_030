@@ -1,25 +1,41 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "../button/Button.module.css";
+import { useRecoilValue } from "recoil";
+import { loginState } from "../../state/LoginState";
 
 const BOOKMARK_COLOR = "red";
 
-const BASE_URL =  process.env.REACT_APP_API_URL
-console.log(BASE_URL)
-const USER_ID = 3;
+const BASE_URL = process.env.REACT_APP_API_URL;
+console.log(BASE_URL);
+
 
 function ButtonBookmark({ postId, isMarked }) {
     const [isBookmarked, setIsBookmarked] = useState(isMarked);
+    const [isLogin, setIsLogin] = useState(false);
+    const [userId, setUserId] = useState(null)
+    const loginInfo = useRecoilValue(loginState);
+    useEffect(() => {
+        if (loginInfo.login_status) {
+            setIsLogin(true);
+            setUserId(loginInfo.userId)
+        }
+    }, []);
 
     const postBookmark = async () => {
         console.log("post 요청 시도");
         try {
-            const response = await axios.post(`${URL}/bookmarks`, {
-                user_id: USER_ID,
+            const response = await axios.post(`${BASE_URL}/bookmarks`, {
+                user_id: userId,
                 post_id: postId,
-                bookmark_name: "집",
+                bookmark_name: "",
             });
-            setIsBookmarked(true);
+            console.log(response)
+            if (response.status === 201) {
+                setIsBookmarked(true);
+            } else {
+                console.error("북마크 정보 post 실패. 응답 코드:", response.status);
+            }
         } catch (error) {
             console.error(error.code, "북마크 정보 post 실패");
         }
@@ -30,11 +46,15 @@ function ButtonBookmark({ postId, isMarked }) {
         try {
             const response = await axios.delete(`${BASE_URL}/bookmarks`, {
                 data: {
-                    user_id: USER_ID,
+                    user_id: userId,
                     post_id: postId,
                 },
             });
-            setIsBookmarked(false);
+            if (response.status === 200, response.status === 204) {
+                setIsBookmarked(false);
+            } else {
+                console.error("북마크 정보 post 실패. 응답 코드:", response.status);
+            }
         } catch (error) {
             console.error(error, "북마크 정보 delete 실패");
         }
@@ -42,8 +62,12 @@ function ButtonBookmark({ postId, isMarked }) {
 
     // 클릭 이벤트리스너
     const handleBookmark = () => {
+        console.log("포스트아이디: ",postId,"유저아이디 ",userId)
+        if (!isLogin) {
+            alert("먼저 로그인을 해주세요");
+            return;
+        }
         isBookmarked ? deleteBookmark() : postBookmark();
-        setIsBookmarked((prev) => !prev);
     };
 
     const BookmarkIcon = () => {

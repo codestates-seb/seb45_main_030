@@ -122,7 +122,7 @@ export function LoginActions() {
     setInvalidPassword,
     loginError: loginInfo.loginError,
     setLoginError,
-    userId : currentState.userId,
+    userId : loginInfo.userId,
     invalidEmail: loginInfo.invalidEmail,
     invalidPassword: loginInfo.invalidPassword,
   };
