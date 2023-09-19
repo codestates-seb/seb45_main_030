@@ -68,6 +68,7 @@
   text-align: center;
   line-height: 34px;
   margin-top: 15px;
+  margin-bottom:10px;
 }
 
 .login_button:hover {
@@ -81,6 +82,7 @@
 
 .add_guide {
   font-size: small;
+  margin-bottom:15px;
 }
 
 .add_msg {
@@ -111,6 +113,7 @@
 }
 
 .warn_login_message {
+  display: none;
   height: 28px;
   margin-top: -6px;
   font-weight: 700;

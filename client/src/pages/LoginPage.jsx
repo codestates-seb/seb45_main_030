@@ -1,12 +1,11 @@
 import React from "react";
-
 import Login from "../components/Login";
-import "./LoginPage.css";
-
-function LoginPage() {
+import styles from "../pages/LoginPage.module.css"
+function LoginPage({onClose}) {
+  console.log(onClose)
   return (
-    <div className="app-container">
-      <div className="loginpage">
+    <div className={styles.app_container}>
+      <div className={styles.loginpage}>
         <Login />
       </div>
     </div>

@@ -1,7 +1,7 @@
 import styles from "./Header.module.css";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import { Link } from "react-router-dom";
-import Modal from "../UploadModal/Modal"
+import Modal from "../UploadModal/Modal";
 
 function Header() {
     return (
@@ -25,12 +25,11 @@ function Header() {
                 </div>
                 <div className={`${styles.right} ${styles.flex}`}>
                     <div className={styles.add_picture}>
-                        <Modal/>
+                        <Modal />
                     </div>
                     <div className={styles.user_name}>
-                        {/* <Link to="/mypage"> */}
-                        유저이름
-                        {/* </Link> */}
+                        <Link to="/mypage">유저이름</Link>
+                        <Link to="/LoginPage">로그인하기</Link>
                     </div>
                 </div>
             </div>

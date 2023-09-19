@@ -72,7 +72,7 @@ export function SignupActions() {
     };
 
     try {
-      const response = await axios.post('https://2610-183-107-174-160.ngrok-free.app/users/signup', requestData);
+      const response = await axios.post('http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/signup', requestData);
       console.log('회원 정보가 저장되었습니다:', response.data);
       resetSignupState();
     } catch (error) {
