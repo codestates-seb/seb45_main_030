@@ -33,6 +33,7 @@
 
 
   .image {
+    margin-top: 1rem;
     max-width: 60%; /* 이미지 최대 너비 */
     height: 50%; /* 자동 높이 조정 */
   }
