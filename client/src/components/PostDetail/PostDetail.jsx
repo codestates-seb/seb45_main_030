@@ -24,8 +24,24 @@ function PostComponent({ postId, onClose }) {
     const { userId } = LoginActions();
     const currentUser = userId;
 
-    // 제일 먼저 특정 게시글의 전체 데이터를 받아와서 postData에 넣어줌
+    // 특정 게시글의 데이터를 받아오는 함수
+    const fetchPostData = async () => {
+        try {
+            const response = await axios.get(
+                `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/${postId}`,
+            );
+            console.log("GET 요청 성공:", response.data);
+            setPostData(response.data);
+            console.log(postData);
+            setEditedCaption(response.data.postCaption);
+        } catch (error) {
+            console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
+        }
+    };
+
+    // 컴포넌트가 처음 렌더링될 때 한 번만 데이터를 받아옵니다.
     useEffect(() => {
+
         console.log("요청", postData);
         axios
             .get(`${BASE_URL}/posts/${postId}`)
@@ -72,16 +88,29 @@ function PostComponent({ postId, onClose }) {
 
     console.log(postData);
 
+        fetchPostData();
+    }, []);
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // Add 1 to month because it's zero-based
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}.${month}.${day}`;
+    }
+
+
     // 게시글 수정 함수
     const handleEditPost = () => {
         // 게시글 작성자의 ID
         const postUserId = postData.user.userId;
+        console.log(postUserId);
 
         // 로그인한 사용자의 ID를 사용
-        const currentUserId = currentUser.userId;
+        // const currentUserId = currentUser.userId;
 
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 수정 가능
-        if (currentUserId === postUserId) {
+        if (currentUser === postUserId) {
             setIsEditing(true);
             // 수정할 내용과 게시글 id를 사용하여 patch 요청을 보냄
             const editData = {
@@ -90,7 +119,9 @@ function PostComponent({ postId, onClose }) {
             };
             axios
                 .patch(
-                    `${BASE_URL}/posts/${postData.id}?userId=${currentUserId}`,
+
+                    `${BASE_URL}/posts/${postId}?userId=${currentUserId}`,
+
                     editData,
                 ) // ngrok 서버 주소로 변경
                 .then((response) => {
@@ -117,7 +148,9 @@ function PostComponent({ postId, onClose }) {
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
                 .delete(
-                    `${BASE_URL}/posts/${postData.id}?userId=${currentUserId}`,
+
+                    `${BASE_URL}/posts/${postId}?userId=${currentUserId}`,
+
                 ) // ngrok 서버 주소로 변경
                 .then((response) => {
                     // 게시글 삭제가 성공한 경우 처리
@@ -138,14 +171,14 @@ function PostComponent({ postId, onClose }) {
             {postData && (
                 <>
                     {" "}
-                    <button onClick={onClose} className={styles.close_button}>
-                        <AiFillCloseCircle />
-                    </button>
                     <div className={styles.modal_content}>
                         <div className={styles.postContainer}>
                             {/* 이미지 */}
                             <img src={postData.postImage} alt="게시글 이미지" className={styles.image} />
 
+                            <button onClick={onClose} className={styles.close_button}>
+                                <AiFillCloseCircle />
+                            </button>
                             {/* 수정 버튼 */}
                             <button onClick={handleEditPost} className={styles.edit_button}>
                                 게시글 수정
@@ -179,13 +212,15 @@ function PostComponent({ postId, onClose }) {
                                         <FaUser size={20} />
                                     </div>
                                 )}
-                                <p className={styles.username}>작성자: {postData.user.username}</p>
-                                <ButtonRecommend postId={postId} isMarked={recommendedPostId.includes(Number(postId))}/>
-                                <ButtonBookmark postId={postId} isMarked={bookmarkedPostId.includes(Number(postId))}/>
+
+                                <p className={styles.username}>{postData.user.username}</p>
+                                <ButtonRecommend />
+                                <ButtonBookmark />
+
                             </div>
 
                             {/* 날짜 */}
-                            <p className={styles.createdAt}>작성 날짜: {postData.createdAt}</p>
+                            <p className={styles.createdAt}>{formatDate(postData.createdAt)}</p>
 
                             {/* 캡션 */}
                             {/* 수정 중이 아니라면 내용을 나타나게 하고, 수정 중이라면 textarea가 나타나도록 함. */}
@@ -199,7 +234,7 @@ function PostComponent({ postId, onClose }) {
                                 <p className={styles.postCaption}>{postData.postCaption}</p>
                             )}
 
-                            <CommentComponent />
+                            <CommentComponent postId={postId} />
                         </div>
                     </div>{" "}
                 </>
