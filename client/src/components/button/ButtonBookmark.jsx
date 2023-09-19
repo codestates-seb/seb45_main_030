@@ -4,7 +4,7 @@ import styles from "../button/Button.module.css";
 import { useRecoilValue } from "recoil";
 import { loginState } from "../../state/LoginState";
 
-const BOOKMARK_COLOR = "red";
+const BOOKMARK_COLOR = "#e34a3c";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 console.log(BASE_URL);

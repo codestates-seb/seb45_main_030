@@ -39,7 +39,7 @@ function Header() {
                     <div>
                         <div className={styles.logo}>
                             <Link to="/">
-                                <div>팀 구운새우</div>
+                                <div>Leisure Link</div>
                             </Link>
                         </div>
                     </div>
@@ -56,7 +56,7 @@ function Header() {
                         <Modal />
                     </div>
                     <div className={styles.user_name}>
-                        {isLogin ? <Link to="/mypage">{userName}님</Link> : <Link to="/LoginPage">로그인하기</Link>}
+                        {isLogin ? <Link to="/mypage">{userName}님</Link> : <Link to="/LoginPage">로그인</Link>}
                     </div>
                 </div>
             </div>

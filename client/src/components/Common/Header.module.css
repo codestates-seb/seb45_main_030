@@ -3,7 +3,7 @@
 }
 
 .header{
-    background-color: #AEC6C1;
+    background-color: #ffffff;
     width: 100vw;
     height: 64px;
     font-size: 1.5rem;
@@ -38,7 +38,7 @@
 
 }
 .search .bar {
-    background-color: white;
+    background-color: #EEEEEE;
     width: 32rem;
     height: 2rem;
     border: none;
@@ -47,15 +47,18 @@
     font-size: 1rem;
 }
 .add_picture{
-    margin-right: 4rem;
+    margin-right: 2rem;
 }
 .add_picture > button {
     border: none;
     box-sizing: border-box;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
 }
 .user_name a{
     text-decoration: none;
     color: black;
+    margin-right:2rem;
 }

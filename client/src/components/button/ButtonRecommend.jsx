@@ -6,7 +6,7 @@ import styles from "../button/Button.module.css";
 import { useRecoilValue } from "recoil";
 import { loginState } from "../../state/LoginState";
 
-const RECOMMEND_COLOR = "blue";
+const RECOMMEND_COLOR = "#4aa8ff";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 const USER_ID = 3;
@@ -14,10 +14,12 @@ const USER_ID = 3;
 function ButtonRecommend({ postId, isMarked }) {
     const [isRecommended, setIsRecommended] = useState(isMarked);
     const [isLogin, setIsLogin] = useState(false);
+    const [userId, setUserId] = useState(null)
     const loginInfo = useRecoilValue(loginState);
     useEffect(() => {
         if (loginInfo.login_status) {
             setIsLogin(true);
+            setUserId(loginInfo.userId)
         }
     }, []);
 
@@ -25,7 +27,8 @@ function ButtonRecommend({ postId, isMarked }) {
     const postRecommmend = async () => {
         console.log("추천 변경 시도");
         try {
-            const response = await axios.post(`${BASE_URL}/recommend/${postId}?userId=${USER_ID}`);
+            const response = await axios.post(`${BASE_URL}/recommend/${postId}?userId=${userId}`);
+            console.log(response)
             if (response.status === 200) {
                 setIsRecommended((prev) => !prev);
             } else {
