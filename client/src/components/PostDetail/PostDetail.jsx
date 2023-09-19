@@ -64,7 +64,7 @@ function PostComponent({ onClose }) {
             };
             axios
                 .patch(
-                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/${postId}?userId=${currentUserId}`,
+                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/${postId}?userId=${currentUser}`,
                     editData,
                 ) // ngrok 서버 주소로 변경
                 .then((response) => {
@@ -89,7 +89,7 @@ function PostComponent({ onClose }) {
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
                 .delete(
-                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/${postId}?userId=${currentUserId}`,
+                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/${postId}?userId=${currentUser}`,
                 ) // ngrok 서버 주소로 변경
                 .then((response) => {
                     // 게시글 삭제가 성공한 경우 처리
