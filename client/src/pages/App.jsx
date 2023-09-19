@@ -1,7 +1,9 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import MainPage from "./MainPage";
+import MyPage from "../components/MyPage/MyPage";
 import React from "react";
 import "./App.css";
 import "../pages/App.module.css";
-import MainPage from "./MainPage";
 import SignupPage from "./SignupPage";
 import LoginPage from "./LoginPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -14,6 +16,7 @@ function App() {
                         <Route path="/" element={<MainPage />} />
                         <Route path="/LoginPage" element={<LoginPage />} />
                         <Route path="/SignUpPage" element={<SignupPage />} />
+                        <Route exact path="/mypage/" element={<MyPage />} />
                     </Routes>
                 </div>
             </BrowserRouter>
