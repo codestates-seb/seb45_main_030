@@ -52,12 +52,13 @@ function PostComponent({ onClose }) {
     const handleEditPost = () => {
         // 게시글 작성자의 ID
         const postUserId = postData.user.userId;
+        console.log(postUserId);
 
         // 로그인한 사용자의 ID를 사용
-        const currentUserId = currentUser.userId;
+        // const currentUserId = currentUser.userId;
 
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 수정 가능
-        if (currentUserId === postUserId) {
+        if (currentUser === postUserId) {
             setIsEditing(true);
             // 수정할 내용과 게시글 id를 사용하여 patch 요청을 보냄
             const editData = {
