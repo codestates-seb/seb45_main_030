@@ -1,0 +1,12 @@
+.app_container, .Signup_Wrapper{
+    width: 100%;
+    height: 100vh;
+}
+
+.loginpage{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
