@@ -30,6 +30,10 @@ export function LoginActions() {
       setLoginInfo((prevState) => ({ ...prevState, loginError: value }));
     }
 
+    const setLoginStatus = (value) => {
+      setLoginInfo((prevState) => ({ ...prevState, login_status: value }))
+    }
+
     const isValidEmail = (email) => {
       const emailRegex = /^[\w.-]+@[\w.-]+\.\w+$/;
       return emailRegex.test(email);
@@ -39,6 +43,7 @@ export function LoginActions() {
       setInvalidEmail(false);
       setInvalidPassword(false);
       setLoginError(false);
+      setLoginStatus(false);
 
       if (!isValidEmail(currentState.email)) {
         setInvalidEmail(true);
@@ -70,11 +75,7 @@ export function LoginActions() {
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
         axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
-        setLoginInfo((prevState) => ({
-          ...prevState,
-          login_status: true,
-        }));
+        setLoginStatus(true);
 
       } catch (error) {
         console.error("로그인 실패:", error);
@@ -95,7 +96,8 @@ export function LoginActions() {
               };
               const retryResponse = await axios.post('http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/login',retryRequestData);
               console.log('로그인을 재시도합니다:', retryResponse.data);
-              
+              setLoginError(false);
+              setLoginStatus(true);
             } catch (refreshError) {
               console.error("Refresh token error:", refreshError);
               // Refresh Token도 만료되었거나 유효하지 않은 경우
@@ -122,6 +124,8 @@ export function LoginActions() {
     setInvalidPassword,
     loginError: loginInfo.loginError,
     setLoginError,
+    login_status: loginInfo.login_status,
+    setLoginStatus,
     userId : loginInfo.userId,
     invalidEmail: loginInfo.invalidEmail,
     invalidPassword: loginInfo.invalidPassword,

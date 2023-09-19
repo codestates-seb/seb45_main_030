@@ -10,13 +10,12 @@
   align-items: center;
   margin-top: 20px;
   margin-bottom: 10px;
-  opacity: 0.7;
 }
 
 .inputprofile {
   border: 2px solid #d9d9d9;
   width: 280px;
-  height: 5.5vh;
+  height: 50px;
   margin-bottom: 5px;
 }
 
@@ -61,7 +60,7 @@
 .login_button {
   border: 1px solid #d9d9d9;
   width: 290px;
-  height: 5.5vh;
+  height: 50px;
   color: white;
   background-color: #0a95ff;
   font: Inter;
@@ -89,13 +88,15 @@
   color: #4bb6e4;
   font-weight: bold;
   font-size: small;
+  text-align: center;
   text-decoration: underline;
 }
 
 .warn_inputId_message {
   display: none;
-  height: 28px;
-  margin-top: -6px;
+  height: 20px;
+  margin-top: -2px;
+  margin-bottom: 5px;
   font-weight: 700;
   letter-spacing: -.6px;
   text-align: left;
@@ -104,8 +105,8 @@
 
 .warn_inputPassword_message {
   display: none;
-  height: 28px;
-  margin-top: -6px;
+  height: 20px;
+  margin-top: -2px;
   font-weight: 700;
   letter-spacing: -.6px;
   text-align: left;
