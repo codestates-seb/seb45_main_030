@@ -61,8 +61,10 @@
 }
 
 .warn_message {
-    font: Inter;
-    color: red;
-    margin-top: 3px;
-    font-size: 17px;
+    height: 28px;
+    margin-top: -6px;
+    font-weight: 700;
+    letter-spacing: -.6px;
+    text-align: middle;
+    color: #ff6060;
   }

@@ -22,6 +22,14 @@ export function LoginActions() {
       setLoginInfo((prevState) => ({ ...prevState, invalidPassword: value }));
     };
 
+    const setUserId = (value) => {
+      setLoginInfo((prevState) => ({ ...prevState, userId: value }));
+    };
+
+    const setLoginError = (value) => {
+      setLoginInfo((prevState) => ({ ...prevState, loginError: value }));
+    }
+
     const isValidEmail = (email) => {
       const emailRegex = /^[\w.-]+@[\w.-]+\.\w+$/;
       return emailRegex.test(email);
@@ -30,17 +38,20 @@ export function LoginActions() {
     const handleSubmit = async () => {
       setInvalidEmail(false);
       setInvalidPassword(false);
+      setLoginError(false);
 
       if (!isValidEmail(currentState.email)) {
         setInvalidEmail(true);
-        return; // 유효하지 않은 이메일일 경우 로그인 중단
+        if (!currentState.password) {
+          setInvalidPassword(true);
+        }
+        return;
       }
-
-      if (currentState.password === '') {
+      
+      if (!currentState.password) {
         setInvalidPassword(true);
-        return; // 비밀번호가 비어있을 경우 로그인 중단
+        return;
       }
-  
       
       const requestData = {
         email: currentState.email,
@@ -48,10 +59,11 @@ export function LoginActions() {
       };
 
       try {
-        const response = await axios.post('https://4c44-183-107-174-160.ngrok-free.app/users/login',requestData);
+        const response = await axios.post('http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/login',requestData);
         console.log('로그인을 시도합니다:', response.data);
         const accessToken = response.data.accessToken;
         const refreshToken = response.data.refreshToken;
+        setUserId(response.data.userid);
         // console.log(
         //   `엑세스토큰 : ${accessToken}, 리프레쉬토큰 : ${refreshToken}`
         // );
@@ -66,17 +78,14 @@ export function LoginActions() {
 
       } catch (error) {
         console.error("로그인 실패:", error);
-        setLoginInfo((prevState) => ({
-          ...prevState,
-          login_error: true,
-        }));
+        setLoginError(true);
 
         if (error.response.status === 401) {
           const refreshToken = localStorage.getItem("refreshToken");
           if (refreshToken) {
             try {
               // 리프레쉬토큰을 사용하여 새로운 Access Token 발급 요청
-              const refreshResponse = await axios.post('https://4c44-183-107-174-160.ngrok-free.app/users/login', refreshToken);
+              const refreshResponse = await axios.post('http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/login', refreshToken);
               const newAccessToken = refreshResponse.data.token;
               localStorage.setItem("accessToken", newAccessToken);
               axios.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
@@ -84,18 +93,20 @@ export function LoginActions() {
                 email: currentState.email,
                 password: currentState.password,
               };
-              const retryResponse = await axios.post('https://4c44-183-107-174-160.ngrok-free.app/users/login',retryRequestData);
+              const retryResponse = await axios.post('http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/login',retryRequestData);
               console.log('로그인을 재시도합니다:', retryResponse.data);
               
             } catch (refreshError) {
               console.error("Refresh token error:", refreshError);
               // Refresh Token도 만료되었거나 유효하지 않은 경우
               // 여기서는 로그아웃 처리
-              console.log(refreshError.response.status);  
+              console.log(refreshError.response.status); 
+              setLoginError(true); 
             }
           } else {
             // Refresh Token이 없는 경우 로그아웃 처리(라우팅으로 로그인 화면으로)
             console.log("No refresh token available");
+            setLoginError(true);
           }
         }
       }
@@ -109,6 +120,9 @@ export function LoginActions() {
     handleSubmit,
     setInvalidEmail,
     setInvalidPassword,
+    loginError: loginInfo.loginError,
+    setLoginError,
+    userId : currentState.userId,
     invalidEmail: loginInfo.invalidEmail,
     invalidPassword: loginInfo.invalidPassword,
   };

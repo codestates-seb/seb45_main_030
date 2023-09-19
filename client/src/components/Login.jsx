@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import "./Login.css";
 import { LoginActions } from '../action/LoginAction';
 import OAuth from "../components/OAuth";
@@ -8,7 +9,11 @@ import FindPassword from "./FindPassword";
 function Login() {
   const [isFindIdPopupOpen, setIsFindIdPopupOpen] = useState(false);
   const [isForgotPasswordPopupOpen, setIsForgotPasswordPopupOpen] = useState(false);
+  const navigate = useNavigate();
 
+  const handleSignupClick = () => {
+    navigate('/SignUpPage', { replace: true });
+  }
   const openFindIdPopup  = () => {
     setIsFindIdPopupOpen(true);
   };
@@ -29,6 +34,8 @@ function Login() {
     email,
     setEmail,
     password,
+    loginError,
+    setLoginError,
     setPassword,
     handleSubmit,
     setInvalidEmail,
@@ -40,6 +47,7 @@ function Login() {
   const handleFormSubmit = (e) => {
     e.preventDefault(); // 폼 제출 기본 동작 막기
     handleSubmit(); // 폼 제출 처리 함수 호출
+
   };
 
   
@@ -55,6 +63,7 @@ function Login() {
             onChange={(e) => {
               setEmail(e.target.value);
               setInvalidEmail(false);
+              setInvalidPassword(false);
             }}
           ></input>
           <p className={`warn_inputId_message ${invalidEmail ? "show" : ""}`}>아이디를 정확히 입력해주세요.</p>
@@ -66,9 +75,9 @@ function Login() {
             className={`inputprofile ${invalidPassword ? "invalid" : ""}`}
             placeholder="비밀번호를 입력하세요."
             value={password}
-
             onChange={(e) => {
               setPassword(e.target.value);
+              setInvalidEmail(false);
               setInvalidPassword(false);
             }}
           >
@@ -76,7 +85,7 @@ function Login() {
           <p className={`warn_inputPassword_message ${invalidPassword ? "show" : ""}`}>비밀번호를 입력해주세요.</p>
         </div>
 
-        {(invalidEmail || invalidPassword) && <p className="warn_login_message">아이디 혹은 비밀번호가 틀렸습니다.</p>}
+        <p className={`warn_login_message ${loginError ? "show" :""}`}>아이디 혹은 비밀번호가 틀렸습니다.</p>
         <button className="login_button">로그인</button>
         <div className="find_userinfo">
           <p className="find_ID" onClick={openFindIdPopup}>ID를 잊으셨나요?</p>
@@ -87,8 +96,7 @@ function Login() {
         < OAuth/>
         <div className="add_user">
           <p className="add_guide">계정이 없으신가요?</p>
-          <p className="add_msg">회원가입</p>
-
+          <p className="add_msg" onClick={handleSignupClick}>회원가입</p>
         </div>
       </form>
     </>
