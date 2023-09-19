@@ -11,7 +11,7 @@ function ImageItem({ data, isMarked }) {
     return (
         <div className={styles.container}>
             <figure className={styles.figure}>
-                <PostModal>
+                <PostModal postId={data.postId}>
                     <img className={styles.fig_img} onClick={handleClickThumbnail} src={data.thumbnail} alt={``} />
                 </PostModal>
                 <figcaption className={styles.figcaption}>
