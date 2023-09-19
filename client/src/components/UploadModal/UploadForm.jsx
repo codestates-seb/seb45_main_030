@@ -45,6 +45,7 @@ export default function UploadForm({ onClose }) {
             }
         }
     };
+    
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {

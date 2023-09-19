@@ -1,7 +1,11 @@
+.commentList{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 700;
+}
 /* 스타일 수정 아이콘과 삭제 아이콘 */
 .commentContainer {
     display: flex;
- flex-direction: column;
+    flex-direction: column;
 } 
 
 .commentBtn {
@@ -24,6 +28,7 @@ li {
 .commentUser {
     width: 10rem;
     font-size: 0.7rem;
+    font-weight: 100;
 }
 
 .commentList {
@@ -34,6 +39,7 @@ li {
     width: 20rem;
     font-size: 0.7rem;
     margin: 0.3rem;
+    font-weight: 100;
 }
 
 /* 댓글 추가 버튼 스타일 */
@@ -71,6 +77,7 @@ li {
 
 .userName {
     font-size: 0.7rem;
+    font-weight: normal;
     padding-top: 10px;
     width: 120px;
 }
