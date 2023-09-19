@@ -6,7 +6,7 @@ export default function Modal() {
     const [showModal, setShowModal] = useState(false);
     return (
         <>
-            <button onClick={() => setShowModal(true)}>+ 사진올리기</button>
+            <button onClick={() => setShowModal(true)}>업로드</button>
             {showModal && createPortal(<UploadForm onClose={() => setShowModal(false)} />, document.body)}
         </>
     );

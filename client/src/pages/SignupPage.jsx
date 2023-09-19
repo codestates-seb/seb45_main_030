@@ -1,6 +1,6 @@
 import React from "react";
 import { SignupActions } from "../action/SignupAction";
-import './SignupPage.css';
+import "./SignupPage.css"
 
 function SignupPage() {
     const {
