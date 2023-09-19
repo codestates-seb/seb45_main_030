@@ -28,7 +28,7 @@
 
 .introduction_container {
     display: flex;
-    margin-left: 20px;
+    margin-top: 10px;
 }
 
 .name_container{
@@ -45,14 +45,12 @@
 
 h1 {
     margin-top: 0px;
-    margin-left: 20px;
     margin-bottom: 0px;
 }
 
 .p_email {
-    margin-top: 0;
+    margin-top: 3px;
     margin-bottom: 0;
-    margin-left: 20px;
     color: gray;
 }
 
@@ -70,4 +68,18 @@ button {
 .margin_left {
     display: flex;
     margin-left: 20px;
+}
+
+.introduction_input {
+    width: 700px;
+    height: 100px;
+}
+
+.button_wh {
+    width: 40px;
+    height: 20px;
+}
+
+.button_wh_container {
+    width: 150px;
 }
