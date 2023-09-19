@@ -1,15 +1,11 @@
-/* body,
-html {
-  height: 100%;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f5f5f5;
-} */
+
 
 .Signup_Wrapper {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .Signup_Box {
@@ -23,7 +19,7 @@ html {
     align-items: center;
     margin-top: 20px;
     margin-bottom: 10px;
-    opacity: 0.7; 
+    opacity: 1; 
 }
 
 .Category_Label {
@@ -69,21 +65,21 @@ html {
 .Username_Input {
     border: 2px solid #d9d9d9;
     width: 280px;
-    height: 5.5vh;
+    height: 55px;
     margin-bottom: 5px;
 }
 
 .Email_Input {
     border: 2px solid #d9d9d9;
     width: 280px;
-    height: 5.5vh;
+    height: 55px;
     margin-bottom: 5px;
 }
 
 .Password_Input {
     border: 2px solid #d9d9d9;
     width: 280px;
-    height: 5.5vh;
+    height: 55px;
     margin-bottom: 5px;
 }
 
@@ -91,7 +87,7 @@ html {
     border: 2px solid #d9d9d9;
     border-radius: 5px;
     width: 290px;
-    height: 5.5vh;
+    height: 55px;
     color: white;
     background-color: #0a95ff;
     font: Inter;
