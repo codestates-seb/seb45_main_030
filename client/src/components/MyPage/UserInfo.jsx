@@ -16,9 +16,7 @@ export default function UserInfo() {
     // 서버로부터 사용자 정보를 가져오는 함수
     const fetchUserData = async () => {
         try {
-            const response = await axios.get("ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/1", {
-                headers: {"ngrok-skip-browser-warning": true,}
-            });
+            const response = await axios.get("/users/1");
             console.log(response);
             const data = response.data;
             setUserData({
@@ -40,7 +38,7 @@ export default function UserInfo() {
     const updateUserProfile = async () => {
         try {
             // 변경된 유저 정보를 서버에 보내고 업데이트
-            await axios.patch("ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/1", {
+            await axios.patch("/users/1", {
                 username: isEditingName ? editedName : userData.user_name,
                 email: userData.email,
                 introduction: isEditingIntroduction ? editedIntroduction : userData.introduction,

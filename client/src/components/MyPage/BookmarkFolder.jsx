@@ -4,7 +4,6 @@ import axios from "axios";
 import { bookmarkFoldersState, userState } from "../../recoil/atom";
 import addBtn from "../../assets/icon/myaddfolder.svg";
 import styles from "./BookmarkFolder.module.css";
-import thumb1 from "../../assets/image/thumb1.jpeg";
 
 export default function BookmarkFolder() {
     const [folders, setFolders] = useRecoilState(bookmarkFoldersState);
@@ -13,11 +12,12 @@ export default function BookmarkFolder() {
     const [isEditingFolder, setIsEditingFolder] = useState(false);
     const [editedFolderName, setEditedFolderName] = useState("");
     const [editingIndex, setEditingIndex] = useState(null);
+    const [thumbnailImages, setThumbnailImages] = useState([]);
 
     // 북마크 폴더 데이터를 서버에서 가져오는 함수
     const fetchBookmarkFolders = () => {
         axios
-            .get("ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/bookmarks/1")
+            .get("/bookmarks/1")
             .then((response) => {
                 // const bookmarkFoldersData = response.data; // 서버에서 받아온 북마크 폴더 데이터
                 // setFolders(bookmarkFoldersData);
@@ -31,6 +31,22 @@ export default function BookmarkFolder() {
     useEffect(() => {
         // 컴포넌트가 처음 렌더링될 때 북마크 폴더 데이터를 불러옴
         fetchBookmarkFolders();
+    }, []);
+
+    const fetchThumbnailImages = () => {
+        axios
+            .get("서버 API 엔드포인트")
+            .then((response) => {
+                setThumbnailImages(response.data);
+            })
+            .catch((error) => {
+                console.error("썸네일 이미지를 가져오는 중 에러 발생: ", error);
+            });
+    };
+
+    useEffect(() => {
+        // 컴포넌트가 처음 렌더링될 때 썸네일 이미지를 가져옵니다.
+        fetchThumbnailImages();
     }, []);
 
     const createFolder = () => {
@@ -149,15 +165,13 @@ export default function BookmarkFolder() {
                 {folders.map((folder, index) => (
                     <div key={index} className={styles.bookmarkItem}>
                         <div className={styles.thumbnail_container}>
-                            <div className={styles.thumbnail_0}>
-                                <img className={styles.thumbnail_img_0} alt="thumbnail" src={thumb1}></img>
-                            </div>
-                            <div className={styles.thumbnail_1}>
-                                <img className={styles.thumbnail_img_1} alt="thumbnail" src={thumb1}></img>
-                            </div>
-                            <div className={styles.thumbnail_1}>
-                                <img className={styles.thumbnail_img_2} alt="thumbnail" src={thumb1}></img>
-                            </div>
+                        {thumbnailImages[index] && (
+                                <img
+                                    className={styles.thumbnail_img}
+                                    alt="thumbnail"
+                                    src={thumbnailImages[index]}
+                                ></img>
+                            )}
                         </div>
                         {isEditingFolder && editingIndex === index ? (
                             <>
@@ -170,7 +184,7 @@ export default function BookmarkFolder() {
                                 <button onClick={updateFolderName}>저장</button>
                             </>
                         ) : (
-                            <>
+                            <div className={styles.buttons}>
                                 {folder}
                                 <button onClick={() => deleteFolder(folder)} className={styles.deleteButton}>
                                     삭제
@@ -178,7 +192,7 @@ export default function BookmarkFolder() {
                                 <button onClick={() => startEditing(folder, index)} className={styles.editButton}>
                                     수정
                                 </button>
-                            </>
+                            </div>
                         )}
                     </div>
                 ))}
