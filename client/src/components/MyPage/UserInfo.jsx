@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import axios from "axios";
 import styles from "./UserInfo.module.css";
-import { userState } from "../../recoil/atom";
+import { userState, loginState } from "../../recoil/atom";
 import userIcon from "../../assets/icon/myuser.svg";
 import SvgEdit from "../../assets/icon/myedit.svg"
 
@@ -12,9 +12,10 @@ export default function UserInfo() {
     const [isEditingIntroduction, setIsEditingIntroduction] = useState(false);
     const [editedName, setEditedName] = useState(userData.user_name);
     const [editedIntroduction, setEditedIntroduction] = useState(userData.introduction);
+    const [loginData,setLoginData] = useRecoilState(loginState);
 
     const BASE_URL = process.env.REACT_APP_API_URL;
-    const USER_ID = 3;
+    const USER_ID = loginData.userId;
 
     // 서버로부터 사용자 정보를 가져오는 함수
     const fetchUserData = async () => {
