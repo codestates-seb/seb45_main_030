@@ -1,6 +1,9 @@
-import { useEffect } from "react";
+import Header from "../components/Common/Header";
 import ImageList from "../components/Image/ImageList";
 import styles from "./MainPage.module.css";
+
+const BASE_URL =  process.env.REACT_APP_API_URL
+
 function MainPage() {
     const Banner = () => {
         const tags = ["바닷가", "카페", "공원"];
@@ -37,10 +40,10 @@ function MainPage() {
     };
     return (
         <>
-            <header>헤더 컴포넌트</header>
+            <Header />
             <Banner />
             <Notice />
-            <ImageList url={"https://d4ec-218-151-64-223.ngrok-free.app/posts"} page={1} />
+            <ImageList url={`${BASE_URL}/posts`} page={1} />
         </>
     );
 }

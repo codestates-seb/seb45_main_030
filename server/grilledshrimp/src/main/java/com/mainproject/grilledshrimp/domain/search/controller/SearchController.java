@@ -26,13 +26,13 @@ public class SearchController {
     @GetMapping("/title")
     public ResponseEntity searchByTitle(@RequestParam String title) {
         List<Posts> postsList = searchService.searchByTitle(title);
-        return ResponseEntity.ok(postsMapper.postsToPostsResponseDtos(postsList));
+        return ResponseEntity.ok(postsMapper.postsToPostsResponseSimpleDtos(postsList));
     }
 
     // 태그로 검색
     @GetMapping("/tag")
     public ResponseEntity searchByTag(@RequestParam String tags) {
         List<Posts> postsList = searchService.searchByTag(tags);
-        return ResponseEntity.ok(postsMapper.postsToPostsResponseDtos(postsList));
+        return ResponseEntity.ok(postsMapper.postsToPostsResponseSimpleDtos(postsList));
     }
 }

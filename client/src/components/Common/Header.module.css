@@ -1,0 +1,58 @@
+.flex {
+    display: flex;
+}
+
+.header{
+    background-color: #AEC6C1;
+    width: 100vw;
+    height: 64px;
+    font-size: 1.5rem;
+}
+.container {
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 4rem;
+    width: calc(100% - 8rem);
+    height: 100%;
+    
+}
+
+.left, .right {
+    align-items: center;
+    height: 100%;
+}
+
+.logo a {
+    text-decoration: none;
+    line-height: 1.5;
+    color: black;
+}
+
+.search {
+    position: relative;
+    margin-left: 4rem;
+}
+.search .icon_wrap{
+    position: absolute;
+    left: 0.5rem;
+
+}
+.search .bar {
+    background-color: white;
+    width: 32rem;
+    height: 2rem;
+    border: none;
+    border-radius: 1rem;
+    text-indent: 3rem;
+    font-size: 1rem;
+}
+.add_picture{
+    margin-right: 4rem;
+}
+.add_picture > button {
+    border: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-size: 1rem;
+}
+

@@ -58,20 +58,20 @@ public class Users {
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonIgnore
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", orphanRemoval = true)
     @JsonIgnore
     private List<Posts> posts = new ArrayList<>();
 
     // 북마크 일대다 관계
-    @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonBackReference // 양방향 참조를 막기 위해 사용
     private List<Bookmark> bookmarks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "users", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JsonManagedReference
     private List<Recommend> recommendList = new ArrayList<>();
 

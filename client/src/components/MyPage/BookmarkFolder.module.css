@@ -1,0 +1,117 @@
+.addBtn {
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+
+}
+
+.buttons {
+    display: flex;
+}
+
+.folder_container {
+    display: grid;
+    justify-content: center;
+    width: 1200px;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 1.5rem;
+    row-gap: 1.5rem;
+}
+
+.create_container {
+    display: flex;
+    justify-content: center;
+}
+
+.bookmarkItem {
+    width: 100px; 
+    height: 100px;
+    /* background-color: #ccc;  */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid #ccc; */
+    /* padding: 20px;
+    text-align: center; */
+}
+
+.folder {
+    display: flex;
+    width: 350px;
+    height: 350px;
+    justify-content: center;
+    align-items: center;
+}
+
+.deleteButton {
+    display: none;
+}
+
+.editButton {
+    display: none;
+}
+
+.bookmarkItem {
+    width: 350px;
+    height: 350px;
+}
+  
+.bookmarkItem:hover .deleteButton {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.bookmarkItem:hover .editButton {
+    display: inline-block;
+    cursor: pointer;
+}
+
+ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.bookmark_container {
+    display: flex;
+    justify-content: center;
+}
+
+.thumbnail_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 330px;
+    height: 330px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+  }
+  
+
+.thumbnail_0,
+.thumbnail_1,
+.thumbnail_2 {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
+.thumbnail_0 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail_1 img {
+  width: 100%;
+  height: 100%; 
+  object-fit: cover;
+  object-position: center top;
+}
+
+.thumbnail_2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

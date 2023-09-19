@@ -1,0 +1,131 @@
+.login_box {
+  box-sizing: border-box;
+  background-color: white;
+  border: 2px solid #d9d9d9;
+  border-radius: 5px;
+  width: 400px;
+  height: 550px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  opacity: 0.7;
+}
+
+.inputprofile {
+  border: 2px solid #d9d9d9;
+  width: 280px;
+  height: 5.5vh;
+  margin-bottom: 5px;
+}
+
+.category_label {
+  font: Inter;
+  font-weight: bold;
+  font-size: larger;
+  border-radius: 5px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.find_userinfo {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  width: 280px;
+}
+
+.find_ID {
+  color: #4bb6e4;
+  font-weight: bold;
+  font-size: small;
+}
+
+.find_password {
+  color: #4bb6e4;
+  font-weight: bold;
+  font-size: small;
+}
+
+.find_ID:hover {
+  cursor: pointer;
+  filter: brightness(1.2);
+}
+
+.find_password:hover {
+  cursor: pointer;
+  filter: brightness(1.2);
+}
+
+.login_button {
+  border: 1px solid #d9d9d9;
+  width: 290px;
+  height: 5.5vh;
+  color: white;
+  background-color: #0a95ff;
+  font: Inter;
+  text-align: center;
+  line-height: 34px;
+  margin-top: 15px;
+  margin-bottom:10px;
+}
+
+.login_button:hover {
+  cursor: pointer;
+  filter: brightness(0.9);
+}
+
+.add_user {
+  margin-top: 20px;
+}
+
+.add_guide {
+  font-size: small;
+  margin-bottom:15px;
+}
+
+.add_msg {
+  color: #4bb6e4;
+  font-weight: bold;
+  font-size: small;
+  text-decoration: underline;
+}
+
+.warn_inputId_message {
+  display: none;
+  height: 28px;
+  margin-top: -6px;
+  font-weight: 700;
+  letter-spacing: -.6px;
+  text-align: left;
+  color: #ff6060;
+}
+
+.warn_inputPassword_message {
+  display: none;
+  height: 28px;
+  margin-top: -6px;
+  font-weight: 700;
+  letter-spacing: -.6px;
+  text-align: left;
+  color: #ff6060;
+}
+
+.warn_login_message {
+  display: none;
+  height: 28px;
+  margin-top: -6px;
+  font-weight: 700;
+  letter-spacing: -.6px;
+  text-align: left;
+  color: #ff6060;
+}
+
+.invalid {
+  border-color: #ff6060;
+}
+
+.show {
+  display: block;
+}

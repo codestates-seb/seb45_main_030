@@ -1,0 +1,17 @@
+.kakao {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 7px;
+}
+
+.kakao:hover {
+  cursor: pointer;
+  filter: brightness(0.9);
+}
+
+.Social_Login_Btn {
+  border: none;
+}
