@@ -6,7 +6,6 @@ import "./App.css";
 import "../pages/App.module.css";
 import SignupPage from "./SignupPage";
 import LoginPage from "./LoginPage";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
 function App() {
   return (
     <>
@@ -20,7 +19,6 @@ function App() {
                     </Routes>
                 </div>
             </BrowserRouter>
-
     </>
   );
 }

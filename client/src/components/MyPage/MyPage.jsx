@@ -10,6 +10,7 @@ import SvgBookmarkGray from "../../assets/icon/mybookmark-gray.svg";
 import SvgComment from "../../assets/icon/mycomment.svg";
 import SvgCommentGray from "../../assets/icon/mycomment-gray.svg";
 import styles from "./MyPage.module.css";
+import Header from "../../components/Common/Header";
 
 export default function MyPage() {
     const [btnStatus, setBtnStatus] = useState("MyPhotos");
@@ -36,6 +37,7 @@ export default function MyPage() {
 
     return (
         <>
+            <Header />
             <div className={styles.mypage_container}>
                 <UserInfo />
                 <div className={styles.button_container}>

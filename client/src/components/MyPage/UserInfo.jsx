@@ -13,10 +13,13 @@ export default function UserInfo() {
     const [editedName, setEditedName] = useState(userData.user_name);
     const [editedIntroduction, setEditedIntroduction] = useState(userData.introduction);
 
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    const USER_ID = 3;
+
     // 서버로부터 사용자 정보를 가져오는 함수
     const fetchUserData = async () => {
         try {
-            const response = await axios.get("/users/1");
+            const response = await axios.get(`${BASE_URL}/users/${USER_ID}`);
             console.log(response);
             const data = response.data;
             setUserData({
@@ -38,7 +41,7 @@ export default function UserInfo() {
     const updateUserProfile = async () => {
         try {
             // 변경된 유저 정보를 서버에 보내고 업데이트
-            await axios.patch("/users/1", {
+            await axios.patch(`${BASE_URL}/users/${USER_ID}`, {
                 username: isEditingName ? editedName : userData.user_name,
                 email: userData.email,
                 introduction: isEditingIntroduction ? editedIntroduction : userData.introduction,
@@ -84,9 +87,12 @@ export default function UserInfo() {
                                 type="text"
                                 value={editedIntroduction}
                                 onChange={(e) => setEditedIntroduction(e.target.value)}
+                                className={styles.introduction_input}
                             />
-                            <button onClick={updateUserProfile}>확인</button>
-                            <button onClick={() => setIsEditingIntroduction(false)}>취소</button>
+                            <div className={styles.button_wh_container}>
+                            <button onClick={updateUserProfile} className={styles.button_wh}>확인</button>
+                            <button onClick={() => setIsEditingIntroduction(false)} className={styles.button_wh}>취소</button>
+                            </div>
                         </>
                     ) : (
                         <>

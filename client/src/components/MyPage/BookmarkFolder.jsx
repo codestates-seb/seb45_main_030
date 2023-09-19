@@ -14,13 +14,17 @@ export default function BookmarkFolder() {
     const [editingIndex, setEditingIndex] = useState(null);
     const [thumbnailImages, setThumbnailImages] = useState([]);
 
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    const USER_ID = 3;
+    // post_id 8 9 10 11 12 만 존재함
+
     // 북마크 폴더 데이터를 서버에서 가져오는 함수
     const fetchBookmarkFolders = () => {
         axios
-            .get("/bookmarks/1")
+            .get(`${BASE_URL}/bookmarks/${USER_ID}`)
             .then((response) => {
-                // const bookmarkFoldersData = response.data; // 서버에서 받아온 북마크 폴더 데이터
-                // setFolders(bookmarkFoldersData);
+                const data = response.data;
+                setFolders(data.map((folder) => folder.bookmark_name));
                 console.log(response);
             })
             .catch((error) => {
@@ -33,21 +37,21 @@ export default function BookmarkFolder() {
         fetchBookmarkFolders();
     }, []);
 
-    const fetchThumbnailImages = () => {
-        axios
-            .get("서버 API 엔드포인트")
-            .then((response) => {
-                setThumbnailImages(response.data);
-            })
-            .catch((error) => {
-                console.error("썸네일 이미지를 가져오는 중 에러 발생: ", error);
-            });
-    };
+    // const fetchThumbnailImages = () => {
+    //     axios
+    //         .get("서버 API 엔드포인트")
+    //         .then((response) => {
+    //             setThumbnailImages(response.data);
+    //         })
+    //         .catch((error) => {
+    //             console.error("썸네일 이미지를 가져오는 중 에러 발생: ", error);
+    //         });
+    // };
 
-    useEffect(() => {
-        // 컴포넌트가 처음 렌더링될 때 썸네일 이미지를 가져옵니다.
-        fetchThumbnailImages();
-    }, []);
+    // useEffect(() => {
+    //     // 컴포넌트가 처음 렌더링될 때 썸네일 이미지를 가져옵니다.
+    //     fetchThumbnailImages();
+    // }, []);
 
     const createFolder = () => {
         if (newFolderName.trim() !== "") {
@@ -56,8 +60,9 @@ export default function BookmarkFolder() {
 
             if (newFolderName.length <= maxNameLength) {
                 axios
-                    .post("서버 API 엔드포인트", {
-                        user_id: userState.user_id, // 유저 아이디
+                    .post(`${BASE_URL}/bookmarks`, {
+                        user_id: USER_ID, // 유저 아이디
+                        post_id: 12,
                         bookmark_name: newFolderName, // 새로 생성한 폴더 이름을 서버로 보냄
                     })
                     .then((response) => {
@@ -84,8 +89,11 @@ export default function BookmarkFolder() {
         if (confirmation) {
             // 사용자가 확인을 클릭한 경우에만 삭제 수행
             axios
-                .delete("서버 API 엔드포인트", {
-                    bookmark_name: { folderName }, // 삭제할 폴더 이름을 서버로 보냄
+                .delete(`${BASE_URL}/bookmarks`, {
+                    data: {
+                        user_id: USER_ID,
+                        bookmark_name: folderName,
+                    },
                 })
                 .then((response) => {
                     const updatedFolders = folders.filter((folder) => folder !== folderName);
@@ -111,8 +119,8 @@ export default function BookmarkFolder() {
 
             if (editedFolderName.length <= maxNameLength) {
                 axios
-                    .patch("서버 API 엔드포인트", {
-                        user_id: null,
+                    .patch(`${BASE_URL}/bookmarks`, {
+                        user_id: 8,
                         bookmark_name_old: folders[editingIndex],
                         bookmark_name_new: editedFolderName,
                     })
