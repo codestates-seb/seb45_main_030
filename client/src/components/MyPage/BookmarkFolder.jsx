@@ -17,7 +17,7 @@ export default function BookmarkFolder() {
     // 북마크 폴더 데이터를 서버에서 가져오는 함수
     const fetchBookmarkFolders = () => {
         axios
-            .get("https://07bb-183-107-174-160.ngrok-free.app/bookmarks/1")
+            .get("ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/bookmarks/1")
             .then((response) => {
                 // const bookmarkFoldersData = response.data; // 서버에서 받아온 북마크 폴더 데이터
                 // setFolders(bookmarkFoldersData);
