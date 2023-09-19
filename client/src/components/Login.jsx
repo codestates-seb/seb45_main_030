@@ -12,7 +12,13 @@ function Login() {
   const navigate = useNavigate();
 
   const handleSignupClick = () => {
-    navigate('/SignUpPage', { replace: true });
+    navigate('/SignUpPage');
+  }
+
+  const handleLoginClick = () => {
+    if(login_status){
+      navigate('/');
+    }
   }
   const openFindIdPopup  = () => {
     setIsFindIdPopupOpen(true);
@@ -35,19 +41,18 @@ function Login() {
     setEmail,
     password,
     loginError,
-    setLoginError,
     setPassword,
     handleSubmit,
     setInvalidEmail,
     setInvalidPassword,
     invalidEmail,
     invalidPassword,
+    login_status,
   } = LoginActions();
 
   const handleFormSubmit = (e) => {
     e.preventDefault(); // 폼 제출 기본 동작 막기
     handleSubmit(); // 폼 제출 처리 함수 호출
-
   };
 
   
@@ -86,7 +91,7 @@ function Login() {
         </div>
 
         <p className={`warn_login_message ${loginError ? "show" :""}`}>아이디 혹은 비밀번호가 틀렸습니다.</p>
-        <button className="login_button">로그인</button>
+        <button className="login_button" onClick={handleLoginClick}>로그인</button>
         <div className="find_userinfo">
           <p className="find_ID" onClick={openFindIdPopup}>ID를 잊으셨나요?</p>
           <FindID onClose={closeFindIdPopup} isFindIdPopupOpen={isFindIdPopupOpen} />
