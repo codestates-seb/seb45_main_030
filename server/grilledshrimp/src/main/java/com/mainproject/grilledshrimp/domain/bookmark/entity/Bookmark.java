@@ -1,11 +1,9 @@
 package com.mainproject.grilledshrimp.domain.bookmark.entity;
 
-import com.mainproject.grilledshrimp.domain.post.entity.Post;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 import javax.persistence.*;
@@ -15,22 +13,25 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@Builder
 public class Bookmark {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long bookmark_id;
+    private Long bookmarkId;
     
     // 외래키
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference // 양방향 참조 방지
     private Users users;
     
     // 외래키
     @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @JoinColumn(name = "post_id", nullable = false)
+    @JsonBackReference // 양방향 참조 방지
+    private Posts posts;
 
-    @Column(nullable = false)
-    private String bookmark_name;
+    @Column(nullable = true)
+    private String bookmarkName;
 }

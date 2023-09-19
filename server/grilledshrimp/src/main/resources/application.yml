@@ -1,15 +1,26 @@
 spring:
+    redis:
+        host: localhost
+        port: 6379
     h2:
         console:
             enabled: true
             path: /h2
     datasource:
-        username: sa
-        password:
-        url: jdbc:h2:mem:test
+        # h2
+        #username: sa
+        #password:
+        #url: jdbc:h2:mem:test
+
+        # mysql
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://grilled-shrimp.c6a7jtcqynrk.ap-northeast-2.rds.amazonaws.com:3306/GS?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+        username: root
+        password: grilled30
+
     jpa:
         hibernate:
-            ddl-auto: create  # (1) 스키마 자동 생성
+            ddl-auto: update  # (1) 스키마 자동 생성
         show-sql: true      # (2) SQL 쿼리 출력
         properties:
             hibernate:
@@ -20,13 +31,14 @@ spring:
     security:
       oauth2:
         client:
-            registration:
-              google:
-                client-id: ${GOOGLE_CLIENT_ID}
-                client-secret: ${GOOGLE_CLIENT_SECRET}
+              
 
 logging:
     level:
+        com:
+            amazonaws:
+                util:
+                    EC2MetadataUtils: error
         org:
             springframework:
                 orm:
@@ -36,3 +48,20 @@ jwt:
     key: ${JWT_SECRET_KEY}
     access-token-expiration-minutes: 30
     refresh-token-expiration-minutes: 420
+
+cloud:
+    aws:
+        credentials:
+            access-key: ${CLOUD_AWS_CREDENTIALS_ACCESSKEY}
+            secret-key: ${CLOUD_AWS_CREDENTIALS_SECRETKEY}
+        s3:
+            bucket: ${CLOUD_AWS_S3_BUCKET}
+        region:
+            static: ap-northeast-2
+        stack:
+            auto: false
+
+# admin용 계정
+mail:
+    address:
+        admin: admin@gmail.com
