@@ -6,7 +6,7 @@ import styles from "../button/Button.module.css";
 import { useRecoilValue } from "recoil";
 import { loginState } from "../../state/LoginState";
 
-const RECOMMEND_COLOR = "blue";
+const RECOMMEND_COLOR = "#337CCF";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 const USER_ID = 3;
