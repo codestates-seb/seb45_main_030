@@ -1,27 +1,33 @@
 .addBtn {
-    width: 240px;
-    height: 240px;
+    width: 100px;
+    height: 100px;
     cursor: pointer;
 
 }
 
 .folder_container {
     display: grid;
-    width: 1500px;
+    justify-content: center;
+    width: 1200px;
     grid-template-columns: 1fr 1fr 1fr;
     column-gap: 1.5rem;
     row-gap: 1.5rem;
 }
 
+.create_container {
+    display: flex;
+    justify-content: center;
+}
+
 .bookmarkItem {
     width: 100px; 
     height: 100px;
-    background-color: #ccc; 
+    /* background-color: #ccc;  */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     /* padding: 20px;
     text-align: center; */
 }
@@ -64,5 +70,44 @@ ul {
 
 .bookmark_container {
     display: flex;
+    justify-content: center;
 }
 
+.thumbnail_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 330px;
+    height: 330px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+  }
+  
+
+.thumbnail_0,
+.thumbnail_1,
+.thumbnail_2 {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
+.thumbnail_0 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail_1 img {
+  width: 100%;
+  height: 100%; 
+  object-fit: cover;
+  object-position: center top; /* 이미지 중앙에서 위쪽으로 자르도록 설정 */
+}
+
+.thumbnail_2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

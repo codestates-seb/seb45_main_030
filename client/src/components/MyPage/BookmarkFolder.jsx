@@ -122,33 +122,41 @@ export default function BookmarkFolder() {
 
     return (
         <div className={styles.folder_container}>
-            <div className={styles.folder}>
-                {isCreatingFolder ? (
-                    <>
-                        <input
-                            type="text"
-                            placeholder="새로운 폴더 이름"
-                            value={newFolderName}
-                            onChange={(e) => setNewFolderName(e.target.value)}
+            <div className={styles.create_container}>
+                <div className={styles.folder}>
+                    {isCreatingFolder ? (
+                        <>
+                            <input
+                                type="text"
+                                placeholder="새로운 폴더 이름"
+                                value={newFolderName}
+                                onChange={(e) => setNewFolderName(e.target.value)}
+                            />
+                            <button onClick={createFolder}>생성</button>
+                            <button onClick={() => setIsCreatingFolder(false)}>취소</button>
+                        </>
+                    ) : (
+                        <img
+                            src={addBtn}
+                            alt="addBtn"
+                            className={styles.addBtn}
+                            onClick={() => setIsCreatingFolder(true)}
                         />
-                        <button onClick={createFolder}>생성</button>
-                        <button onClick={() => setIsCreatingFolder(false)}>취소</button>
-                    </>
-                ) : (
-                    <img
-                        src={addBtn}
-                        alt="addBtn"
-                        className={styles.addBtn}
-                        onClick={() => setIsCreatingFolder(true)}
-                    />
-                )}
+                    )}
+                </div>
             </div>
             <div className={styles.bookmark_container}>
                 {folders.map((folder, index) => (
                     <div key={index} className={styles.bookmarkItem}>
                         <div className={styles.thumbnail_container}>
+                            <div className={styles.thumbnail_0}>
+                                <img className={styles.thumbnail_img_0} alt="thumbnail" src={thumb1}></img>
+                            </div>
                             <div className={styles.thumbnail_1}>
-                                <img alt="thumbnail" src={thumb1}></img>
+                                <img className={styles.thumbnail_img_1} alt="thumbnail" src={thumb1}></img>
+                            </div>
+                            <div className={styles.thumbnail_1}>
+                                <img className={styles.thumbnail_img_2} alt="thumbnail" src={thumb1}></img>
                             </div>
                         </div>
                         {isEditingFolder && editingIndex === index ? (
