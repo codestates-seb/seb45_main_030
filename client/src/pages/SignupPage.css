@@ -1,0 +1,144 @@
+/* body,
+html {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+} */
+
+.Signup_Wrapper {
+    text-align: center;
+}
+
+.Signup_Box {
+    background-color: white;
+    border: 2px solid #d9d9d9;
+    border-radius: 5px;
+    width: 400px;
+    height: 550px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    opacity: 0.7; 
+}
+
+.Category_Label {
+    font: Inter;
+    font-weight: bold;
+    font-size: larger;
+    border-radius: 5px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+  
+.Username_Wrapper {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.Email_Wrapper {
+    text-align: left;
+    margin-top: 10px;
+}
+  
+.Password_Wrapper {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.Agreement_Wrapper {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.Agreement_Label {
+    color: #0a95ff;
+    font-size:small;
+}
+
+.Btn_Wrapper {
+    text-align: center;
+    margin-top: 30px;
+    width:75%
+}
+
+.Username_Input {
+    border: 2px solid #d9d9d9;
+    width: 280px;
+    height: 5.5vh;
+    margin-bottom: 5px;
+}
+
+.Email_Input {
+    border: 2px solid #d9d9d9;
+    width: 280px;
+    height: 5.5vh;
+    margin-bottom: 5px;
+}
+
+.Password_Input {
+    border: 2px solid #d9d9d9;
+    width: 280px;
+    height: 5.5vh;
+    margin-bottom: 5px;
+}
+
+.Btn_Submit {
+    border: 2px solid #d9d9d9;
+    border-radius: 5px;
+    width: 290px;
+    height: 5.5vh;
+    color: white;
+    background-color: #0a95ff;
+    font: Inter;
+    text-align: center;
+    line-height: 34px;
+    margin-top: 15px;
+}
+  
+.Btn_Submit:hover {
+    cursor: pointer;
+    filter: brightness(0.9);
+}
+  
+
+.warn_inputEmail_message {
+    display: none;
+    height: 28px;
+    margin-top: -6px;
+    font-weight: 700;
+    letter-spacing: -.6px;
+    text-align: left;
+    color: #ff6060;
+}
+
+.warn_inputPassword_message {
+    display: none;
+    height: 28px;
+    margin-top: -6px;
+    font-weight: 700;
+    letter-spacing: -.6px;
+    text-align: left;
+    color: #ff6060;
+}
+
+.warn_login_message {
+    height: 28px;
+    margin-top: -6px;
+    font-weight: 700;
+    letter-spacing: -.6px;
+    text-align: left;
+    color: #ff6060;
+}
+
+.invalid {
+    border-color: #ff6060;
+}
+
+.show {
+    display: block;
+}
