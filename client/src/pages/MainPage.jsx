@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import Header from "../components/Common/Header";
 import ImageList from "../components/Image/ImageList";
 import styles from "./MainPage.module.css";
 
@@ -40,7 +40,7 @@ function MainPage() {
     };
     return (
         <>
-            <header>헤더 컴포넌트</header>
+            <Header />
             <Banner />
             <Notice />
             <ImageList url={`${BASE_URL}/posts`} page={1} />
