@@ -1,33 +1,41 @@
-import { useSetRecoilState, useRecoilValue } from 'recoil';
-import { signupState } from '../state/SignupState';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from 'axios';
+import { signupState } from '../state/SignupState';
 
 export function SignupActions() {
-  const setSignupState = useSetRecoilState(signupState);
+  const [signupInfo, setSignupInfo] = useRecoilState(signupState);
   const currentState = useRecoilValue(signupState);
 
   const setUsername = (username) => {
-    setSignupState((prevState) => ({ ...prevState, username }));
+    setSignupInfo((prevState) => ({ ...prevState, username }));
   };
 
   const setEmail = (email) => {
-    setSignupState((prevState) => ({ ...prevState, email }));
+    setSignupInfo((prevState) => ({ ...prevState, email }));
   };
 
   const setPassword = (password) => {
-    setSignupState((prevState) => ({ ...prevState, password }));
+    setSignupInfo((prevState) => ({ ...prevState, password }));
   };
   
   const setAgreed = (agreed) => {
-    setSignupState((prevState) => ({ ...prevState, agreed }));
+    setSignupInfo((prevState) => ({ ...prevState, agreed }));
   };
 
   const setInvalidEmail = (value) => {
-    setSignupState((prevState) => ({ ...prevState, invalidEmail: value }));
+    setSignupInfo((prevState) => ({ ...prevState, invalidEmail: value }));
   };
 
   const setInvalidPassword = (value) => {
-    setSignupState((prevState) => ({ ...prevState, invalidPassword: value }));
+    setSignupInfo((prevState) => ({ ...prevState, invalidPassword: value }));
+  };
+
+  const setInvalidUsername = (value) => {
+    setSignupInfo((prevState) => ({ ...prevState, invalidUsername: value }));
+  };
+
+  const setSignupStatus = (value) => {
+    setSignupInfo((prevState) => ({ ...prevState, signup_status: value }));
   };
 
   const isValidEmail = (email) => {
@@ -36,7 +44,7 @@ export function SignupActions() {
   };
 
   const resetSignupState = () => {
-    setSignupState({
+    setSignupInfo({
       email: '',
       username: '',
       password: '',
@@ -47,15 +55,18 @@ export function SignupActions() {
   const submitAccount = async () => {
     setInvalidEmail(false);
     setInvalidPassword(false);
+    setInvalidUsername(false);
+    setSignupStatus(false);
 
     if (!isValidEmail(currentState.email)) {
       setInvalidEmail(true);
-      return; // 유효하지 않은 이메일일 경우 로그인 중단
-    }
-
-    if (currentState.password === '') {
-      setInvalidPassword(true);
-      return; // 비밀번호가 비어있을 경우 로그인 중단
+      if (!currentState.password) {
+        setInvalidPassword(true);
+        if(!currentState.username) {
+          setInvalidUsername(true);
+        }
+      }
+      return;
     }
 
     const { email, username, password, agreed } = currentState;
@@ -75,16 +86,18 @@ export function SignupActions() {
       const response = await axios.post('http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/signup', requestData);
       console.log('회원 정보가 저장되었습니다:', response.data);
       resetSignupState();
+      setSignupStatus(true);
     } catch (error) {
       console.error('회원가입 실패:', error);
+      setSignupStatus(false);
     }
   };
 
   return { 
-    email: currentState.email,
-    username: currentState.username,
-    password: currentState.password,
-    agreed: currentState.agreed,
+    email: signupInfo.email,
+    username: signupInfo.username,
+    password: signupInfo.password,
+    agreed: signupInfo.agreed,
     setUsername,
     setEmail,
     setPassword,
@@ -92,7 +105,11 @@ export function SignupActions() {
     submitAccount,
     setInvalidEmail,
     setInvalidPassword,
-    invalidEmail: currentState.invalidEmail,
-    invalidPassword: currentState.invalidPassword,
+    setInvalidUsername,
+    invalidEmail: signupInfo.invalidEmail,
+    invalidPassword: signupInfo.invalidPassword,
+    invalidUsername: signupInfo.invalidUsername,
+    setSignupStatus,
+    signup_status: signupInfo.signup_status,
   };
 }

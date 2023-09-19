@@ -20,6 +20,7 @@ function Login() {
       navigate('/');
     }
   }
+  
   const openFindIdPopup  = () => {
     setIsFindIdPopupOpen(true);
   };

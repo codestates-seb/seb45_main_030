@@ -1,8 +1,17 @@
 import React from "react";
 import { SignupActions } from "../action/SignupAction";
+import { useNavigate } from 'react-router-dom';
 import './SignupPage.css';
 
 function SignupPage() {
+    const navigate = useNavigate();
+
+    const handleSignupClick = () => {
+        if(signup_status){
+            navigate('/LoginPage');
+        }
+    }
+
     const {
         username,
         password,
@@ -15,8 +24,11 @@ function SignupPage() {
         submitAccount,
         setInvalidEmail,
         setInvalidPassword,
+        setInvalidUsername,
         invalidEmail,
         invalidPassword,
+        invalidUsername,
+        signup_status,
     } = SignupActions();
 
     const handleAgreementChange = () => {
@@ -42,12 +54,16 @@ function SignupPage() {
                 </div>
             
                 <div className='Username_Wrapper'>
-                    <input className='Username_Input'
+                    <input className={`Username_Input ${invalidUsername ? "invalid" : ""}`}
                         type="text"
-                        placeholder="아이디를 입력하세요."
+                        placeholder="사용자 이름을 입력하세요."
                         value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        onChange={(e) => {
+                            setUsername(e.target.value)
+                            setInvalidUsername(false);
+                        }}
                     />
+                    <p className={`warn_inputName_message ${invalidUsername ? "show" : ""}`}>사용자 이름을 반드시 입력해주세요.</p>
                 </div>
             
                 <div className='Password_Wrapper'>
@@ -76,7 +92,7 @@ function SignupPage() {
                 </div>
 
                 <div className='Btn_Wrapper'>
-                    <button className='Btn_Submit' onClick={submitAccount}>가입완료</button>
+                    <button className='Btn_Submit'  onClick={() => { submitAccount(); handleSignupClick(); }}>가입완료</button>
                 </div>
             </div>
         </div>
