@@ -1,5 +1,4 @@
 import React from "react";
-import "./SignupPage.css";
 import { SignupActions } from "../action/SignupAction";
 
 function SignupPage() {
