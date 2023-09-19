@@ -1,6 +1,8 @@
 package com.mainproject.grilledshrimp.domain.user.controller;
 
 import com.google.gson.JsonObject;
+import com.mainproject.grilledshrimp.domain.post.dto.PostsResponseSimpleDto;
+import com.mainproject.grilledshrimp.domain.post.entity.Posts;
 import com.mainproject.grilledshrimp.domain.post.mapper.PostsMapper;
 import com.mainproject.grilledshrimp.domain.user.dto.*;
 import com.mainproject.grilledshrimp.domain.user.entity.Users;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
@@ -99,11 +102,10 @@ public class UserController {
     }
 
     // 특정 유저의 전체 게시글 가져오기
-    @GetMapping("/posts/{user-id}")
-    public ResponseEntity getUserPosts(@PathVariable("user-id") long userId) {
-        //List<Posts> postsList = userService.getUsersPosts(userId);
-        //return new ResponseEntity(postsMapper.postsToPostsResponseDtos(postsList), HttpStatus.OK);
-        return new ResponseEntity(HttpStatus.OK);
+    @GetMapping("/posts")
+    public ResponseEntity getUserPosts(@RequestParam @Positive long userId) {
+        List<PostsResponseSimpleDto> posts = userService.findUserPosts(userId);
+        return new ResponseEntity(posts, HttpStatus.OK);
     }
 
     // 특정 유저의 정보 가져오기
