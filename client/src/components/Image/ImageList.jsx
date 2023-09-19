@@ -13,7 +13,14 @@ const USER_ID = 3;
 function ImageList({ url, page }) {
     const [bookmarkedPostId, setBookmarkedPostId] = useState([]);
     const [recommendedPostId, setRecommendeddPostId] = useState([]);
+
+    const [isLogin, setIsLogin] = useState(false);
     const loginInfo = useRecoilValue(loginState);
+    useEffect(() => {
+        if (loginInfo.login_status) {
+            setIsLogin(true);
+        }
+    }, []);
 
     // 무한 스크롤 훅
     const config = {
@@ -26,9 +33,11 @@ function ImageList({ url, page }) {
     const [columnState, setColumnState] = useState({ first: [], second: [], third: [] });
 
     useEffect(() => {
-        getRecommmend();
-        getBookmark();
-    }, []);
+        if (isLogin) {
+            getRecommmend();
+            getBookmark();
+        }
+    }, [isLogin]);
 
     useEffect(() => {
         ImageDistributer();
