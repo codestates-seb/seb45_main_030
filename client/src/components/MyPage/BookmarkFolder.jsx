@@ -62,7 +62,7 @@ export default function BookmarkFolder() {
                 axios
                     .post(`${BASE_URL}/bookmarks`, {
                         user_id: USER_ID, // 유저 아이디
-                        post_id: 12,
+                        post_id: 8,
                         bookmark_name: newFolderName, // 새로 생성한 폴더 이름을 서버로 보냄
                     })
                     .then((response) => {
