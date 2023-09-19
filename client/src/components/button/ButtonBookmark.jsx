@@ -68,7 +68,6 @@ function ButtonBookmark({ postId, isMarked }) {
             return;
         }
         isBookmarked ? deleteBookmark() : postBookmark();
-        setIsBookmarked((prev) => !prev);
     };
 
     const BookmarkIcon = () => {
