@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styles from "./UploadForm.module.css";
 import axios from "axios";
 import { BsTrash3Fill } from "react-icons/bs";
@@ -8,10 +8,6 @@ import { useRecoilValue } from "recoil";
 import { loginState } from "../../state/LoginState";
 
 export default function UploadForm({ onClose }) {
-    const currentUser = useRecoilValue(loginState);
-    const currentUserId = currentUser.userId;
-    console.log(currentUserId);
-
     const [image, setImage] = useState(null);
     const [imageObjectURL, setImageObjectURL] = useState(null);
 
@@ -25,6 +21,18 @@ export default function UploadForm({ onClose }) {
     const [uploading, setUploading] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [uploadError, setUploadError] = useState("");
+
+    // 로그인 상태
+    const [currentUserId, setCurrentUserId] = useState(null);
+
+    const loginInfo = useRecoilValue(loginState);
+
+    useEffect(() => {
+        if (loginInfo.login_status) {
+            setCurrentUserId(loginInfo.userId);
+        }
+    }, []);
+    console.log(currentUserId);
 
     const removeTags = (indexToRemove) => {
         const filter = tags.filter((el, index) => index !== indexToRemove);
@@ -42,7 +50,7 @@ export default function UploadForm({ onClose }) {
             }
         }
     };
-    
+
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {

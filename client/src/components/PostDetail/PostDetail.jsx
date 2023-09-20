@@ -2,53 +2,75 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { AiFillCloseCircle } from "react-icons/ai";
 import styles from "./PostDetail.module.css";
-import { useRecoilValue } from "recoil";
 import CommentComponent from "../Comment/CommentComponent";
 import { FaUser } from "react-icons/fa";
 import ButtonBookmark from "../button/ButtonBookmark";
 import ButtonRecommend from "../button/ButtonRecommend";
-import { LoginActions } from "../../action/LoginAction";
+import { useRecoilValue } from "recoil";
 import { loginState } from "../../state/LoginState";
-
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 function PostComponent({ postId, onClose }) {
-    console.log("포스트 컴포넌트", postId);
+    //게시글 관련 상태
     const [postData, setPostData] = useState(null);
     const [editedCaption, setEditedCaption] = useState(""); // 수정한 캡션을 저장
     const [isEditing, setIsEditing] = useState(false);
-    const [bookmarkedPostId, setBookmarkedPostId] = useState([]);
-    const [recommendedPostId, setRecommendeddPostId] = useState([]);
+    //로그인 관련 상태
+    const [currentUserId, setCurrentUserId] = useState(null);
+    const [recommendedPostId, setRecommendedPostId] = useState();
+    const [bookmarkedPostId, setBookmarkedPostId] = useState();
 
-    const currentUserId = useRecoilValue(loginState).userId;
-    // console.log(currentUser);
-    // const currentUserId = currentUser.userId;
-    console.log(currentUserId);
+    const loginInfo = useRecoilValue(loginState);
 
-    // 컴포넌트가 처음 렌더링될 때 한 번만 데이터를 받아옵니다.
     useEffect(() => {
-        console.log(postId);
-        axios
-            .get(`${BASE_URL}/posts/${postId}`)
-            .then((response) => {
-                console.log("GET 요청 성공:", response.data);
-                setPostData(response.data);
-                setEditedCaption(response.data.postCaption);
-            })
-            .catch((error) => {
-                console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
-            });
-        getRecommmend();
-        getBookmark();
+        fetchPostData();
+        if (loginInfo.login_status) {
+            setCurrentUserId(loginInfo.userId);
+        }
     }, []);
+
+    useEffect(() => {
+        if (currentUserId !== null) {
+            getRecommmend();
+            getBookmark();
+        }
+    }, [currentUserId]);
+
+    useEffect(() => {
+        renderMarkButton();
+    }, [recommendedPostId, bookmarkedPostId]);
+
+    const renderMarkButton = () => {
+        let result;
+        if (Array.isArray(recommendedPostId) && Array.isArray(bookmarkedPostId)) {
+            result = (
+                <>
+                    <ButtonRecommend postId={postId} isMarked={recommendedPostId.includes(Number(postId))} />
+                    <ButtonBookmark postId={postId} isMarked={bookmarkedPostId.includes(Number(postId))} />
+                </>
+            );
+        }
+        return result;
+    };
+
+    // 특정 게시글의 데이터를 받아오는 함수
+    const fetchPostData = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/posts/${postId}`);
+            console.log("게시글 데이터:", response.data);
+            setPostData(response.data);
+            setEditedCaption(response.data.postCaption);
+        } catch (error) {
+            console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
+        }
+    };
 
     // 추천 get 통신
     const getRecommmend = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/recommend/${currentUserId}`);
             const data = await response.data;
-
-            setRecommendeddPostId(
+            setRecommendedPostId(
                 data.map((el) => {
                     return el.postId;
                 }),
@@ -57,24 +79,22 @@ function PostComponent({ postId, onClose }) {
             console.error(error.code, "추천 정보 get 실패");
         }
     };
+
     //북마크 get 통신
     const getBookmark = async () => {
         try {
             const response = await axios.get(`${BASE_URL}/bookmarks/${currentUserId}`);
             const data = await response.data;
-
             setBookmarkedPostId(data.map((el) => el.post_id));
         } catch (error) {
             console.error(error.code, "북마크 정보 get 실패");
         }
     };
 
-    console.log(postData);
-
     function formatDate(dateString) {
         const date = new Date(dateString);
         const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // Add 1 to month because it's zero-based
         const day = String(date.getDate()).padStart(2, "0");
         return `${year}.${month}.${day}`;
     }
@@ -83,8 +103,6 @@ function PostComponent({ postId, onClose }) {
     const handleEditPost = () => {
         // 게시글 작성자의 ID
         const postUserId = postData.user.userId;
-        console.log(postUserId);
-
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 수정 가능
         if (currentUserId === postUserId) {
             setIsEditing(true);
@@ -179,8 +197,8 @@ function PostComponent({ postId, onClose }) {
                                 )}
 
                                 <p className={styles.username}>{postData.user.username}</p>
-                                <ButtonRecommend />
-                                <ButtonBookmark />
+                                {/* 추천, 북마크자리 */}
+                                {renderMarkButton()}
                             </div>
 
                             {/* 날짜 */}

@@ -11,11 +11,16 @@ function CommentComponent({ postId }) {
     const [newComment, setNewComment] = useState(""); // 새 댓글 입력 상태
     const [userName, setUserName] = useState("사용자"); // 사용자 이름 상태
     const [isLogin, setIsLogin] = useState(false);
+    const [currentUserId, setCurrentUserId] = useState(null);
 
     const loginInfo = useRecoilValue(loginState);
 
-    const currentUser = useRecoilValue(loginState);
-    const currentUserId = currentUser.userId;
+    useEffect(() => {
+        if (loginInfo.login_status) {
+            setCurrentUserId(loginInfo.userId);
+        }
+    }, []);
+    console.log(currentUserId);
 
     // 게시글의 댓글을 가져오는 API 요청
     useEffect(() => {
