@@ -20,8 +20,9 @@ function PostComponent({ postId, onClose }) {
     const [bookmarkedPostId, setBookmarkedPostId] = useState([]);
     const [recommendedPostId, setRecommendeddPostId] = useState([]);
 
-    const currentUser = useRecoilValue(loginState);
-    const currentUserId = currentUser.userId;
+    const currentUserId = useRecoilValue(loginState).userId;
+    // console.log(currentUser);
+    // const currentUserId = currentUser.userId;
     console.log(currentUserId);
 
     // 컴포넌트가 처음 렌더링될 때 한 번만 데이터를 받아옵니다.
@@ -56,23 +57,17 @@ function PostComponent({ postId, onClose }) {
             console.error(error.code, "추천 정보 get 실패");
         }
     };
-    // 컴포넌트가 처음 렌더링될 때 한 번만 데이터를 받아옵니다.
-    useEffect(() => {
+    //북마크 get 통신
+    const getBookmark = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/bookmarks/${currentUserId}`);
+            const data = await response.data;
 
-        console.log("요청", postData);
-        axios
-            .get(`${BASE_URL}/posts/${postId}`)
-            .then((response) => {
-                console.log("GET 요청 성공:", response.data);
-                setPostData(response.data);
-                setEditedCaption(response.data.postCaption);
-            })
-            .catch((error) => {
-                console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
-            });
-        getRecommmend();
-        getBookmark();
-    }, []);
+            setBookmarkedPostId(data.map((el) => el.post_id));
+        } catch (error) {
+            console.error(error.code, "북마크 정보 get 실패");
+        }
+    };
 
     console.log(postData);
 
@@ -83,7 +78,6 @@ function PostComponent({ postId, onClose }) {
         const day = String(date.getDate()).padStart(2, "0");
         return `${year}.${month}.${day}`;
     }
-
 
     // 게시글 수정 함수
     const handleEditPost = () => {
@@ -100,7 +94,7 @@ function PostComponent({ postId, onClose }) {
                 tags: postData.tags, // 태그 정보는 그대로 사용
             };
             axios
-                .patch(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`, editData) 
+                .patch(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`, editData)
                 .then((response) => {
                     console.log("게시글 수정 성공:", response.data);
                     // 수정된 내용을 화면에 반영
@@ -119,10 +113,10 @@ function PostComponent({ postId, onClose }) {
         const postUserId = postData.user.userId;
 
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 삭제 가능
-        if (currentUser === postUserId) {
+        if (currentUserId === postUserId) {
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
-                .delete(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`) 
+                .delete(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`)
                 .then((response) => {
                     // 게시글 삭제가 성공한 경우 처리
                     console.log("게시글 삭제 성공:", response.data);
@@ -187,7 +181,6 @@ function PostComponent({ postId, onClose }) {
                                 <p className={styles.username}>{postData.user.username}</p>
                                 <ButtonRecommend />
                                 <ButtonBookmark />
-
                             </div>
 
                             {/* 날짜 */}

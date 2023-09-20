@@ -25,9 +25,6 @@ function CommentComponent({ postId }) {
                 // API에서 가져온 댓글 데이터를 상태에 저장함.
                 const allComments = response.data.data;
                 setComments(allComments);
-                // setPostId(allComments.postId);
-                console.log(allComments);
-                console.log(allComments[1].user);
             })
             .catch((error) => {
                 console.error("댓글 목록을 가져오는 데 실패했습니다.", error);
