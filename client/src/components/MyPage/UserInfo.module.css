@@ -18,6 +18,7 @@
     margin-right: 32px;
     width: 150px;
     height: 150px;
+    cursor: pointer;
 }
 
 .info_container {

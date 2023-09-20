@@ -8,7 +8,7 @@ export default function MyPhotos() {
 
     return (
         <>
-            <ImageList url={`${BASE_URL}/users/posts/21`} page={1} />
+            <ImageList url={`${BASE_URL}/users/posts?userId=${USER_ID.userId}`} page={1} />
         </>
     );
 }
