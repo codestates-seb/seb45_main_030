@@ -1,4 +1,5 @@
 import React from "react";
+import Header from "../components/Common/Header";
 import { SignupActions } from "../action/SignupAction";
 import { useNavigate } from 'react-router-dom';
 import './SignupPage.css';
@@ -79,7 +80,6 @@ function SignupPage() {
                     <p className={`warn_inputPassword_message ${invalidPassword ? "show" : ""}`}>비밀번호를 입력해주세요.</p>
                 </div>
                 
-                {/* 개인정보 처리 방침 동의 체크박스 */}
                 <div className='Agreement_Wrapper'>
                     <label className="Agreement_Label">
                         <input

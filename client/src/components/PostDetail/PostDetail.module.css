@@ -26,12 +26,14 @@
   }
 
   .postContainer {
+    position: relative;
     margin-left: 30px;
     margin-top: 10px;
   }
 
 
   .image {
+    margin-top: 1rem;
     max-width: 60%; /* 이미지 최대 너비 */
     height: 50%; /* 자동 높이 조정 */
   }
@@ -47,23 +49,28 @@
   }
 
   .tags {
-    margin-top: 0.8rem;
+    margin-top: 0.5rem;
+    margin-right: 0.2rem;
     margin-bottom: 1rem;
     font-size: 0.8rem;
+    color: #369bbc;
   }
 
   .postAddress {
     font-size: 0.8rem;
     margin-bottom: 0.8rem;
+    color: #392f31;
   }
 
   .createdAt {
-    font-size: 0.7rem;
+    font-size: 0.5rem;
+    color: gray;
     margin-bottom: 0.5rem;
   }
 
   .username {
     margin-left: 20px;
+    margin-bottom: 0.5rem;
     width: 150px;
     height: 20px;
     font-size: 0.7rem;
@@ -76,7 +83,7 @@
 
   .postCaption {
     font-size: 0.7rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
   }
 
 .profileIcon {
@@ -85,22 +92,22 @@
 
 /* 닫기 버튼 */
 .close_button {
-  position: relative;
-  left: 33rem;
-  bottom: 20rem;
+  position: absolute;
   border-radius: 10px;
   cursor: pointer;
   border: none;
   background-color: transparent;
   font-size: 1rem;
+  top: 0.5rem;
+  right: 0rem;
   color: black;
 }
 
 /* 수정 버튼 스타일 */
 .edit_button {
-  position: fixed;
-  left: 55rem;
-  bottom: 35rem;
+  position: absolute;
+ top: 3rem;
+ right: 1rem;
   font-size: 0.7rem;
   font-weight: 500;
   padding: 8px;
@@ -114,9 +121,9 @@
 
 /* 삭제 버튼 스타일 */
 .delete_button {
-  position: fixed;
-  left: 55rem;
-  bottom: 31rem;
+  position: absolute;
+  top: 6rem;
+  right: 1rem;
   font-size: 0.7rem;
   font-weight: 500;
   padding: 8px;

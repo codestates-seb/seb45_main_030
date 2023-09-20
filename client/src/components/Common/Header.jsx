@@ -41,7 +41,7 @@ function Header() {
                     <div>
                         <div className={styles.logo}>
                             <Link to="/">
-                                <div>팀 구운새우</div>
+                                <div>Leisure Link</div>
                             </Link>
                         </div>
                     </div>

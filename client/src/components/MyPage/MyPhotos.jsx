@@ -1,9 +1,14 @@
-// 사용자가 올린 사진을 그리드 형식으로 보여줘야 함
+import ImageList from "../../components/Image/ImageList";
+import { loginState } from "../../recoil/atom";
+import { useRecoilState } from "recoil";
 
 export default function MyPhotos() {
-    // 아이디와 썸네일만 response로 받음
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    const [USER_ID] = useRecoilState(loginState);
+
     return (
         <>
+            <ImageList url={`${BASE_URL}/users/posts/21`} page={1} />
         </>
     );
 }

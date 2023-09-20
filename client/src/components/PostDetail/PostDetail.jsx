@@ -2,49 +2,107 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { AiFillCloseCircle } from "react-icons/ai";
 import styles from "./PostDetail.module.css";
-import { useRecoilValue } from "recoil";
-//import { loginState } from "../state/LoginState"; // 사용자 정보를 담은 recoil 상태
 import CommentComponent from "../Comment/CommentComponent";
 import { FaUser } from "react-icons/fa";
-import { LoginActions } from "../../action/LoginAction";
 import ButtonBookmark from "../button/ButtonBookmark";
 import ButtonRecommend from "../button/ButtonRecommend";
+import { useRecoilValue } from "recoil";
+import { loginState } from "../../state/LoginState";
+const BASE_URL = process.env.REACT_APP_API_URL;
 
-function PostComponent({ onClose }) {
+function PostComponent({ postId, onClose }) {
+    //게시글 관련 상태
     const [postData, setPostData] = useState(null);
     const [editedCaption, setEditedCaption] = useState(""); // 수정한 캡션을 저장
     const [isEditing, setIsEditing] = useState(false);
+    //로그인 관련 상태
+    const [currentUserId, setCurrentUserId] = useState(null);
+    const [recommendedPostId, setRecommendedPostId] = useState();
+    const [bookmarkedPostId, setBookmarkedPostId] = useState();
 
-    // const currentUser = useRecoilValue(loginState);
-    const { userId } = LoginActions();
-    const currentUser = userId;
-    // const postId = 8;
+    const loginInfo = useRecoilValue(loginState);
 
-    // 제일 먼저 특정 게시글의 전체 데이터를 받아와서 postData에 넣어줌
     useEffect(() => {
-        console.log("요청", postData);
-        axios
-            .get("http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/8")
-            .then((response) => {
-                console.log("GET 요청 성공:", response.data);
-                setPostData(response.data);
-                setEditedCaption(response.data.postCaption);
-            })
-            .catch((error) => {
-                console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
-            });
+        fetchPostData();
+        if (loginInfo.login_status) {
+            setCurrentUserId(loginInfo.userId);
+        }
     }, []);
+  
+    useEffect(() => {
+        if (currentUserId !== null) {
+            getRecommmend();
+            getBookmark();
+        }
+    }, [currentUserId]);
 
-    console.log(postData);
+    useEffect(() => {
+        renderMarkButton();
+    }, [recommendedPostId, bookmarkedPostId]);
+
+    const renderMarkButton = () => {
+        let result;
+        if (Array.isArray(recommendedPostId) && Array.isArray(bookmarkedPostId)) {
+            result = (
+                <>
+                    <ButtonRecommend postId={postId} isMarked={recommendedPostId.includes(Number(postId))} />
+                    <ButtonBookmark postId={postId} isMarked={bookmarkedPostId.includes(Number(postId))} />
+                </>
+            );
+        }
+        return result;
+    };
+
+    // 특정 게시글의 데이터를 받아오는 함수
+    const fetchPostData = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/posts/${postId}`);
+            console.log("게시글 데이터:", response.data);
+            setPostData(response.data);
+            setEditedCaption(response.data.postCaption);
+        } catch (error) {
+            console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
+        }
+    };
+
+    // 추천 get 통신
+    const getRecommmend = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/recommend/${currentUserId}`);
+            const data = await response.data;
+            setRecommendedPostId(
+                data.map((el) => {
+                    return el.postId;
+                }),
+            );
+        } catch (error) {
+            console.error(error.code, "추천 정보 get 실패");
+        }
+    };
+
+    //북마크 get 통신
+    const getBookmark = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/bookmarks/${currentUserId}`);
+            const data = await response.data;
+            setBookmarkedPostId(data.map((el) => el.post_id));
+        } catch (error) {
+            console.error(error.code, "북마크 정보 get 실패");
+        }
+    };
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // Add 1 to month because it's zero-based
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}.${month}.${day}`;
+    }
 
     // 게시글 수정 함수
     const handleEditPost = () => {
         // 게시글 작성자의 ID
         const postUserId = postData.user.userId;
-
-        // 로그인한 사용자의 ID를 사용
-        const currentUserId = currentUser.userId;
-
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 수정 가능
         if (currentUserId === postUserId) {
             setIsEditing(true);
@@ -54,10 +112,7 @@ function PostComponent({ onClose }) {
                 tags: postData.tags, // 태그 정보는 그대로 사용
             };
             axios
-                .patch(
-                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/${postData.id}?userId=${currentUserId}`,
-                    editData,
-                ) // ngrok 서버 주소로 변경
+                .patch(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`, editData)
                 .then((response) => {
                     console.log("게시글 수정 성공:", response.data);
                     // 수정된 내용을 화면에 반영
@@ -75,15 +130,11 @@ function PostComponent({ onClose }) {
     const handleDeletePost = () => {
         const postUserId = postData.user.userId;
 
-        const currentUserId = currentUser.userId;
-
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 삭제 가능
         if (currentUserId === postUserId) {
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
-                .delete(
-                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/${postData.id}?userId=${currentUserId}`,
-                ) // ngrok 서버 주소로 변경
+                .delete(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`)
                 .then((response) => {
                     // 게시글 삭제가 성공한 경우 처리
                     console.log("게시글 삭제 성공:", response.data);
@@ -103,14 +154,14 @@ function PostComponent({ onClose }) {
             {postData && (
                 <>
                     {" "}
-                    <button onClick={onClose} className={styles.close_button}>
-                        <AiFillCloseCircle />
-                    </button>
                     <div className={styles.modal_content}>
                         <div className={styles.postContainer}>
                             {/* 이미지 */}
                             <img src={postData.postImage} alt="게시글 이미지" className={styles.image} />
 
+                            <button onClick={onClose} className={styles.close_button}>
+                                <AiFillCloseCircle />
+                            </button>
                             {/* 수정 버튼 */}
                             <button onClick={handleEditPost} className={styles.edit_button}>
                                 게시글 수정
@@ -144,13 +195,14 @@ function PostComponent({ onClose }) {
                                         <FaUser size={20} />
                                     </div>
                                 )}
-                                <p className={styles.username}>작성자: {postData.user.username}</p>
-                                <ButtonRecommend />
-                                <ButtonBookmark />
+
+                                <p className={styles.username}>{postData.user.username}</p>
+                                {/* 추천, 북마크자리 */}
+                                {renderMarkButton()}
                             </div>
 
                             {/* 날짜 */}
-                            <p className={styles.createdAt}>작성 날짜: {postData.createdAt}</p>
+                            <p className={styles.createdAt}>{formatDate(postData.createdAt)}</p>
 
                             {/* 캡션 */}
                             {/* 수정 중이 아니라면 내용을 나타나게 하고, 수정 중이라면 textarea가 나타나도록 함. */}
@@ -164,7 +216,7 @@ function PostComponent({ onClose }) {
                                 <p className={styles.postCaption}>{postData.postCaption}</p>
                             )}
 
-                            <CommentComponent />
+                            <CommentComponent postId={postId} />
                         </div>
                     </div>{" "}
                 </>

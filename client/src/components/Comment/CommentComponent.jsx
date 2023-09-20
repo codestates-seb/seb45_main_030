@@ -3,45 +3,70 @@ import { FaTrash, FaEdit } from "react-icons/fa";
 import axios from "axios";
 import styles from "./CommentComponent.module.css";
 import { LoginActions } from "../../action/LoginAction";
+import { useRecoilValue } from "recoil";
+import { loginState } from "../../state/LoginState";
 
-function CommentComponent() {
+function CommentComponent({ postId }) {
     const [comments, setComments] = useState([]); // 댓글 데이터를 저장할 상태
     const [newComment, setNewComment] = useState(""); // 새 댓글 입력 상태
-    const [userName, setUserName] = useState("초기 사용자"); // 사용자 이름 상태
-    const [postId, setPostId] = useState(8); // 게시글 ID
+    const [userName, setUserName] = useState("사용자"); // 사용자 이름 상태
+    const [isLogin, setIsLogin] = useState(false);
+    const [currentUserId, setCurrentUserId] = useState(null);
 
-    // const currentUser = useRecoilValue(loginState);
-    const { userId } = LoginActions();
-    const currentUser = userId;
+    const loginInfo = useRecoilValue(loginState);
+
+    useEffect(() => {
+        if (loginInfo.login_status) {
+            setCurrentUserId(loginInfo.userId);
+        }
+    }, []);
+    console.log(currentUserId);
 
     // 게시글의 댓글을 가져오는 API 요청
     useEffect(() => {
         axios
-            .get("http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/posts/8")
+            .get(`http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/posts/${postId}`)
             .then((response) => {
                 // API에서 가져온 댓글 데이터를 상태에 저장함.
                 const allComments = response.data.data;
                 setComments(allComments);
-                console.log(allComments);
-                console.log(allComments[1].user);
             })
             .catch((error) => {
                 console.error("댓글 목록을 가져오는 데 실패했습니다.", error);
             });
     }, [postId]);
 
+    useEffect(() => {
+        if (loginInfo.login_status) {
+            setIsLogin(true);
+            fetchUserData(loginInfo.userId);
+        }
+        console.log(loginInfo);
+    }, []);
+
+    const fetchUserData = async (userId) => {
+        try {
+            const response = await axios.get(
+                `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/${userId}`,
+            );
+            console.log(response);
+            const data = response.data.username;
+            setUserName(data);
+        } catch (error) {
+            console.log("사용자 정보를 가져오는 데 실패했습니다.", error);
+        }
+    };
     // 새 댓글을 생성하는 API 요청
     const handleAddComment = async () => {
         if (newComment.trim() !== "") {
             try {
                 const commentData = {
-                    // userId: currentUser.userId, // 현재 사용자의 userId
-                    userId: currentUser,
+                    userId: currentUserId,
                     commentText: newComment,
                 };
 
                 await axios.post(
-                    "http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/posts/8",
+                    `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/posts/${postId}`,
                     commentData,
                 );
 
@@ -49,10 +74,8 @@ function CommentComponent() {
                 const newCommentObject = {
                     postId: postId,
                     user: {
-                        // userId: currentUser.userId,
-                        userId: currentUser,
+                        userId: currentUserId,
                         userName: userName,
-                        // username, email 등 다른 사용자 정보도 필요하다면 여기에 추가
                     },
                     commentText: newComment,
                 };
@@ -90,13 +113,11 @@ function CommentComponent() {
                 const response = await axios.patch(
                     `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/${id}`,
                     {
-                        // userId: currentUser.userId, // 현재 사용자의 userId
-                        userId: currentUser,
+                        userId: currentUserId,
                         commentText: editedComment,
                     },
                 );
 
-                // 응답에서 수정된 댓글 정보를 가져와서 상태를 업데이트합니다.
                 const updatedComment = response.data;
                 const updatedComments = comments.map((comment) =>
                     comment.commentId === id ? { ...comment, commentText: updatedComment.commentText } : comment,
@@ -122,7 +143,7 @@ function CommentComponent() {
                                         <span className={styles.commentText}> {comment.commentText} </span>
                                     </>
                                 )}
-                                {currentUser === comment.user?.userId && (
+                                {currentUserId === comment.user?.userId && (
                                     <>
                                         <button
                                             onClick={() => handleDeleteComment(comment.commentId)}
