@@ -12,10 +12,10 @@ function CommentComponent({ postId }) {
     const [userName, setUserName] = useState("사용자"); // 사용자 이름 상태
     const [isLogin, setIsLogin] = useState(false);
 
-    // const currentUser = useRecoilValue(loginState);
-    const { userId } = LoginActions();
-    const currentUser = userId;
     const loginInfo = useRecoilValue(loginState);
+
+    const currentUser = useRecoilValue(loginState);
+    const currentUserId = currentUser.userId;
 
     // 게시글의 댓글을 가져오는 API 요청
     useEffect(() => {
@@ -59,8 +59,7 @@ function CommentComponent({ postId }) {
         if (newComment.trim() !== "") {
             try {
                 const commentData = {
-                    // userId: currentUser.userId, // 현재 사용자의 userId
-                    userId: currentUser,
+                    userId: currentUserId,
                     commentText: newComment,
                 };
 
@@ -73,10 +72,8 @@ function CommentComponent({ postId }) {
                 const newCommentObject = {
                     postId: postId,
                     user: {
-                        // userId: currentUser.userId,
-                        userId: currentUser,
+                        userId: currentUserId,
                         userName: userName,
-                        // username, email 등 다른 사용자 정보도 필요하다면 여기에 추가
                     },
                     commentText: newComment,
                 };
@@ -114,13 +111,11 @@ function CommentComponent({ postId }) {
                 const response = await axios.patch(
                     `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/comments/${id}`,
                     {
-                        // userId: currentUser.userId, // 현재 사용자의 userId
-                        userId: currentUser,
+                        userId: currentUserId,
                         commentText: editedComment,
                     },
                 );
 
-                // 응답에서 수정된 댓글 정보를 가져와서 상태를 업데이트합니다.
                 const updatedComment = response.data;
                 const updatedComments = comments.map((comment) =>
                     comment.commentId === id ? { ...comment, commentText: updatedComment.commentText } : comment,
@@ -146,7 +141,7 @@ function CommentComponent({ postId }) {
                                         <span className={styles.commentText}> {comment.commentText} </span>
                                     </>
                                 )}
-                                {currentUser === comment.user?.userId && (
+                                {currentUserId === comment.user?.userId && (
                                     <>
                                         <button
                                             onClick={() => handleDeleteComment(comment.commentId)}

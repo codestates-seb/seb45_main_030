@@ -4,16 +4,13 @@ import axios from "axios";
 import { BsTrash3Fill } from "react-icons/bs";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { LoginActions } from "../../action/LoginAction";
+import { useRecoilValue } from "recoil";
+import { loginState } from "../../state/LoginState";
 
 export default function UploadForm({ onClose }) {
-    // const currentUser = useRecoilValue(loginState);
-    // const currentUserId = currentUser.userId;
-
-    // 일단은 하드 코딩
-    // const userId = 3;
-    const { userId } = LoginActions();
-    console.log(userId);
-    // console.log(userName);
+    const currentUser = useRecoilValue(loginState);
+    const currentUserId = currentUser.userId;
+    console.log(currentUserId);
 
     const [image, setImage] = useState(null);
     const [imageObjectURL, setImageObjectURL] = useState(null);
@@ -89,7 +86,7 @@ export default function UploadForm({ onClose }) {
             tags: tags,
             postAddress: addressPermission,
             postCommentPermission: commentPermission,
-            userId: userId,
+            userId: currentUserId,
         });
         const blob = new Blob([json], { type: "application/json" });
         formData.append("data", blob);

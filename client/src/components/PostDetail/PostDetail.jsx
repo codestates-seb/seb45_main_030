@@ -5,9 +5,10 @@ import styles from "./PostDetail.module.css";
 import { useRecoilValue } from "recoil";
 import CommentComponent from "../Comment/CommentComponent";
 import { FaUser } from "react-icons/fa";
-import { LoginActions } from "../../action/LoginAction";
 import ButtonBookmark from "../button/ButtonBookmark";
 import ButtonRecommend from "../button/ButtonRecommend";
+import { LoginActions } from "../../action/LoginAction";
+import { loginState } from "../../state/LoginState";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -19,12 +20,13 @@ function PostComponent({ postId, onClose }) {
     const [bookmarkedPostId, setBookmarkedPostId] = useState([]);
     const [recommendedPostId, setRecommendeddPostId] = useState([]);
 
-    const { userId } = LoginActions();
-    const currentUser = userId;
+    const currentUser = useRecoilValue(loginState);
+    const currentUserId = currentUser.userId;
+    console.log(currentUserId);
 
     // 컴포넌트가 처음 렌더링될 때 한 번만 데이터를 받아옵니다.
     useEffect(() => {
-        console.log("요청", postData);
+        console.log(postId);
         axios
             .get(`${BASE_URL}/posts/${postId}`)
             .then((response) => {
@@ -42,7 +44,7 @@ function PostComponent({ postId, onClose }) {
     // 추천 get 통신
     const getRecommmend = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/recommend/${userId}`);
+            const response = await axios.get(`${BASE_URL}/recommend/${currentUserId}`);
             const data = await response.data;
 
             setRecommendeddPostId(
@@ -58,7 +60,7 @@ function PostComponent({ postId, onClose }) {
     //북마크 get 통신
     const getBookmark = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/bookmarks/${userId}`);
+            const response = await axios.get(`${BASE_URL}/bookmarks/${currentUserId}`);
             const data = await response.data;
 
             setBookmarkedPostId(data.map((el) => el.post_id));
@@ -84,7 +86,7 @@ function PostComponent({ postId, onClose }) {
         console.log(postUserId);
 
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 수정 가능
-        if (currentUser === postUserId) {
+        if (currentUserId === postUserId) {
             setIsEditing(true);
             // 수정할 내용과 게시글 id를 사용하여 patch 요청을 보냄
             const editData = {
@@ -92,7 +94,7 @@ function PostComponent({ postId, onClose }) {
                 tags: postData.tags, // 태그 정보는 그대로 사용
             };
             axios
-                .patch(`${BASE_URL}/posts/${postId}?userId=${currentUser}`, editData) // ngrok 서버 주소로 변경
+                .patch(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`, editData) // ngrok 서버 주소로 변경
                 .then((response) => {
                     console.log("게시글 수정 성공:", response.data);
                     // 수정된 내용을 화면에 반영
@@ -114,7 +116,7 @@ function PostComponent({ postId, onClose }) {
         if (currentUser === postUserId) {
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
-                .delete(`${BASE_URL}/posts/${postId}?userId=${currentUser}`) // ngrok 서버 주소로 변경
+                .delete(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`) // ngrok 서버 주소로 변경
                 .then((response) => {
                     // 게시글 삭제가 성공한 경우 처리
                     console.log("게시글 삭제 성공:", response.data);
