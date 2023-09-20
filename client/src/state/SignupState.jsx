@@ -9,5 +9,6 @@ export const signupState = atom({
     agreed: false,
     invalidEmail: false,
     invalidPassword: false,
+    invalidUsername: false,
   },
 });

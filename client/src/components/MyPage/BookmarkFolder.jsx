@@ -4,6 +4,8 @@ import axios from "axios";
 import { bookmarkFoldersState, loginState } from "../../recoil/atom";
 import addBtn from "../../assets/icon/myaddfolder.svg";
 import styles from "./BookmarkFolder.module.css";
+import folder_thumbnail from "../../assets/icon/bookmarkFolder.png";
+
 
 export default function BookmarkFolder() {
     const [folders, setFolders] = useRecoilState(bookmarkFoldersState);
@@ -174,13 +176,11 @@ export default function BookmarkFolder() {
                 {folders.map((folder, index) => (
                     <div key={index} className={styles.bookmarkItem}>
                         <div className={styles.thumbnail_container}>
-                        {thumbnailImages[index] && (
                                 <img
                                     className={styles.thumbnail_img}
                                     alt="thumbnail"
-                                    src={thumbnailImages[index]}
+                                    src={folder_thumbnail}
                                 ></img>
-                            )}
                         </div>
                         {isEditingFolder && editingIndex === index ? (
                             <>

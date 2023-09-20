@@ -1,20 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styles from "./UploadForm.module.css";
 import axios from "axios";
 import { BsTrash3Fill } from "react-icons/bs";
 import { AiFillCloseCircle } from "react-icons/ai";
-import { LoginActions } from "../../action/LoginAction";
+import { useRecoilValue } from "recoil";
+import { loginState } from "../../state/LoginState";
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 export default function UploadForm({ onClose }) {
-    // const currentUser = useRecoilValue(loginState);
-    // const currentUserId = currentUser.userId;
-
-    // 일단은 하드 코딩
-    // const userId = 3;
-    const { userId } = LoginActions();
-    console.log(userId);
-    // console.log(userName);
-
     const [image, setImage] = useState(null);
     const [imageObjectURL, setImageObjectURL] = useState(null);
 
@@ -29,15 +22,30 @@ export default function UploadForm({ onClose }) {
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [uploadError, setUploadError] = useState("");
 
+    // 로그인 상태
+    const [currentUserId, setCurrentUserId] = useState(null);
+
+    const loginInfo = useRecoilValue(loginState);
+
+    useEffect(() => {
+        if (loginInfo.login_status && loginInfo.userId) {
+            setCurrentUserId(loginInfo.userId);
+        }
+    }, []); // loginInfo 객체가 변경될 때 useEffect를 실행
+
+    // currentUserId가 null이 아닐 때에만 출력
+    if (currentUserId !== null) {
+        console.log(currentUserId);
+    }
+
     const removeTags = (indexToRemove) => {
         const filter = tags.filter((el, index) => index !== indexToRemove);
         setTags(filter);
     };
 
     const addTags = (event) => {
+        event.preventDefault();
         if (event.key.toLowerCase() === "enter") {
-            // 엔터 키가 입력되었을 때만 실행
-            event.preventDefault();
             const inputVal = event.target.value.trim();
             if (inputVal !== "" && !tags.includes(inputVal)) {
                 setTags((prev) => [...prev, inputVal]);
@@ -45,7 +53,7 @@ export default function UploadForm({ onClose }) {
             }
         }
     };
-    
+
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -89,7 +97,7 @@ export default function UploadForm({ onClose }) {
             tags: tags,
             postAddress: addressPermission,
             postCommentPermission: commentPermission,
-            userId: userId,
+            userId: currentUserId,
         });
         const blob = new Blob([json], { type: "application/json" });
         formData.append("data", blob);
@@ -107,11 +115,7 @@ export default function UploadForm({ onClose }) {
                 },
             };
 
-            const response = await axios.post(
-                "http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts",
-                formData,
-                axiosConfig,
-            );
+            const response = await axios.post(`${BASE_URL}/posts`, formData, axiosConfig);
             console.log(response.data);
 
             setUploadSuccess(true);
@@ -143,10 +147,10 @@ export default function UploadForm({ onClose }) {
     return (
         <div className={styles.modal}>
             <div className={styles.modal_content}>
-                <button onClick={onClose} className={styles.close_button}>
-                    <AiFillCloseCircle />
-                </button>
                 <form onSubmit={handleSubmit} className={styles.form_container}>
+                    <button onClick={onClose} className={styles.close_button}>
+                        <AiFillCloseCircle />
+                    </button>
                     <label className={styles.image_section}>
                         <div className={styles.image_upload_label} onClick={handleClickUpload}>
                             {imageObjectURL ? (
@@ -200,7 +204,7 @@ export default function UploadForm({ onClose }) {
                             required
                             className={styles.input_description}
                         />
-                        <form className={styles.address_form}>위치 정보가 없을 경우 주소 입력 폼이 나타남</form>
+                        {/* <form className={styles.address_form}>위치 정보가 없을 경우 주소 입력 폼이 나타남</form> */}
                         <div className={styles.tag_container}>
                             <ul className={styles.tags}>
                                 {tags.map((tag, index) => (
@@ -219,6 +223,9 @@ export default function UploadForm({ onClose }) {
                                 type="text"
                                 onKeyUp={(e) => addTags(e)}
                                 placeholder="최대 3개까지 #태그를 입력해주세요 (예시) #바다"
+                                onKeyPress={(e) => {
+                                    e.key === "Enter" && e.preventDefault();
+                                }}
                             />
                         </div>
                     </div>
@@ -232,7 +239,7 @@ export default function UploadForm({ onClose }) {
                     {uploading ? "업로드 중..." : "게시하기"}
                 </button>
                 {/* 정보 제공 동의 */}
-                <div>
+                <div className={styles.box}>
                     {/* 위치 정보 동의 체크박스 */}
                     <label className={styles.checkbox}>
                         <input

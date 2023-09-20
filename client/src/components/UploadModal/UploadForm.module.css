@@ -21,7 +21,7 @@
   background-color: white;
   padding-left: 30px;
   padding-right: 30px;
-  padding-top: 10px;
+  padding-top:35px;
   border-radius: 20px;
   flex-direction: column;
 }
@@ -57,8 +57,9 @@
 
 /* 닫기 버튼 */
 .close_button {
-  position: relative;
-  left: 22rem;
+  position: absolute;
+  top: 3rem;
+  right: 22rem;
   border-radius: 10px;
   cursor: pointer;
   border: none;
@@ -69,11 +70,11 @@
 
 /* 게시하기 제출 버튼 */
 .submit_button {
-  position: relative;
+  position: absolute;
   font-size: 0.9rem;
   font-weight: 500;
-  top: 1rem;
-  left: 39rem;
+  bottom: 3rem;
+  right: 23rem;
   padding: 8px;
   height: 40px;
   width: 90px;
@@ -275,11 +276,16 @@
   font-size: 0.8rem;
 }
 
+.box {
+  margin-top: 1rem;
+}
+
 /* CSS 파일 또는 스타일 컴포넌트에 추가 */
 .checkbox {
   display: flex;
   align-items: center;
-  font-size: 0.8rem; /* 텍스트 크기 조절 */
+  font-size: 1rem; /* 텍스트 크기 조절 */
+  margin-top: 0.8rem;
 }
 
 .checkbox input[type="checkbox"] {

@@ -8,21 +8,22 @@ export const userState = atom({
       user_name: "",
       email: "",
       introduction: "",
+      profileImage: null,
   },
 });
 
-export const loginState = atom({
-  key: "loginState",
-  default: {
-    email: "",
-    password: "",
-    loginError: false,
-    login_status: false,
-    invalidEmail: false,
-    invalidPassword: false,
-    userId: "",
-  },
-})
+// export const loginState = atom({
+//   key: "loginState",
+//   default: {
+//     email: "",
+//     password: "",
+//     loginError: false,
+//     login_status: false,
+//     invalidEmail: false,
+//     invalidPassword: false,
+//     userId: "",
+//   },
+// })
 
 export const bookmarkFoldersState = atom({
   key: "bookmarkFoldersState",
