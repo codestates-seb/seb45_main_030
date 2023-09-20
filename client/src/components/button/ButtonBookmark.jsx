@@ -6,12 +6,9 @@ import { loginState } from "../../state/LoginState";
 
 const BOOKMARK_COLOR = "#FFC436";
 
-
 const BASE_URL = process.env.REACT_APP_API_URL;
-console.log(BASE_URL);
 
 function ButtonBookmark({ postId, isMarked }) {
-    console.log(isMarked);
     const [isBookmarked, setIsBookmarked] = useState(isMarked);
     const [isLogin, setIsLogin] = useState(false);
     const [userId, setUserId] = useState(null);
@@ -31,7 +28,7 @@ function ButtonBookmark({ postId, isMarked }) {
                 post_id: postId,
                 bookmark_name: "",
             });
-            console.log(response);
+
             if (response.status === 201) {
                 setIsBookmarked(true);
             } else {
@@ -63,7 +60,6 @@ function ButtonBookmark({ postId, isMarked }) {
 
     // 클릭 이벤트리스너
     const handleBookmark = () => {
-        console.log("포스트아이디: ", postId, "유저아이디 ", userId);
         if (!isLogin) {
             alert("먼저 로그인을 해주세요");
             return;
