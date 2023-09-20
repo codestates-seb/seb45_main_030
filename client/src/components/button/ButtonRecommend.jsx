@@ -12,7 +12,6 @@ const BASE_URL = process.env.REACT_APP_API_URL;
 
 function ButtonRecommend({ postId, isMarked }) {
     const [isRecommended, setIsRecommended] = useState(isMarked);
-    console.log("추천상태",isRecommended);
     const [isLogin, setIsLogin] = useState(false);
     const [userId, setUserId] = useState(null)
     const loginInfo = useRecoilValue(loginState);
