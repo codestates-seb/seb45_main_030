@@ -28,6 +28,7 @@ function PostComponent({ postId, onClose }) {
             setCurrentUserId(loginInfo.userId);
         }
     }, []);
+  
     useEffect(() => {
         if (currentUserId !== null) {
             getRecommmend();
