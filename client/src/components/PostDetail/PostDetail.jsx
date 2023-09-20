@@ -28,7 +28,7 @@ function PostComponent({ postId, onClose }) {
             setCurrentUserId(loginInfo.userId);
         }
     }, []);
-  
+
     useEffect(() => {
         if (currentUserId !== null) {
             getRecommmend();
@@ -100,12 +100,66 @@ function PostComponent({ postId, onClose }) {
     }
 
     // 게시글 수정 함수
+    // const handleEditPost = () => {
+    //     // 게시글 작성자의 ID
+    //     const postUserId = postData.user.userId;
+
+    //     if (currentUserId == null) {
+    //         alert("로그인 후 이용해주세요");
+    //     }
+
+    //     // 게시글 작성자와 현재 사용자가 동일한 경우에만 수정 가능
+    //     else if (currentUserId == postUserId) {
+    //         setIsEditing(true);
+    //         // 수정할 내용과 게시글 id를 사용하여 patch 요청을 보냄
+    //         const editData = {
+    //             postCaption: editedCaption, // 수정된 내용
+    //             tags: postData.tags, // 태그 정보는 그대로 사용
+    //         };
+    //         axios
+    //             .patch(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`, editData)
+    //             .then((response) => {
+    //                 console.log("게시글 수정 성공:", response.data);
+    //                 // 수정된 내용을 화면에 반영
+    //                 setPostData({ ...postData, postCaption: editedCaption });
+    //             })
+    //             .catch((error) => {
+    //                 console.error("게시글 수정 중 오류가 발생했습니다:", error);
+    //             });
+    //     } else {
+    //         alert("게시글 작성자와 현재 사용자가 다릅니다. 수정할 수 없습니다.");
+    //     }
+    // };
+
+    // 게시글 수정 함수
     const handleEditPost = () => {
         // 게시글 작성자의 ID
         const postUserId = postData.user.userId;
+
+        if (currentUserId == null) {
+            alert("로그인 후 이용해주세요");
+        }
+
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 수정 가능
-        if (currentUserId === postUserId) {
+        else if (currentUserId == postUserId) {
             setIsEditing(true);
+        } else {
+            alert("게시글 작성자와 현재 사용자가 다릅니다. 수정할 수 없습니다.");
+        }
+    };
+
+    // 수정 완료 버튼 클릭 시 호출되는 함수
+    const handleSaveEdit = () => {
+        // 수정 완료 시 실행할 작업을 추가
+        // 예: 수정한 내용 저장, 수정 모드 종료
+        // axios.patch() 또는 필요한 작업을 수행하세요.
+        // 수정이 완료되면 isEditing 값을 변경하여 수정 모드 종료
+        const postUserId = postData.user.userId;
+
+        if (currentUserId == null) {
+            alert("로그인 후 이용해주세요");
+            setIsEditing(false); // 수정 모드 종료
+        } else if (currentUserId == postUserId) {
             // 수정할 내용과 게시글 id를 사용하여 patch 요청을 보냄
             const editData = {
                 postCaption: editedCaption, // 수정된 내용
@@ -117,12 +171,15 @@ function PostComponent({ postId, onClose }) {
                     console.log("게시글 수정 성공:", response.data);
                     // 수정된 내용을 화면에 반영
                     setPostData({ ...postData, postCaption: editedCaption });
+                    setIsEditing(false); // 수정 모드 종료
                 })
                 .catch((error) => {
                     console.error("게시글 수정 중 오류가 발생했습니다:", error);
+                    setIsEditing(false); // 수정 모드 종료
                 });
         } else {
             alert("게시글 작성자와 현재 사용자가 다릅니다. 수정할 수 없습니다.");
+            setIsEditing(false); // 수정 모드 종료
         }
     };
 
@@ -130,8 +187,10 @@ function PostComponent({ postId, onClose }) {
     const handleDeletePost = () => {
         const postUserId = postData.user.userId;
 
-        // 게시글 작성자와 현재 사용자가 동일한 경우에만 삭제 가능
-        if (currentUserId === postUserId) {
+        if (currentUserId == null) {
+            // User is not logged in, show an alert
+            alert("로그인 후 이용해주세요.");
+        } else if (currentUserId == postUserId) {
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
                 .delete(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`)
@@ -145,7 +204,7 @@ function PostComponent({ postId, onClose }) {
                 });
         } else {
             // 게시글 작성자와 현재 사용자가 다른 경우 삭제할 수 없음을 알림
-            console.log("게시글 작성자와 현재 사용자가 다릅니다. 삭제할 수 없습니다.");
+            alert("게시글 작성자와 현재 사용자가 다릅니다. 삭제할 수 없습니다.");
         }
     };
 
@@ -171,6 +230,13 @@ function PostComponent({ postId, onClose }) {
                             <button onClick={handleDeletePost} className={styles.delete_button}>
                                 게시글 삭제
                             </button>
+
+                            {/* 수정 완료 버튼 */}
+                            {isEditing && (
+                                <button onClick={handleSaveEdit} className={styles.complete_button}>
+                                    수정 완료
+                                </button>
+                            )}
 
                             {/* 태그 */}
                             <div className={styles.tags}>
@@ -210,7 +276,8 @@ function PostComponent({ postId, onClose }) {
                                 <textarea
                                     value={editedCaption}
                                     onChange={(e) => setEditedCaption(e.target.value)}
-                                    rows="5"
+                                    rows="3"
+                                    cols="35"
                                 />
                             ) : (
                                 <p className={styles.postCaption}>{postData.postCaption}</p>
