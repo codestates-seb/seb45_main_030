@@ -46,12 +46,13 @@ function FindID({ onClose, isFindIdPopupOpen }) {
           </div>
         )) || (step === 2 && (
           <div className="popup">
-            <h2>아이디 찾기 결과</h2>
-            <p>{result}</p>
+             <p className="category_label">아이디 찾기 결과</p>
+            <p className="find_message">{result}</p>
             <button className="Close_button" onClick={() => {
               setStep(1);
               onClose();
               setUsername('');
+              setResult('');
             }}>닫기</button>
           </div>
         ))

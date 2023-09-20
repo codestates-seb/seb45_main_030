@@ -6,12 +6,6 @@ import './SignupPage.css';
 function SignupPage() {
     const navigate = useNavigate();
 
-    const handleSignupClick = () => {
-        if(signup_status){
-            navigate('/LoginPage');
-        }
-    }
-
     const {
         username,
         password,
@@ -24,13 +18,19 @@ function SignupPage() {
         submitAccount,
         setInvalidEmail,
         setInvalidPassword,
-        setInvalidUsername,
+        setInvalidUsername, 
         invalidEmail,
         invalidPassword,
         invalidUsername,
-        signup_status,
     } = SignupActions();
 
+    const handleSignupClick = async () => {
+        const isSuccess = await submitAccount();
+        if (isSuccess) {
+          navigate('/LoginPage');
+        }
+      }
+      
     const handleAgreementChange = () => {
         setAgreed(!agreed); // 동의 체크박스를 토글합니다.
     };
@@ -92,7 +92,7 @@ function SignupPage() {
                 </div>
 
                 <div className='Btn_Wrapper'>
-                    <button className='Btn_Submit'  onClick={() => { submitAccount(); handleSignupClick(); }}>가입완료</button>
+                    <button className='Btn_Submit' onClick={handleSignupClick}>가입완료</button>
                 </div>
             </div>
         </div>

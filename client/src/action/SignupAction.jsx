@@ -34,10 +34,6 @@ export function SignupActions() {
     setSignupInfo((prevState) => ({ ...prevState, invalidUsername: value }));
   };
 
-  const setSignupStatus = (value) => {
-    setSignupInfo((prevState) => ({ ...prevState, signup_status: value }));
-  };
-
   const isValidEmail = (email) => {
     const emailRegex = /^[\w.-]+@[\w.-]+\.\w+$/;
     return emailRegex.test(email);
@@ -56,7 +52,6 @@ export function SignupActions() {
     setInvalidEmail(false);
     setInvalidPassword(false);
     setInvalidUsername(false);
-    setSignupStatus(false);
 
     if (!isValidEmail(currentState.email)) {
       setInvalidEmail(true);
@@ -72,7 +67,7 @@ export function SignupActions() {
     const { email, username, password, agreed } = currentState;
 
     if (!agreed) {
-      console.error('개인정보 처리 방침에 동의해야 합니다.');
+      alert('개인정보 처리 방침에 동의해야 합니다.');
       return;
     }
 
@@ -84,12 +79,12 @@ export function SignupActions() {
 
     try {
       const response = await axios.post('http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/signup', requestData);
-      console.log('회원 정보가 저장되었습니다:', response.data);
-      resetSignupState();
-      setSignupStatus(true);
+        console.log('회원 정보가 저장되었습니다:', response.data);
+        resetSignupState();
+        return true;
     } catch (error) {
       console.error('회원가입 실패:', error);
-      setSignupStatus(false);
+      return false;
     }
   };
 
@@ -109,7 +104,5 @@ export function SignupActions() {
     invalidEmail: signupInfo.invalidEmail,
     invalidPassword: signupInfo.invalidPassword,
     invalidUsername: signupInfo.invalidUsername,
-    setSignupStatus,
-    signup_status: signupInfo.signup_status,
   };
 }

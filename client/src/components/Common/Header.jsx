@@ -5,6 +5,7 @@ import Modal from "../UploadModal/Modal";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { loginState } from "../../state/LoginState";
+import { LogoutActions } from "../../action/LogoutAction";
 import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
@@ -13,6 +14,7 @@ function Header() {
     const [isLogin, setIsLogin] = useState(false);
     const [userName, setUserName] = useState("사용자");
     const loginInfo = useRecoilValue(loginState);
+    const { handleLogout } = LogoutActions();
     
     useEffect(() => {
         if (loginInfo.login_status) {
@@ -20,7 +22,7 @@ function Header() {
             fetchUserData(loginInfo.userId)
         }
         console.log(loginInfo)
-    }, []);
+    }, [loginInfo]);
 
     const fetchUserData = async (userId) => {
         try {
@@ -56,7 +58,14 @@ function Header() {
                         <Modal />
                     </div>
                     <div className={styles.user_name}>
-                        {isLogin ? <Link to="/mypage">{userName}님</Link> : <Link to="/LoginPage">로그인하기</Link>}
+                    {isLogin ? (
+                            <>
+                                <Link to="/mypage">{userName}님</Link>
+                                <button onClick={handleLogout}>로그아웃</button>
+                            </>
+                        ) : (
+                            <Link to="/LoginPage">로그인하기</Link>
+                        )}
                     </div>
                 </div>
             </div>

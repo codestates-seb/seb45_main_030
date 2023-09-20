@@ -10,6 +10,5 @@ export const signupState = atom({
     invalidEmail: false,
     invalidPassword: false,
     invalidUsername: false,
-    signup_status: false,
   },
 });

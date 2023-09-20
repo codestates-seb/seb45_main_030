@@ -19,8 +19,10 @@ export function LogoutActions() {
   
         // 로그아웃 요청이 성공하면 로컬 스토리지에서 토큰 제거 및 사용자 정보 초기화
         if (response.status === 200) {
+          console.log('로그아웃 성공!');  
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
+          window.location.reload();
         }
 
       setLoginInfo({

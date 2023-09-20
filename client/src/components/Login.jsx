@@ -15,8 +15,9 @@ function Login() {
     navigate('/SignUpPage');
   }
 
-  const handleLoginClick = () => {
-    if(login_status){
+  const handleLoginClick = async () => {
+    const isSuccess = await handleSubmit();
+    if (isSuccess) {
       navigate('/');
     }
   }
@@ -48,18 +49,11 @@ function Login() {
     setInvalidPassword,
     invalidEmail,
     invalidPassword,
-    login_status,
   } = LoginActions();
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault(); // 폼 제출 기본 동작 막기
-    handleSubmit(); // 폼 제출 처리 함수 호출
-  };
-
-  
   return (
     <>
-      <form className="login_box" onSubmit={handleFormSubmit}>
+      <div className="login_box">
         <div className="category_label"> 로그인 </div>
         <div className="id_input">
           <input
@@ -104,7 +98,7 @@ function Login() {
           <p className="add_guide">계정이 없으신가요?</p>
           <p className="add_msg" onClick={handleSignupClick}>회원가입</p>
         </div>
-      </form>
+      </div>
     </>
   );
 }

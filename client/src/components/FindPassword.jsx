@@ -27,7 +27,7 @@ function FindPassword({ onClose, isForgotPasswordPopupOpen }) {
     axios.post('http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/userCheck', { username, email })
       .then((response) => {
         if (response.status === 200) {
-          setResult('아이디 확인이 성공했습니다.');
+          setResult('아이디 확인에 성공했습니다.');
           setStep(2); // 다음 단계로 전환 (비밀번호 갱신 화면)
         } else {
           setResult('아이디 확인에 실패했습니다.');
@@ -40,7 +40,7 @@ function FindPassword({ onClose, isForgotPasswordPopupOpen }) {
 
   const handleUpdatePassword = () => {
     // 서버로 새로운 비밀번호를 보내서 갱신하는 API 요청을 보냅니다.
-    axios.post('https://4c44-183-107-174-160.ngrok-free.app/users/updatePassword', { username, email, newPassword })
+    axios.post('http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/users/updatePassword', { username, email, newPassword })
       .then((response) => {
         if (response.status === 200) {
           setResult('비밀번호가 성공적으로 갱신되었습니다.');
@@ -71,15 +71,16 @@ function FindPassword({ onClose, isForgotPasswordPopupOpen }) {
         )) || (step === 2 && (
           <div className="popup">
             <p className="category_label">비밀번호 갱신</p>
-            <input type="password" placeholder="새로운 비밀번호" value={newPassword} onChange={handlenewPasswordChange} />
+            <input className="inputprofile" type="password" placeholder="새로운 비밀번호" value={newPassword} onChange={handlenewPasswordChange} />
+            <p className="find_message">{result}</p>
             <button className="Find_button" onClick={handleUpdatePassword}>비밀번호 등록</button>
-            <p>{result}</p>
             <button className="Close_button" onClick={() => {
               setStep(1);
               onClose();
               setUsername('');
               setEmail('');
               setNewPassword('');
+              setResult('');
             }}>닫기</button>
           </div>
         ))
