@@ -2,69 +2,74 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { AiFillCloseCircle } from "react-icons/ai";
 import styles from "./PostDetail.module.css";
-import { useRecoilValue } from "recoil";
-//import { loginState } from "../state/LoginState"; // 사용자 정보를 담은 recoil 상태
 import CommentComponent from "../Comment/CommentComponent";
 import { FaUser } from "react-icons/fa";
-import { LoginActions } from "../../action/LoginAction";
 import ButtonBookmark from "../button/ButtonBookmark";
 import ButtonRecommend from "../button/ButtonRecommend";
-
+import { useRecoilValue } from "recoil";
+import { loginState } from "../../state/LoginState";
 const BASE_URL = process.env.REACT_APP_API_URL;
 
 function PostComponent({ postId, onClose }) {
-    console.log("포스트 컴포넌트", postId);
+    //게시글 관련 상태
     const [postData, setPostData] = useState(null);
     const [editedCaption, setEditedCaption] = useState(""); // 수정한 캡션을 저장
     const [isEditing, setIsEditing] = useState(false);
-    const [bookmarkedPostId, setBookmarkedPostId] = useState([]);
-    const [recommendedPostId, setRecommendeddPostId] = useState([]);
+    //로그인 관련 상태
+    const [currentUserId, setCurrentUserId] = useState(null);
+    const [recommendedPostId, setRecommendedPostId] = useState();
+    const [bookmarkedPostId, setBookmarkedPostId] = useState();
 
-    // const currentUser = useRecoilValue(loginState);
-    const { userId } = LoginActions();
-    const currentUser = userId;
+    const loginInfo = useRecoilValue(loginState);
+
+    useEffect(() => {
+        fetchPostData();
+        if (loginInfo.login_status) {
+            setCurrentUserId(loginInfo.userId);
+        }
+    }, []);
+    useEffect(() => {
+        if (currentUserId !== null) {
+            getRecommmend();
+            getBookmark();
+        }
+    }, [currentUserId]);
+
+    useEffect(() => {
+        renderMarkButton();
+    }, [recommendedPostId, bookmarkedPostId]);
+
+    const renderMarkButton = () => {
+        let result;
+        if (Array.isArray(recommendedPostId) && Array.isArray(bookmarkedPostId)) {
+            result = (
+                <>
+                    <ButtonRecommend postId={postId} isMarked={recommendedPostId.includes(Number(postId))} />
+                    <ButtonBookmark postId={postId} isMarked={bookmarkedPostId.includes(Number(postId))} />
+                </>
+            );
+        }
+        return result;
+    };
 
     // 특정 게시글의 데이터를 받아오는 함수
     const fetchPostData = async () => {
         try {
-            const response = await axios.get(
-                `http://ec2-3-36-197-34.ap-northeast-2.compute.amazonaws.com:8080/posts/${postId}`,
-            );
-            console.log("GET 요청 성공:", response.data);
+            const response = await axios.get(`${BASE_URL}/posts/${postId}`);
+            console.log("게시글 데이터:", response.data);
             setPostData(response.data);
-            console.log(postData);
             setEditedCaption(response.data.postCaption);
         } catch (error) {
             console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
         }
     };
 
-    // 컴포넌트가 처음 렌더링될 때 한 번만 데이터를 받아옵니다.
-    useEffect(() => {
-
-        console.log("요청", postData);
-        axios
-            .get(`${BASE_URL}/posts/${postId}`)
-            .then((response) => {
-                console.log("GET 요청 성공:", response.data);
-                setPostData(response.data);
-                setEditedCaption(response.data.postCaption);
-            })
-            .catch((error) => {
-                console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
-            });
-        getRecommmend();
-        getBookmark();
-    }, []);
-
     // 추천 get 통신
     const getRecommmend = async () => {
         try {
-            // ``
-            const response = await axios.get(`${BASE_URL}/recommend/${userId}`);
+            const response = await axios.get(`${BASE_URL}/recommend/${currentUserId}`);
             const data = await response.data;
-
-            setRecommendeddPostId(
+            setRecommendedPostId(
                 data.map((el) => {
                     return el.postId;
                 }),
@@ -77,19 +82,13 @@ function PostComponent({ postId, onClose }) {
     //북마크 get 통신
     const getBookmark = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/bookmarks/${userId}`);
+            const response = await axios.get(`${BASE_URL}/bookmarks/${currentUserId}`);
             const data = await response.data;
-
             setBookmarkedPostId(data.map((el) => el.post_id));
         } catch (error) {
             console.error(error.code, "북마크 정보 get 실패");
         }
     };
-
-    console.log(postData);
-
-        fetchPostData();
-    }, []);
 
     function formatDate(dateString) {
         const date = new Date(dateString);
@@ -99,18 +98,12 @@ function PostComponent({ postId, onClose }) {
         return `${year}.${month}.${day}`;
     }
 
-
     // 게시글 수정 함수
     const handleEditPost = () => {
         // 게시글 작성자의 ID
         const postUserId = postData.user.userId;
-        console.log(postUserId);
-
-        // 로그인한 사용자의 ID를 사용
-        // const currentUserId = currentUser.userId;
-
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 수정 가능
-        if (currentUser === postUserId) {
+        if (currentUserId === postUserId) {
             setIsEditing(true);
             // 수정할 내용과 게시글 id를 사용하여 patch 요청을 보냄
             const editData = {
@@ -118,12 +111,7 @@ function PostComponent({ postId, onClose }) {
                 tags: postData.tags, // 태그 정보는 그대로 사용
             };
             axios
-                .patch(
-
-                    `${BASE_URL}/posts/${postId}?userId=${currentUserId}`,
-
-                    editData,
-                ) // ngrok 서버 주소로 변경
+                .patch(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`, editData)
                 .then((response) => {
                     console.log("게시글 수정 성공:", response.data);
                     // 수정된 내용을 화면에 반영
@@ -141,17 +129,11 @@ function PostComponent({ postId, onClose }) {
     const handleDeletePost = () => {
         const postUserId = postData.user.userId;
 
-        const currentUserId = currentUser.userId;
-
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 삭제 가능
         if (currentUserId === postUserId) {
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
-                .delete(
-
-                    `${BASE_URL}/posts/${postId}?userId=${currentUserId}`,
-
-                ) // ngrok 서버 주소로 변경
+                .delete(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`)
                 .then((response) => {
                     // 게시글 삭제가 성공한 경우 처리
                     console.log("게시글 삭제 성공:", response.data);
@@ -214,9 +196,8 @@ function PostComponent({ postId, onClose }) {
                                 )}
 
                                 <p className={styles.username}>{postData.user.username}</p>
-                                <ButtonRecommend />
-                                <ButtonBookmark />
-
+                                {/* 추천, 북마크자리 */}
+                                {renderMarkButton()}
                             </div>
 
                             {/* 날짜 */}
