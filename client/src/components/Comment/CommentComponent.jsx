@@ -163,7 +163,7 @@ function CommentComponent({ postId }) {
                                         <span className={styles.commentText}> {comment.commentText} </span>
                                     </div>
                                 )}
-                                {currentUserId !== null && comment.user && currentUserId == comment.user.userId && (
+                                {currentUserId !== null && comment.user && Number(currentUserId) === Number(comment.user.userId) && (
                                     <>
                                         <button
                                             onClick={() => handleDeleteComment(comment.commentId)}
