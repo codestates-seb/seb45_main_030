@@ -18,7 +18,7 @@
 .inputprofile {
     border: 2px solid #d9d9d9;
     width: 280px;
-    height: 50px;
+    height: 55px;
     margin-bottom: 5px;
 }
 
@@ -70,4 +70,13 @@
     letter-spacing: -.6px;
     text-align: middle;
     color: #ff6060;
-  }
+}
+
+.find_message {
+    height: 28px;
+    margin-top: 10px;
+    font-weight: 700;
+    letter-spacing: -.6px;
+    text-align: middle;
+    color: #7cd185
+}
