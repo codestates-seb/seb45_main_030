@@ -107,8 +107,18 @@
 
 .warn_inputEmail_message {
     display: none;
-    height: 28px;
-    margin-top: -6px;
+    height: 20px;
+    margin-top: -2px;
+    font-weight: 700;
+    letter-spacing: -.6px;
+    text-align: left;
+    color: #ff6060;
+}
+
+.warn_inputName_message {
+    display: none;
+    height: 20px;
+    margin-top: -2px;
     font-weight: 700;
     letter-spacing: -.6px;
     text-align: left;
@@ -117,8 +127,8 @@
 
 .warn_inputPassword_message {
     display: none;
-    height: 28px;
-    margin-top: -6px;
+    height: 20px;
+    margin-top: -2px;
     font-weight: 700;
     letter-spacing: -.6px;
     text-align: left;
@@ -127,7 +137,7 @@
 
 .warn_login_message {
     height: 28px;
-    margin-top: -6px;
+    margin-top: -2px;
     font-weight: 700;
     letter-spacing: -.6px;
     text-align: left;

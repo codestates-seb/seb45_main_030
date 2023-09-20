@@ -76,11 +76,11 @@ export function LoginActions() {
         localStorage.setItem("refreshToken", refreshToken);
         axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
         setLoginStatus(true);
+        return true;
 
       } catch (error) {
         console.error("로그인 실패:", error);
         setLoginError(true);
-
         if (error.response.status === 401) {
           const refreshToken = localStorage.getItem("refreshToken");
           if (refreshToken) {
@@ -98,17 +98,20 @@ export function LoginActions() {
               console.log('로그인을 재시도합니다:', retryResponse.data);
               setLoginError(false);
               setLoginStatus(true);
+              return true;
             } catch (refreshError) {
               console.error("Refresh token error:", refreshError);
               // Refresh Token도 만료되었거나 유효하지 않은 경우
               // 여기서는 로그아웃 처리
               console.log(refreshError.response.status); 
               setLoginError(true); 
+              return false;
             }
           } else {
             // Refresh Token이 없는 경우 로그아웃 처리(라우팅으로 로그인 화면으로)
             console.log("No refresh token available");
             setLoginError(true);
+            return false;
           }
         }
       }
@@ -124,10 +127,10 @@ export function LoginActions() {
     setInvalidPassword,
     loginError: loginInfo.loginError,
     setLoginError,
-    login_status: loginInfo.login_status,
     setLoginStatus,
     userId : loginInfo.userId,
     invalidEmail: loginInfo.invalidEmail,
     invalidPassword: loginInfo.invalidPassword,
+    login_status: loginInfo.login_status,
   };
 }

@@ -187,10 +187,16 @@ function PostComponent({ postId, onClose }) {
     const handleDeletePost = () => {
         const postUserId = postData.user.userId;
 
-        if (currentUserId == null) {
+
+        if (currentUserId === null) {
             // User is not logged in, show an alert
             alert("로그인 후 이용해주세요.");
-        } else if (currentUserId == postUserId) {
+            return;
+        } 
+
+        // 게시글 작성자와 현재 사용자가 동일한 경우에만 삭제 가능
+        if (Number(currentUserId) === Number(postUserId)) {
+
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
                 .delete(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`)

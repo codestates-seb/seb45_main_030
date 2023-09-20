@@ -47,7 +47,9 @@ function useGetImageList(url, config) {
             // https://picsum.photos/ 더미 이미지 API
             const response = await axios.get(url, config);
             const responseData = response.data
-            setFetchedData([...responseData.data]);
+            console.log(responseData);
+            const data = responseData.hasOwnProperty("data") ? responseData.data : responseData;
+            setFetchedData(data);
         } catch (error) {
             console.error("데이터를 불러오는 중 오류 발생:", error);
             // 오류 토스트 컴포넌트를 여기에 추가할 수 있습니다.
