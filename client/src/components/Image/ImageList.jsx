@@ -17,22 +17,19 @@ function ImageList({ url, page }) {
     const [userId, setUserId] = useState(null);
 
     const loginInfo = useRecoilValue(loginState);
-    useEffect(() => {
-        if (loginInfo.login_status) {
-            setIsLogin(true);
-            setUserId(loginInfo.userId)
-        }
-    }, []);
 
     // 무한 스크롤 훅
-    const config = {
-        params: {
-            page: page,
-        },
-    };
+    const config = { params: { page: page } };
     const { fetchedData, sentinelRef } = useInfiniteGetImage(url, config);
 
     const [columnState, setColumnState] = useState({ first: [], second: [], third: [] });
+
+    useEffect(() => {
+        if (loginInfo.login_status) {
+            setIsLogin(true);
+            setUserId(loginInfo.userId);
+        }
+    }, []);
 
     useEffect(() => {
         if (isLogin) {

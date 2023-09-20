@@ -48,7 +48,15 @@ function PostComponent({ postId, onClose }) {
                     <ButtonBookmark postId={postId} isMarked={bookmarkedPostId.includes(Number(postId))} />
                 </>
             );
+        } else{
+            result = (
+                <>
+                    <ButtonRecommend postId={postId} isMarked={false} />
+                    <ButtonBookmark postId={postId} isMarked={false} />
+                </>
+            );
         }
+
         return result;
     };
 
@@ -128,9 +136,10 @@ function PostComponent({ postId, onClose }) {
     // 게시글 삭제 함수
     const handleDeletePost = () => {
         const postUserId = postData.user.userId;
+        console.log(postUserId, currentUserId)
 
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 삭제 가능
-        if (currentUserId === postUserId) {
+        if (Number(currentUserId) === Number(postUserId)) {
             // 게시글 ID와 유저 ID를 사용하여 DELETE 요청을 보냄
             axios
                 .delete(`${BASE_URL}/posts/${postId}?userId=${currentUserId}`)
