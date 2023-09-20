@@ -49,7 +49,7 @@ function PostComponent({ postId, onClose }) {
                     <ButtonBookmark postId={postId} isMarked={bookmarkedPostId.includes(Number(postId))} />
                 </>
             );
-        } else{
+        } else {
             result = (
                 <>
                     <ButtonRecommend postId={postId} isMarked={false} />
@@ -194,14 +194,13 @@ function PostComponent({ postId, onClose }) {
     // 게시글 삭제 함수
     const handleDeletePost = () => {
         const postUserId = postData.user.userId;
-        console.log(postUserId, currentUserId)
-
+        console.log(postUserId, currentUserId);
 
         if (currentUserId === null) {
             // User is not logged in, show an alert
             alert("로그인 후 이용해주세요.");
             return;
-        } 
+        }
 
         // 게시글 작성자와 현재 사용자가 동일한 경우에만 삭제 가능
         if (Number(currentUserId) === Number(postUserId)) {
@@ -229,8 +228,12 @@ function PostComponent({ postId, onClose }) {
                     {" "}
                     <div className={styles.modal_content}>
                         <div className={styles.postContainer}>
-                            {/* 이미지 */}
-                            <img src={postData.postImage} alt="게시글 이미지" className={styles.image} />
+                            <div className={styles.image_wrap}>
+                                <div className={styles.inner}>
+                                    {/* 이미지 */}
+                                    <img src={postData.postImage} alt="게시글 이미지" className={styles.image} />
+                                </div>
+                            </div>
 
                             <button onClick={onClose} className={styles.close_button}>
                                 <AiFillCloseCircle />
@@ -261,7 +264,7 @@ function PostComponent({ postId, onClose }) {
                             <p className={styles.postTitle}>{postData.postTitle}</p>
 
                             {/* 주소 */}
-                            <p className={styles.postAddress}>{postData.postAddress}</p>
+                            <p className={styles.postAddress}></p>
 
                             <div className={styles.userInfo}>
                                 {postData.user.profileImage ? (

@@ -16,7 +16,8 @@
     display: flex;
     overflow-y: auto;
     width: 80%;
-    height: 100%;
+    height: fit-content;
+    padding-bottom: 1rem;
     max-width: 35%;
     max-height: 90%;
     background-color: white;
@@ -31,12 +32,21 @@
     margin-left: 30px;
     margin-top: 10px;
   }
+  .image_wrap{
+    display: flex;
+    justify-content: center;
 
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .image_wrap .inner {
+    width: 70%;
+  }
 
   .image {
-    margin-top: 1rem;
-    max-width: 60%; /* 이미지 최대 너비 */
-    height: 50%; /* 자동 높이 조정 */
+    width: 100%;
+
   }
 
   .profileImage {
@@ -98,7 +108,7 @@
   cursor: pointer;
   border: none;
   background-color: transparent;
-  font-size: 1rem;
+  font-size: 2rem;
   top: 0.5rem;
   right: 0rem;
   color: black;
