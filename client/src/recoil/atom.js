@@ -8,6 +8,7 @@ export const userState = atom({
       user_name: "",
       email: "",
       introduction: "",
+      profileImage: null,
   },
 });
 
